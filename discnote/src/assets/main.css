@@ -25,3 +25,8 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #145d91d0; 
 }
+main{
+  width: 100%;
+  height: 100vh;
+  background-color: #162326;
+} 
