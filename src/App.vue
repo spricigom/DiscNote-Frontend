@@ -17,26 +17,45 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
       <h3>Músicas</h3>
       <hr>
     </div>
+    <Carousel :items-to-show="3" :wrap-around="true" class="carousel-custom">
+      <Slide>
+        <div class="carousel-slide">
+          <img src="#" alt="" class="sliderImage">
+        </div>
+      </Slide>
+      <Slide>
+        <div class="carousel-slide">
+          <img src="#" alt="" class="sliderImage">
+        </div>
+      </Slide>
+      <Slide>
+        <div class="carousel-slide">
+          <img src="#" alt="" class="sliderImage">
+        </div>
+      </Slide>
+      <Slide>
+        <div class="carousel-slide">
+          <img src="#" alt="" class="sliderImage">
+        </div>
+      </Slide>
+      <Slide>
+        <div class="carousel-slide">
+          <img src="#" alt="" class="sliderImage">
+        </div>
+      </Slide>
+      <Slide>
+        <div class="carousel-slide">
+          <img src="#" alt="" class="sliderImage">
+        </div>
+      </Slide>
 
-    <Carousel :items-to-show="1" :wrap-around="true" class="carousel-custom">
-      <Slide>
-        <div class="carousel-slide">1</div>
-      </Slide>
-      <Slide>
-        <div class="carousel-slide">2</div>
-      </Slide>
-      <Slide>
-        <div class="carousel-slide">3</div>
-      </Slide>
-      <Slide>
-        <div class="carousel-slide">4</div>
-      </Slide>
 
       <template #addons>
         <Navigation />
         <Pagination />
       </template>
     </Carousel>
+    
   </main>
 
   <RouterView />
@@ -88,17 +107,19 @@ main {
 
 .divisao hr {
   width: 100%;
-  border: #145d91 2px solid;
+  border: #145d91 1px solid;
 }
-
-.carousel-slide {
-  width: 13vw;
+.carousel-custom{
+  width: 65vw;
   height: 30vh;
-  background-color: gray;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 2vw;
+  background-color: red;
+margin: 0 0.2vw;
+}
+.carousel-slide{
+  width: 200px;
+  height: 200px;
+  background-color: black ;
+  opacity: 31%;
+  border-radius: 2vw;
 }
 </style>

@@ -79,7 +79,7 @@ function toggleSidebar() {
 <style scoped>
 
 .submenu hr {
-  border: 2px #145d91 solid;
+  border: 1px #145d91 solid;
   width: 7vw;
 }
 
