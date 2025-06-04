@@ -17,7 +17,7 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
       <h3>Músicas</h3>
       <hr>
     </div>
-    <Carousel :items-to-show="3" :wrap-around="true" class="carousel-custom">
+    <Carousel :items-to-show="4" :wrap-around="true":snap-align="'start'"  class="carousel-custom">
       <Slide>
         <div class="carousel-slide">
           <img src="#" alt="" class="sliderImage">
@@ -52,7 +52,6 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 
       <template #addons>
         <Navigation />
-        <Pagination />
       </template>
     </Carousel>
     
@@ -95,7 +94,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: baseline;
-  width: 65vw;
+  width: 68vw;
 }
 
 .divisao h3 {
@@ -110,16 +109,35 @@ main {
   border: #145d91 1px solid;
 }
 .carousel-custom{
-  width: 65vw;
-  height: 30vh;
-  background-color: red;
-margin: 0 0.2vw;
+  width: 70vw;
+  height: 35vh;
+  margin: 0 0.2vw;
 }
 .carousel-slide{
-  width: 200px;
-  height: 200px;
-  background-color: black ;
-  opacity: 31%;
+  width: 290px;
+  height: 290px;
+  background-color: #0c1414 ;
   border-radius: 2vw;
+  transition: .1s;
 }
+.carousel-slide:hover{
+  border: #ecc415 3px solid;
+}
+.carousel-custom :deep(.carousel__prev), 
+.carousel-custom :deep(.carousel__next) {
+  transform: translateY(-50%); /* centraliza verticalmente */
+  color: white;
+  padding: 0.5em;
+  width: 3em;
+  height: 3em;
+}
+
+.carousel-custom :deep(.carousel__prev) {
+  left: -3vw; /* coloca mais pra fora ou ajusta como quiser */
+}
+
+.carousel-custom :deep(.carousel__next) {
+  right: -3vw;
+}
+
 </style>
