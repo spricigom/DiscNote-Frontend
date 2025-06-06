@@ -94,7 +94,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: baseline;
-  width: 68vw;
+  width: 67%;
 }
 
 .divisao h3 {
@@ -114,8 +114,8 @@ main {
   margin: 0 0.2vw;
 }
 .carousel-slide{
-  width: 290px;
-  height: 290px;
+  width: 85%;
+  height: 85%;
   background-color: #0c1414 ;
   border-radius: 2vw;
   transition: .1s;
@@ -133,11 +133,11 @@ main {
 }
 
 .carousel-custom :deep(.carousel__prev) {
-  left: -3vw; /* coloca mais pra fora ou ajusta como quiser */
+  left: -5%; /* coloca mais pra fora ou ajusta como quiser */
 }
 
 .carousel-custom :deep(.carousel__next) {
-  right: -3vw;
+  right: -5%;
 }
 
 </style>
