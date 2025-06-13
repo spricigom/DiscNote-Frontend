@@ -1,4 +1,24 @@
+
+
+<script setup>
+import HeaderPag from '@/components/HeaderPag.vue'
+import { ref } from 'vue'
+
+const email = ref('')
+const password = ref('')
+const showPassword = ref(false)
+
+function togglePassword() {
+  showPassword.value = !showPassword.value
+}
+
+function login() {
+  console.log('Login com', email.value, password.value)
+}
+</script>
+
 <template>
+  <HeaderPag />
   <div class="container">
     <div class="login-box">
       <h2>Bem-vindo de volta...</h2>
@@ -18,7 +38,7 @@
 
         <div class="password-wrapper">
           <input :type="showPassword ? 'text' : 'password'" v-model="password" placeholder="Senha" required />
-          <span class="eye" @click="togglePassword">👁️</span>
+          <img class="eye" @click="togglePassword" src="@/assets/eye-3-16.png" alt="Mostrar senha" />
         </div>
 
         <button type="submit" class="login-btn">Entrar</button>
@@ -31,23 +51,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-
-import { ref } from 'vue'
-
-const email = ref('')
-const password = ref('')
-const showPassword = ref(false)
-
-function togglePassword() {
-  showPassword.value = !showPassword.value
-}
-
-function login() {
-  console.log('Login com', email.value, password.value)
-}
-</script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -136,8 +139,8 @@ form input {
 
 .eye {
   position: absolute;
-  right: 10px;
-  top: 12px;
+  right: 1px;
+  top: 10px;
   cursor: pointer;
   color: #ccc;
 }
