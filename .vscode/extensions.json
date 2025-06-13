@@ -1,6 +1,10 @@
 {
   "recommendations": [
     "Vue.volar",
+<<<<<<< feat-1
+=======
+    "vitest.explorer",
+>>>>>>> dev
     "dbaeumer.vscode-eslint",
     "EditorConfig.EditorConfig",
     "esbenp.prettier-vscode"

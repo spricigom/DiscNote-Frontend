@@ -1,9 +1,9 @@
 <script setup>
+//import TheWelcome from '../components/TheWelcome.vue'
 </script>
 
 <template>
   <main>
-    
   </main>
 </template>
 
@@ -12,3 +12,5 @@ main{
   background-color: #162326;
 } 
 </style>
+  </main>
+</template>
