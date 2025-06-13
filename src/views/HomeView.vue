@@ -10,7 +10,6 @@
 <style scoped>
 main{
   background-color: #162326;
-} 
+}
 </style>
-  </main>
-</template>
+

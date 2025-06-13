@@ -1,5 +1,3 @@
-
-
 <script setup>
 import HeaderPag from '@/components/HeaderPag.vue'
 import { ref } from 'vue'
