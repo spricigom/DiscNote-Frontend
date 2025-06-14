@@ -24,6 +24,11 @@ const router = createRouter({
       name: 'Cadastro',
       component: () => import('../views/CadastroView.vue'),
     },
+    {
+      path: '/perfil',
+      name: 'Perfil',
+      component: () => import('../views/PerfilView.vue'),
+    },
   ],
 })
 
