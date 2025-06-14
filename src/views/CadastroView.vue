@@ -21,7 +21,6 @@ function login() {
 </script>
 
 <template>
-  <HeaderPag />
   <div class="container">
     <div class="login-box">
       <h2>Crie sua conta</h2>

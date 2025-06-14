@@ -1,7 +1,5 @@
-
-
 <script setup>
-import HeaderPag from '@/components/HeaderPag.vue'
+import Header from '@/components/Header.vue'
 import { ref } from 'vue'
 
 const email = ref('')
@@ -18,7 +16,6 @@ function login() {
 </script>
 
 <template>
-  <HeaderPag />
   <div class="container">
     <div class="login-box">
       <h2>Bem-vindo de volta...</h2>
