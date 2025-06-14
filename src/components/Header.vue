@@ -62,7 +62,7 @@ function toggleSidebar() {
         <hr style="margin-top: 4vh; width: 100%;">
         <div class="itens-sidebar">
           <p>
-            <RouterLink to="#"><i class="pi pi-user" style="color: #145d91; font-size: 1.2vw;"></i> Seu Perfil
+            <RouterLink to="/perfil"><i class="pi pi-user" style="color: #145d91; font-size: 1.2vw;"></i> Seu Perfil
             </RouterLink>
           </p>
           <p>
