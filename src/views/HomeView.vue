@@ -1,9 +1,13 @@
 <script setup>
+import Header from '@/components/Header.vue'
 import Slider from '@/components/Slider.vue'
+import Resenha from '@/components/Resenha.vue';
+
 </script>
 
 <template>
-  
+  <Header />
+
   <main>
     <div class="apresenta">
       <h1>Populares no DiscNote</h1>
@@ -22,29 +26,11 @@ import Slider from '@/components/Slider.vue'
     </div>
     <Slider />
 
-    <div class="divisao">
+        <div class="divisao">
       <h3>Resenhas</h3>
-      <hr>
     </div>
-    <div class="resenha">
-      <div class="foto-resenha">
-        <img src="#" alt="">
-      </div>
-
-      <div class="corpo">
-        <div class="titulo">
-          <h1>Nome da Música</h1>
-          <h4>nome do artista</h4>
-        </div>
-
-        <div class="username">
-          <div class="foto-username">
-            <img src="#" alt="">
-          </div>
-          <p>@username</p>
-        </div>
-      </div>
-    </div>
+    <Resenha />
+    <Resenha />
   </main>
 </template>
 
