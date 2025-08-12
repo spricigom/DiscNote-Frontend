@@ -136,7 +136,7 @@ main {
   cursor: pointer;
   font-size: 1.3vw;
   border-bottom: 2px solid #145d91;
-  transition: all 0.3s;
+  transition: all 0.2s;
   width: 15%;
 }
 
