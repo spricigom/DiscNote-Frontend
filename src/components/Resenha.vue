@@ -1,70 +1,66 @@
 <script>
 import { ref } from 'vue'
-
 </script>
 <template>
-<div class="divisao">
-<hr>
-</div>
-<div class="resenha">
-      <div class="foto-resenha">
-        <img src="#" alt="">
-      </div>
-
-      <div class="corpo">
-        <div class="titulo">
-          <h1>Nome da Música</h1>
-          <h4>nome do artista</h4>
-        </div>
-
-
-        <div class="user-av-e-fav">
-          <div class="username">
-            <div class="foto-username">
-              <img src="#" alt="">
-            </div>
-            <p>@username</p>
-          </div>
-          <div class="avaliacao-e-favorito">
-            <div class="avaliacao">
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-            </div>
-            <div class="favorito">
-              <i class="pi pi-heart-fill"></i>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="texto-resenha">
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sed voluptate excepturi vero tempore similique
-            ea, quo obcaecati libero quibusdam illo quidem consectetur dolor ab, possimus neque officiis sint laboriosam
-            numquam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae recusandae autem hic ad
-            assumenda quis illo doloremque unde impedit, obcaecati modi quae quos sint harum iste dolor nesciunt, labore
-            dolore. Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque, deleniti omnis eos in maiores earum
-            quibusdam consectetur, repellendus harum iusto voluptatibus sequi, error consequuntur minus dicta vitae
-            voluptates dolor amet.
-          </p>
-        </div>
-        <div class="curtida-e-comentario">
-          <div class="curtida">
-            <i class="pi pi-thumbs-up"></i>
-            <p>2.500 curtidas</p>
-          </div>
-          <div class="comentarios">
-            <i class="pi pi-comment"></i>
-            <p>230 comentarios</p>
-          </div>
-        </div>
-
-
-      </div>
-
+  <div class="divisao">
+    <hr />
+  </div>
+  <RouterLink to="/resenhas"><div class="resenha">
+    <div class="foto-resenha">
+      <img src="#" alt="" />
     </div>
+
+    <div class="corpo">
+      <div class="titulo">
+        <h1>Nome da Música</h1>
+        <h4>nome do artista</h4>
+      </div>
+
+      <div class="user-av-e-fav">
+        <div class="username">
+          <div class="foto-username">
+            <img src="#" alt="" />
+          </div>
+          <p>@username</p>
+        </div>
+        <div class="avaliacao-e-favorito">
+          <div class="avaliacao">
+            <i class="pi pi-star-fill"></i>
+            <i class="pi pi-star-fill"></i>
+            <i class="pi pi-star-fill"></i>
+            <i class="pi pi-star-fill"></i>
+            <i class="pi pi-star-fill"></i>
+          </div>
+          <div class="favorito">
+            <i class="pi pi-heart-fill"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="texto-resenha">
+        <p>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sed voluptate excepturi vero
+          tempore similique ea, quo obcaecati libero quibusdam illo quidem consectetur dolor ab,
+          possimus neque officiis sint laboriosam numquam. Lorem ipsum dolor sit amet consectetur
+          adipisicing elit. Molestiae recusandae autem hic ad assumenda quis illo doloremque unde
+          impedit, obcaecati modi quae quos sint harum iste dolor nesciunt, labore dolore. Lorem
+          ipsum dolor sit amet consectetur adipisicing elit. Itaque, deleniti omnis eos in maiores
+          earum quibusdam consectetur, repellendus harum iusto voluptatibus sequi, error
+          consequuntur minus dicta vitae voluptates dolor amet.
+        </p>
+      </div>
+      <div class="curtida-e-comentario">
+        <div class="curtida">
+          <i class="pi pi-thumbs-up"></i>
+          <p>2.500 curtidas</p>
+        </div>
+        <div class="comentarios">
+          <i class="pi pi-comment"></i>
+          <p>230 comentarios</p>
+        </div>
+      </div>
+    </div>
+  </div></RouterLink>
 
 </template>
 
@@ -75,11 +71,13 @@ import { ref } from 'vue'
   align-items: baseline;
   width: 67%;
 }
+
 .divisao hr {
   width: 100%;
   border: #145d91 1px solid;
   margin-bottom: 2%;
 }
+
 .curtida-e-comentario {
   display: flex;
   flex-direction: row;
@@ -91,7 +89,7 @@ import { ref } from 'vue'
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: .5vw;
+  gap: 0.5vw;
 }
 
 .comentarios i {
@@ -108,7 +106,7 @@ import { ref } from 'vue'
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: .5vw;
+  gap: 0.5vw;
 }
 
 .curtida i {
@@ -170,7 +168,7 @@ import { ref } from 'vue'
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: .5vw;
+  margin-right: 0.5vw;
 }
 
 .foto-username img {
@@ -207,7 +205,6 @@ import { ref } from 'vue'
   height: 250px;
   border-radius: 2vw;
   display: flex;
-
 }
 
 .resenha {
@@ -217,6 +214,4 @@ import { ref } from 'vue'
   margin-bottom: 20vh;
   gap: 2vw;
 }
-
-
 </style>
