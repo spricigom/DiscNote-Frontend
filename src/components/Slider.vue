@@ -70,12 +70,12 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
     </Slide>
     <Slide>
       <div class="carousel-slide">
-        <img src="@/assets/figure8.jpeg" alt="" class="sliderImage">
+        <img src="@/assets/abbeyRoad.jpeg" alt="" class="sliderImage">
 
         <!-- Overlay que aparece no hover -->
         <div class="overlay">
-          <h3>Figure 8</h3>
-          <p>Elliott Smith</p>
+          <h3>Abbey Road</h3>
+          <p>The Beatles</p>
         </div>
 
         <div class="avaliacao">
