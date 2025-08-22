@@ -7,7 +7,7 @@ import { ref } from 'vue'
   </div>
   <RouterLink to="/resenhas"><div class="resenha">
     <div class="foto-resenha">
-      <img src="#" alt="" />
+      <img src="@/assets/stadiumArcadium.jpeg" alt="" />
     </div>
 
     <div class="corpo">
@@ -69,7 +69,7 @@ import { ref } from 'vue'
   display: flex;
   flex-direction: column;
   align-items: baseline;
-  width: 67%;
+  width: 100%;
 }
 
 .divisao hr {
@@ -200,18 +200,26 @@ import { ref } from 'vue'
 }
 
 .foto-resenha {
-  background-color: rgba(0, 0, 0, 0.308);
-  width: 250px;
-  height: 250px;
-  border-radius: 2vw;
-  display: flex;
+  width: 230px;   /* largura da div */
+  height: 230px;  /* altura da div */
+  border-radius: 10px;
+  overflow: hidden; /* esconde qualquer parte que passe da div */
+  background-color: #222; /* só para visualizar o fundo */
 }
 
+.foto-resenha img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .resenha {
-  width: 67%;
+  width: 100%;
   display: flex;
   flex-direction: row;
-  margin-bottom: 20vh;
   gap: 2vw;
+  margin-bottom: 20vh;
+}
+a{
+  text-decoration: none;
 }
 </style>
