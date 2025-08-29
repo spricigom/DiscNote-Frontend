@@ -1,8 +1,10 @@
 <script setup>
 import Footer from '@/components/Footer.vue';
 import Header from '@/components/Header.vue'
-import Slider from '@/components/Slider.vue'
+import Slider from '@/components/SliderAlbum.vue'
 import Resenha from '@/components/Resenha.vue';
+import SliderMusica from '@/components/SliderMusica.vue';
+import SliderAlbum from '@/components/SliderAlbum.vue';
 
 </script>
 
@@ -19,24 +21,25 @@ import Resenha from '@/components/Resenha.vue';
       <h3>Músicas</h3>
       <hr>
     </div>
-    <Slider />
+    <SliderMusica />
 
     <div class="divisao">
       <h3>Álbuns</h3>
       <hr>
     </div>
-    <Slider />
+    <SliderAlbum />
 
         <div class="divisao">
       <h3>Resenhas</h3>
     </div>
     <div class="campo-resenhas">
+      
       <Resenha />
       <Resenha />
     </div>
 
   </main>
-  
+
   <Footer />
 </template>
 

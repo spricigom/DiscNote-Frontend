@@ -175,7 +175,7 @@ nav>a:hover::after {
 }
 
 .submenu a {
-  color: antiquewhite;
+  color: white;
   text-decoration: none;
   transition: color 0.3s ease;
   font-family: 'Archivo', sans-serif;

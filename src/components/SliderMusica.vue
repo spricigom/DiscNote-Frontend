@@ -1,18 +1,18 @@
 <script setup>
 
 import 'vue3-carousel/dist/carousel.css';
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
+import { Carousel, Slide, Navigation } from 'vue3-carousel';
 </script>
 
 <template>
   <Carousel :items-to-show="4" :wrap-around="true" :snap-align="'start'" class="carousel-custom">
     <Slide>
       <div class="carousel-slide">
-        <img src="@/assets/figure8.jpeg" alt="" class="sliderImage">
+        <img src="@/assets/roseParade.jpg" alt="" class="sliderImage">
 
         <!-- Overlay que aparece no hover -->
         <div class="overlay">
-          <h3>Figure 8</h3>
+          <h3>Rose Parade</h3>
           <p>Elliott Smith</p>
         </div>
 
@@ -29,12 +29,12 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 
     <Slide>
       <div class="carousel-slide">
-        <img src="@/assets/grace.jpeg" alt="" class="sliderImage">
+        <img src="@/assets/theWhiteLady.jpeg" alt="" class="sliderImage">
 
         <!-- Overlay que aparece no hover -->
         <div class="overlay">
-          <h3>Grace</h3>
-          <p>Jeff Buckley</p>
+          <h3>The White Lady Loves You More</h3>
+          <p>Elliott Smith</p>
         </div>
 
         <div class="avaliacao">
@@ -50,72 +50,72 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 
     <Slide>
       <div class="carousel-slide">
-        <img src="@/assets/inRainbows.jpeg" alt="" class="sliderImage">
+        <img src="@/assets/musicaBarcoAVela.jpeg" alt="" class="sliderImage">
 
         <!-- Overlay que aparece no hover -->
         <div class="overlay">
-          <h3>In Rainbows</h3>
+          <h3>Barco A Vela</h3>
+          <p>Quarto Vazio</p>
+        </div>
+
+        <div class="avaliacao">
+          <div class="av1">
+            <p><i class="pi pi-clipboard"></i>666k</p>
+          </div>
+          <div class="av2">
+            <p><i class="pi pi-star"></i>4.7/5</p>
+          </div>
+        </div>
+      </div>
+    </Slide>
+    <Slide>
+      <div class="carousel-slide">
+        <img src="@/assets/jonabug.jpeg" alt="" class="sliderImage">
+
+        <!-- Overlay que aparece no hover -->
+        <div class="overlay">
+          <h3>Brown Coloured Eyes</h3>
+          <p>Jonabug</p>
+        </div>
+
+        <div class="avaliacao">
+          <div class="av1">
+            <p><i class="pi pi-clipboard"></i>666k</p>
+          </div>
+          <div class="av2">
+            <p><i class="pi pi-star"></i>4.7/5</p>
+          </div>
+        </div>
+      </div>
+    </Slide>
+    <Slide>
+      <div class="carousel-slide">
+        <img src="@/assets/amarga.jpg" alt="" class="sliderImage">
+
+        <!-- Overlay que aparece no hover -->
+        <div class="overlay">
+          <h3>Amarga</h3>
+          <p>Adorável Clichê</p>
+        </div>
+
+        <div class="avaliacao">
+          <div class="av1">
+            <p><i class="pi pi-clipboard"></i>666k</p>
+          </div>
+          <div class="av2">
+            <p><i class="pi pi-star"></i>4.7/5</p>
+          </div>
+        </div>
+      </div>
+    </Slide>
+    <Slide>
+      <div class="carousel-slide">
+        <img src="@/assets/heartToHeart.jpeg" alt="" class="sliderImage">
+
+        <!-- Overlay que aparece no hover -->
+        <div class="overlay">
+          <h3>Heart To Heart</h3>
           <p>Radiohead</p>
-        </div>
-
-        <div class="avaliacao">
-          <div class="av1">
-            <p><i class="pi pi-clipboard"></i>666k</p>
-          </div>
-          <div class="av2">
-            <p><i class="pi pi-star"></i>4.7/5</p>
-          </div>
-        </div>
-      </div>
-    </Slide>
-    <Slide>
-      <div class="carousel-slide">
-        <img src="@/assets/abbeyRoad.jpeg" alt="" class="sliderImage">
-
-        <!-- Overlay que aparece no hover -->
-        <div class="overlay">
-          <h3>Abbey Road</h3>
-          <p>The Beatles</p>
-        </div>
-
-        <div class="avaliacao">
-          <div class="av1">
-            <p><i class="pi pi-clipboard"></i>666k</p>
-          </div>
-          <div class="av2">
-            <p><i class="pi pi-star"></i>4.7/5</p>
-          </div>
-        </div>
-      </div>
-    </Slide>
-    <Slide>
-      <div class="carousel-slide">
-        <img src="@/assets/figure8.jpeg" alt="" class="sliderImage">
-
-        <!-- Overlay que aparece no hover -->
-        <div class="overlay">
-          <h3>Figure 8</h3>
-          <p>Elliott Smith</p>
-        </div>
-
-        <div class="avaliacao">
-          <div class="av1">
-            <p><i class="pi pi-clipboard"></i>666k</p>
-          </div>
-          <div class="av2">
-            <p><i class="pi pi-star"></i>4.7/5</p>
-          </div>
-        </div>
-      </div>
-    </Slide>
-    <Slide>
-      <div class="carousel-slide">
-        <img src="@/assets/figure8.jpeg" alt="" class="sliderImage">
-
-        <!-- Overlay que aparece no hover -->
-        <div class="overlay">
-          <h3>Figure 8</h3>
-          <p>Elliott Smith</p>
         </div>
 
         <div class="avaliacao">
@@ -140,7 +140,7 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 .carousel-custom {
   width: 70%;
   height: 35vh;
-  margin-bottom: 25vh;
+  margin-bottom: 20vh;
 }
 
 .carousel-slide {
