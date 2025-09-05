@@ -1,9 +1,9 @@
 <script setup>
-import Header from '@/components/Header.vue'
+import HeaderComp from '@/components/HeaderComp.vue'
 </script>
 
 <template>
-  <Header />
+  <HeaderComp />
   <main>
     <div class="geral">
       <div class="coluna1">
@@ -96,8 +96,9 @@ import Header from '@/components/Header.vue'
 
 .geral {
   display: flex;
-  gap: 1vh;
-  margin-top: 5vh;
+  /* gap: 1vh; */
+  /* margin-top: 15vh; */
+  background-color: 'red';
   font-family: 'Archivo', sans-serif;
 }
 .coluna1 {
@@ -124,7 +125,7 @@ import Header from '@/components/Header.vue'
 
 .overlay {
   position: absolute;
-  top: 0;
+  top: 220;
   left: 0;
   width: 100%;
   height: 85%;

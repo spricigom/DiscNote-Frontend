@@ -14,33 +14,34 @@ function toggleSidebar() {
 </script>
 
 <template>
-    <header>
+  <header>
     <div class="logo">
-      <img src="@/assets/logo (1).png" alt="Logo DiscNote">
+      <RouterLink to="/"> <img src="@/assets/logo.png" alt="Logo DiscNote"></RouterLink>
+
     </div>
 
     <nav>
       <div class="nav-item" @click="toggleSubmenu">
-        <!--RouterLink to="#">Explorar <span><i class="pi pi-angle-down"></i></span></RouterLink -->
+        <RouterLink to="#">Explorar <span><i class="pi pi-angle-down"></i></span></RouterLink>
         <div class="submenu" v-if="showSubmenu">
-          <!--RouterLink to="#">Álbuns</RouterLink-->
+          <RouterLink to="#">Álbuns</RouterLink>
           <hr>
-          <!-- RouterLink to="#">Músicas</RouterLink -->
+          <RouterLink to="#">Músicas</RouterLink>
           <hr>
-          <!-- RouterLink to="#">Artistas</RouterLink -->
-          <hr>
-          <!-- RouterLink to="#">Gêneros</RouterLink -->
+          <RouterLink to="#">Artistas</RouterLink>
         </div>
       </div>
-      <!-- RouterLink to="#">Playlists</RouterLink -->
-      <!-- RouterLink to="#">Resenhas</RouterLink -->
+      <RouterLink to="#">Playlists</RouterLink>
+      <RouterLink to="#">Resenhas</RouterLink>
+      <RouterLink to="/cadastro">Cadastro</RouterLink>
+
     </nav>
 
     <div class="right">
       <span class="pi pi-search"></span>
       <span class="pi pi-plus"></span>
       <div class="foto-user" @click="toggleSidebar">
-        <img src="@/assets/fotoPerfil.jpeg" alt="Foto de perfil">
+        <img src="#" alt="">
       </div>
 
       <div class="sidebar" v-if="showSidebar">
@@ -48,7 +49,7 @@ function toggleSidebar() {
         <div class="top">
           <div class="user">
             <div class="foto-user">
-              <img src="@/assets/fotoPerfil.jpeg" alt="Foto de perfil">
+              <img src="@/assets/fotoPerfil.jpeg" alt="">
             </div>
             <h3>LuizEduardoCR</h3>
           </div>
@@ -57,18 +58,22 @@ function toggleSidebar() {
         </div>
         <hr style="margin-top: 4vh; width: 100%;">
         <div class="itens-sidebar">
-            <p>
-              <RouterLink to="#"><i class="pi pi-user" style="color: #145d91; font-size: 1.2vw;"></i> Seu Perfil</RouterLink>
-            </p>
-            <p>
-              <RouterLink to="#"><i class="pi pi-clipboard" style="color: #145d91; font-size: 1.2vw;"></i> Suas Resenhas</RouterLink>
-            </p>
-            <p>
-              <RouterLink to="#"><i class="pi pi-headphones" style="color: #145d91; font-size: 1.2vw;"></i> Suas Playlisys</RouterLink>
-            </p>
-            <p>
-              <RouterLink to="#"><i class="pi pi-star" style="color: #145d91; font-size: 1.2vw;"></i> Favoritos</RouterLink>
-            </p>
+          <p>
+            <RouterLink to="/perfil"><i class="pi pi-user" style="color: #145d91; font-size: 1.2vw;"></i> Seu Perfil
+            </RouterLink>
+          </p>
+          <p>
+            <RouterLink to="#"><i class="pi pi-clipboard" style="color: #145d91; font-size: 1.2vw;"></i> Suas Resenhas
+            </RouterLink>
+          </p>
+          <p>
+            <RouterLink to="#"><i class="pi pi-headphones" style="color: #145d91; font-size: 1.2vw;"></i> Suas Playlisys
+            </RouterLink>
+          </p>
+          <p>
+            <RouterLink to="#"><i class="pi pi-star" style="color: #145d91; font-size: 1.2vw;"></i> Favoritos
+            </RouterLink>
+          </p>
         </div>
       </div>
       <div class="overlay" v-if="showSidebar" @click="toggleSidebar"></div>
@@ -77,7 +82,6 @@ function toggleSidebar() {
 </template>
 
 <style scoped>
-
 .submenu hr {
   border: 1px #145d91 solid;
   width: 7vw;
@@ -191,6 +195,13 @@ nav>a:hover::after {
   cursor: pointer;
 }
 
+.foto-user{
+    background-color: rgba(0, 0, 0, 0.342);
+width: 50px;
+height: 50px;
+border-radius: 50px;
+}
+
 .foto-user img {
   width: 50px;
   height: 50px;
@@ -215,13 +226,14 @@ nav>a:hover::after {
   z-index: 1000;
 }
 
-.itens-sidebar{
+.itens-sidebar {
   display: flex;
   flex-direction: column;
   gap: 3vh;
   margin-top: 5vh;
 }
-.itens-sidebar a{
+
+.itens-sidebar a {
   text-decoration: none;
   color: white;
   font-family: 'Archivo', sans-serif;
@@ -229,13 +241,15 @@ nav>a:hover::after {
   transition: color .3s ease;
 
 }
-.itens-sidebar a:hover{
+
+.itens-sidebar a:hover {
   color: #ECC815;
 }
 
-.itens-sidebar i{
+.itens-sidebar i {
   margin-right: .5vw;
 }
+
 .close-btn {
   background: none;
   border: none;
@@ -254,13 +268,15 @@ nav>a:hover::after {
   padding-right: .5vw;
   width: 100%;
 }
-.user{
+
+.user {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: .7vw;
 }
-.user h3{
+
+.user h3 {
   font-family: 'Archivo', sans-serif;
   color: white;
   font-weight: 500;
@@ -276,5 +292,4 @@ nav>a:hover::after {
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 999;
 }
-
 </style>
