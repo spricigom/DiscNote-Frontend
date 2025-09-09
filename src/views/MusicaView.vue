@@ -1,197 +1,225 @@
 <script setup>
+import { computed, reactive } from 'vue'
 import Header from '@/components/Header.vue'
+
+const musica = reactive({
+  titulo: 'Nome da Musica',
+  artista: 'nome do artista',
+  genero: ['Alt-Rock', 'Rock', 'Funk-Rock'],
+})
+
+const stats = reactive({
+  totalresenhas: 777314,
+  average: 5.0,
+  popularity: 86,
+})
+
+const resenha = reactive({
+  user: 'username',
+  estrelas: '',
+  data: '28/08/2025',
+  likes: 2500,
+  body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra diam quis leo finibus, vel posuere augue volutpat. Aenean orci lacus, luctus sed faucibus vel, ultrices ut leo. Quisque cursus libero eros, eget fringilla mi convallis a. Nulla porttitor lorem ac diam mollis scelerisque. Praesent ut luctus tellus, id facilisis felis. Donec sit amet arcu vehicula, lacinia eros et, vestibulum risus. Aenean aliquet malesuada tristique. Ut porta diam nisl, eu posuere lorem sodales vel. Curabitur dignissim accumsan volutpat. Integer vita...`,
+})
+
+const truncatedresenha = computed(() => {
+  const max = 420
+  return resenha.body.length > max ? resenha.body.slice(0, max) + '...' : resenha.body
+})
 </script>
 
 <template>
   <Header />
   <main>
-    <div class="geral">
-      <div class="coluna1">
-        <img src="@/assets/figure8.jpeg" alt="" class="imgMusica" />
+    <div class="musica">
+      <div class="left">
+        <div class="imgMusica"></div>
         <button id="escrever">Escrever Resenha</button>
       </div>
-      <div class="coluna2">
-        <div class="nomes">
-          <h1 class="titulo">Nome da Música</h1>
-          <h2 class="artista">Nome do artista</h2>
+
+      <div class="center">
+        <div class="area-titulos">
+          <h1 class="titulo">{{ musica.titulo }}</h1>
+          <h2 class="artista">{{ musica.artista }}</h2>
         </div>
-        <div class="divisao">
-          <h3 id="generos">Gêneros</h3>
-         </div> 
-         <hr />
-        
-        <div class="divisao">
-          <h3 id="resenhas">Resenhas</h3>
-        </div> 
-         <hr />
-        
-        <div class="resenha">
-          <div class="user-av-e-fav">
-            <div class="foto-username">
-              <img src="#" alt="" />
-            </div>
-            <p class="username">@username</p>
-            <div class="avaliacao-e-favorito">
-              <div class="avaliacao-resenha">
-                <i class="pi pi-star-fill"></i>
-                <i class="pi pi-star-fill"></i>
-                <i class="pi pi-star-fill"></i>
-                <i class="pi pi-star-fill"></i>
-                <i class="pi pi-star-fill"></i>
-              </div>
-              <div class="favorito">
-                <i class="pi pi-heart-fill"></i>
-              </div>
-              <div class="data">28/08/2025</div>
-            </div>
-          </div>
-
-          <!-- Texto -->
-          <p class="texto-resenha">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra diam quis leo
-            finibus, vel posuere augue volutpat. Aenean orci lacus, luctus sed faucibus vel,
-            ultricies ut leo. Quisque cursus libero eros, eget fringilla mi convallis a. Nulla
-            porttitor lorem ac diam mollis scelerisque. Praesent ut luctus tellus, id facilisis
-            felis. ac. Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam nihil
-            eveniet accusantium molestiae minus nisi laborum ut officia? Aliquid facere libero sed
-            provident. Maiores eligendi nihil sunt, mollitia inventore explicabo.
-          </p>
-
-          <div class="curtida">
-            <i class="pi pi-thumbs-up"></i>
-            <p>2.500 curtidas</p>
+        <div id="generos">
+          <p>Generos:</p>
+          <div class="tags">
+            <button v-for="g in musica.genero" :key="g" class="tag">{{ g }}</button>
           </div>
         </div>
-        <hr>
-        <div class="resenha">
-          <div class="user-av-e-fav">
-            <div class="foto-username">
-              <img src="#" alt="" />
-            </div>
-            <p class="username">@username</p>
-            <div class="avaliacao-e-favorito">
-              <div class="avaliacao-resenha">
-                <i class="pi pi-star-fill"></i>
-                <i class="pi pi-star-fill"></i>
-                <i class="pi pi-star-fill"></i>
-                <i class="pi pi-star-fill"></i>
-                <i class="pi pi-star-fill"></i>
-              </div>
-              <div class="favorito">
-                <i class="pi pi-heart-fill"></i>
-              </div>
-              <div class="data">28/08/2025</div>
-            </div>
+        <section class="resenhas">
+          <div id="cabecalho-resenha">
+            <h3>Resenhas</h3>
+            <a href="#" class="ver-mais">ver todas &gt;</a>
           </div>
 
-          <!-- Texto -->
-          <p class="texto-resenha">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra diam quis leo
-            finibus, vel posuere augue volutpat. Aenean orci lacus, luctus sed faucibus vel,
-            ultricies ut leo. Quisque cursus libero eros, eget fringilla mi convallis a. Nulla
-            porttitor lorem ac diam mollis scelerisque. 
-          </p>
-
-          <div class="curtida">
-            <i class="pi pi-thumbs-up"></i>
-            <p>2.500 curtidas</p>
-          </div>
-        </div>
-        <hr>
+          <article class="card-resenha">
+            <div class="meta">
+              <div class="foto-username">
+                <img src="#" alt="" />
+              </div>
+              <div class="meta-text">
+                <div class="user-row">
+                  <strong>@{{ resenha.user }}</strong>
+                  <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
+                  <div class="favorito">
+                    <i class="pi pi-heart-fill"></i>
+                  </div>
+                  <span class="data">{{ resenha.data }}</span>
+                </div>
+              </div>
+            </div>
+            <p class="resenha-body">
+              {{ truncatedresenha }}
+              <a class="ver-maisResenha" href="#">ver mais &gt;</a>
+            </p>
+            <div class="resenha-footer">
+              <span class="likes"
+                ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
+              >
+            </div>
+          </article>
+          <article class="card-resenha">
+            <div class="meta">
+              <div class="foto-username">
+                <img src="#" alt="" />
+              </div>
+              <div class="meta-text">
+                <div class="user-row">
+                  <strong>@{{ resenha.user }}</strong>
+                  <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
+                  <div class="favorito">
+                    <i class="pi pi-heart-fill"></i>
+                  </div>
+                  <span class="data">{{ resenha.data }}</span>
+                </div>
+              </div>
+            </div>
+            <p class="resenha-body">
+              {{ truncatedresenha }}
+              <a class="ver-maisResenha" href="#">ver mais &gt;</a>
+            </p>
+            <div class="resenha-footer">
+              <span class="likes"
+                ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
+              >
+            </div>
+          </article>
+        </section>
       </div>
-      <div class="coluna3">
-        <p>Lorem</p>
-      </div>
+      <aside class="right">
+        <div class="stat">
+          <div class="big">{{ stats.totalresenhas.toLocaleString() }}</div>
+          <div class="label">Total de avaliacoes</div>
+        </div>
+
+        <div class="stat rating">
+          <div class="stars">
+            ★★★★★ <span class="avg">{{ stats.average.toFixed(1) }}</span>
+          </div>
+          <div class="label">Media das avaliacoes</div>
+        </div>
+
+        <div class="stat">
+          <div class="big">{{ stats.popularity }}%</div>
+          <div class="label">Popularidade</div>
+        </div>
+      </aside>
     </div>
   </main>
 </template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-.geral {
-  display: flex;
-  gap: 1vh;
-  margin-top: 5vh;
-  font-family: 'Archivo', sans-serif;
+.musica {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  padding: 32px;
+  height: 100%;
+  font-family: 'Archivo' , sans-serif
 }
-.coluna1 {
-  flex: 1;
-  padding: 20px;
-  text-align: center;
-  border-radius: 8px;
-}
-.coluna2 {
-  flex: 2;
-  padding: 20px;
+.left {
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
+  align-items: center;
+  gap: 1.5vh;
 }
-.coluna3 {
-  flex: 1;
-  padding: 20px;
-  text-align: center;
-  border-radius: 8px;
+.imgMusica {
+  width: 220px;
+  height: 220px;
+  background: #0b1a1a;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.3);
 }
-
-/* Coluna 1*/
-.imgMusica{
+#escrever {
+  border: 1.5px solid #fff;
+  background: transparent;
+  color: #fff;
+  padding: 10px 18px;
   border-radius: 10px;
-}
-#escrever{
-  
+  cursor: pointer;
 }
 
-/* Coluna 2*/
-.nomes {
-  text-align: left;
+.center {
+  margin-left: 3vh;
+  padding-top: 6px;
 }
-.titulo {
+.area-titulos .titulo {
   color: white;
-  font-size: 5.5vh;
+  font-size: 5vh;
+  margin: 0;
 }
-
-.artista {
+.area-titulos .artista {
+  margin-top: 0;
   color: #d8d8d8;
-  font-size: 2.25vh;
-}
-
-.divisao {
-  display: flex;
-  flex-direction: column;
-  align-items: baseline;
-  width: 67%;
-  margin-top: 6vh;
-}
-
-hr {
-  width: 100%;
-  border: #145d91 1px solid;
-  margin-bottom: 2%;
+  font-size: 2vh;
 }
 #generos {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1vw;
-  font-weight: 500;
+  margin-top: 5vh;
   color: #145d91;
 }
-#resenhas {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.4vw;
-  font-weight: 500;
+#generos p {
   color: #145d91;
+  border-bottom: 2px solid #145d91;
+  font-size: 2.3vh
+}
+.tags {
+  display: flex;
+  gap: 10px;
+}
+.tag {
+  background: transparent;
+  border: 2px solid #ecc815;
+  color: #ecc815;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 1.5vh
+}
+#cabecalho-resenha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #145d91;
+  padding-bottom: 10px;
+  margin-bottom: 1vh;
+  margin-top: 3vh;
+  color: #145d91;
+}
+#cabecalho-resenha h3 {
+  margin: 0;
+  font-size: 3vh
 }
 
 .resenha {
-  color: #fff;
-  padding: 16px;
-  border-radius: 12px;
-  width: 80%;
-  margin: auto;
-  font-family: Arial, sans-serif;
-  text-align: left;
+  color: white;
+  margin-top: 1.5px;
 }
-
+.ver-mais {
+  color: #145d91;
+  text-decoration: none;
+}
 .foto-username {
   background-color: rgba(0, 0, 0, 0.315);
   width: 40px;
@@ -203,19 +231,8 @@ hr {
 .foto-username img {
   object-fit: cover;
 }
-
-.username {
-  font-size: 2vh;
-  margin: 0;
-}
-
-.avaliacao-resenha {
-  display: flex;
-  flex-direction: row;
-  gap: 0.3vw;
-  font-size: 1vw;
-  color: #ecc815;
-  margin-left: 1vw;
+strong{
+  font-size:1.7vh
 }
 .favorito {
   display: flex;
@@ -223,48 +240,72 @@ hr {
   font-size: 1.2vw;
   color: #145d91;
 }
-.data{
-  font-size: 1vw;
-  color: #9E9E9E;
-}
-
-.user-av-e-fav {
-  display: flex;
-  flex-direction: row;
-  margin-top: 4vh;
-  align-items: center;
-}
-.avaliacao-e-favorito {
-  display: flex;
-  flex-direction: row;
-  gap: 1.2vw;
-}
-
-.texto-resenha {
-  font-size: 2vh;
-  line-height: 1.4;
-  text-align: left;
-  margin-top: 1.5vh;
-  margin-bottom: 1.5vh;
-}
-
-.curtida {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5vw;
-  margin-bottom: 2vh;
-}
-
-.curtida i {
-  color: #145d91;
-  font-size: 1vw;
-}
-
-.curtida p {
-  font-family: 'DM Mono', sans-serif;
+.card-resenha {
+  margin-top: 2vh;
+  padding: 8px 0;
   color: white;
-  font-size: 0.7vw;
 }
-/* Coluna 3*/
+.meta {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.user-row {
+  display: flex;
+  gap: 2.3vh;
+  align-items: center;
+}
+.estrelas {
+  color: #ecc815;
+  font-weight: 900;
+  font-size: 2.5vh;
+}
+.data {
+  color: #9e9e9e;
+  font-size: 14px;
+}
+.resenha-body {
+  margin-top: 0.7px;
+  line-height: 1.45;
+  color: #f3f7f7;
+  font-size: 1.8vh
+  }
+.ver-maisResenha {
+  color: #9e9e9e;
+  text-decoration: none;
+}
+.resenha-footer {
+  margin-top: 12px;
+  color: white;
+  font-family: 'Archivo', sans-serif;
+  gap:1.5vh
+}
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  align-items: flex-end;
+  margin-right: 7vh;
+  font-family: 'Archivo', sans-serif;
+  font-size: 2.5vh
+}
+.stat {
+  background: transparent;
+  text-align: right;
+}
+.stat .big {
+  font-size: 3.5vh;
+  color: #ecc815;
+}
+.stat .label {
+  color: white;
+}
+.rating .stars {
+  font-size: 3vh;
+  color: #ecc815;
+}
+.rating .avg {
+  margin-left: 8px;
+  color: #fff;
+}
 </style>
