@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import Header from '@/components/Header.vue'
+import HeaderComp from '@/components/HeaderComp.vue'
 
 
 const selectedTab = ref('resenhas')
@@ -14,7 +14,7 @@ const tabs = [
 </script>
 
 <template>
-  <Header />
+  <HeaderComp />
   <main>
     <div class="container">
       <div class="perfil-info">

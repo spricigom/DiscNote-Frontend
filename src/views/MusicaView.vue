@@ -1,6 +1,6 @@
 <script setup>
+import HeaderComp from '@/components/HeaderComp.vue'
 import { computed, reactive } from 'vue'
-import Header from '@/components/Header.vue'
 
 const musica = reactive({
   titulo: 'Nome da Musica',
@@ -29,7 +29,7 @@ const truncatedresenha = computed(() => {
 </script>
 
 <template>
-  <Header />
+  <HeaderComp />
   <main>
     <div class="musica">
       <div class="left">
@@ -160,7 +160,6 @@ const truncatedresenha = computed(() => {
   border-radius: 10px;
   cursor: pointer;
 }
-
 .center {
   margin-left: 3vh;
   padding-top: 6px;

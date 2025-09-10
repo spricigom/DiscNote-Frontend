@@ -1,13 +1,13 @@
 <script setup>
 import Footer from '@/components/Footer.vue';
-import Header from '@/components/Header.vue'
+import HeaderComp from '@/components/HeaderComp.vue'
 import Slider from '@/components/Slider.vue'
 import Resenha from '@/components/Resenha.vue';
 
 </script>
 
 <template>
-  <Header />
+  <HeaderComp />
 
   <main>
     <div class="apresenta">
