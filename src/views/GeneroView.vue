@@ -1,0 +1,209 @@
+<script setup>
+import HeaderComp from '@/components/HeaderComp.vue'
+import { ref, onMounted } from "vue";
+
+// Gêneros e músicas da imagem
+const generos = [
+  {
+    nome: "Hard Rock",
+    musicas: [
+      { titulo: "Hard Rock 1", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Hard Rock 2", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Hard Rock 3", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Hard Rock 4", ouvintes: "666k", nota: "4.7/5" }
+    ]
+  },
+  {
+    nome: "Indie Rock",
+    musicas: [
+      { titulo: "Indie Rock 1", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Indie Rock 2", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Indie Rock 3", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Indie Rock 4", ouvintes: "666k", nota: "4.7/5" }
+    ]
+  },
+  {
+    nome: "Surf Rock",
+    musicas: [
+      { titulo: "Surf Rock 1", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Surf Rock 2", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Surf Rock 3", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Surf Rock 4", ouvintes: "666k", nota: "4.7/5" }
+    ]
+  },
+  {
+    nome: "Grunge",
+    musicas: [
+      { titulo: "Grunge 1", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Grunge 2", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Grunge 3", ouvintes: "666k", nota: "4.7/5" },
+      { titulo: "Grunge 4", ouvintes: "666k", nota: "4.7/5" }
+    ]
+  }
+];
+
+const carrosseis = ref({});
+
+function setRef(el, key) {
+  if (el) carrosseis.value[key] = el;
+}
+
+function scrollLeft(key) {
+  const el = carrosseis.value[key];
+  if (el) el.scrollBy({ left: -200, behavior: "smooth" });
+}
+
+function scrollRight(key) {
+  const el = carrosseis.value[key];
+  if (el) el.scrollBy({ left: 200, behavior: "smooth" });
+}
+
+// garante loop infinito
+function checkLoop(key) {
+  const el = carrosseis.value[key];
+  if (!el) return;
+
+  const scrollWidth = el.scrollWidth / 2; // metade pq duplicamos os itens
+  if (el.scrollLeft <= 0) {
+    el.scrollLeft = scrollWidth;
+  } else if (el.scrollLeft >= scrollWidth * 2 - el.clientWidth) {
+    el.scrollLeft = scrollWidth;
+  }
+}
+
+onMounted(() => {
+  Object.values(carrosseis.value).forEach(el => {
+    const half = el.scrollWidth / 2;
+    el.scrollLeft = half;
+  });
+});
+</script>
+
+<template>
+  <HeaderComp/>
+  <div class="page">
+    <div class="container">
+      <p class="titulo">Rock</p>
+      <section v-for="g in generos" :key="g.nome" class="bloco">
+        <div class="bloco-header">
+          <p>{{ g.nome }}</p>
+        </div>
+
+        <div class="carrossel">
+          <button class="arrow left" @click="scrollLeft(g.nome)">‹</button>
+          <div class="cards" :ref="el => setRef(el, g.nome)" @scroll="checkLoop(g.nome)">
+            <div v-for="(musica, i) in g.musicas.concat(g.musicas)" :key="i + g.nome" class="card">
+              <div class="thumb"></div>
+              <div class="info">
+                <div class="info-item">
+                  <!-- Ícone ouvintes -->
+                  <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5Z" fill="#145D91"/></svg>
+                  <span>{{ musica.ouvintes }}</span>
+                </div>
+                <div class="info-item">
+                  <!-- Ícone estrela -->
+                  <svg viewBox="0 0 24 24"><path d="M12 2 15 9l7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-7Z" fill="#145D91"/></svg>
+                  <span>{{ musica.nota }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="arrow right" @click="scrollRight(g.nome)">›</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.page {
+  background: #0f2626;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  font-family: "Poppins", sans-serif;
+}
+.container {
+  width: 100%;
+  max-width: 70%;
+  padding: 24px;
+}
+.titulo {
+  font-size: 5vh;
+  font-weight:600;
+  margin-bottom: 2.5vh;
+  margin-top:2.5vh;
+}
+.bloco-header {
+  display: flex;
+  align-items: center;
+  margin-top:5vh;
+  margin-bottom: 2.5vh;
+  color: #145D91;
+  border-bottom: 2px solid #145D91
+}
+.bloco-header p {
+  margin: 0;
+  font-size: 3vh;
+  font-weight:600;
+}
+.carrossel {
+  display: flex;
+  align-items: center;
+  gap: 2.2vh;
+}
+.cards {
+  display: flex;
+  gap: 3vh;
+  overflow-x: auto;
+  flex: 1;
+  scroll-behavior: smooth;  
+}
+.cards::-webkit-scrollbar { display: none; }
+.card {
+  width: 200px;
+  height: 230px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+}
+.thumb {
+  flex: 1;
+  background: #0f1c1c;
+  border-radius: 6px;
+  border: 2px solid transparent;
+}
+.thumb:hover {
+  border-color: #ffd800;
+}
+.info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+  font-size: 0.9rem;
+  margin: auto;
+}
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #bdbdbd;
+}
+.info-item svg {
+  width: 16px;
+  height: 16px;
+}
+.arrow {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+</style>

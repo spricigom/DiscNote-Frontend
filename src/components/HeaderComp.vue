@@ -26,7 +26,7 @@ function toggleSidebar() {
         <div class="submenu" v-if="showSubmenu">
           <RouterLink to="#">Álbuns</RouterLink>
           <hr>
-          <RouterLink to="#">Músicas</RouterLink>
+          <RouterLink to="/musicas">Músicas</RouterLink>
           <hr>
           <RouterLink to="#">Artistas</RouterLink>
         </div>
