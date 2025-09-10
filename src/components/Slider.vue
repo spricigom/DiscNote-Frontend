@@ -19,6 +19,7 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
         <div class="carousel-slide">
           <img src="#" alt="" class="sliderImage">
           <div class="avaliacao">
+            
             <div class="av1"><p><i class="pi pi-clipboard"></i>666k</p></div>
             <div class="av2"><p><i class="pi pi-star"></i>4.7/5</p></div>
           </div>
@@ -88,11 +89,11 @@ import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
   background-color: rgba(0, 0, 0, 0.397);
 }
 .avaliacao{
-  height: 15%;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 2vh;
   gap: 10%;
 }
 .avaliacao p{
