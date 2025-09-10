@@ -100,7 +100,7 @@ onMounted(() => {
               <div class="info">
                 <div class="info-item">
                   <!-- Ícone de "ouvintes" -->
-                  <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5Z" fill="#145D91"/></svg>
+                  <i class="pi pi-clipboard"></i>
                   <span>{{ musica.ouvintes }}</span>
                 </div>
                 <div class="info-item">
@@ -178,15 +178,16 @@ onMounted(() => {
   display: none;
 }
 .card {
-  width: 200px;
-  height: 230px;
-  border-radius: 8px;
+  width: 270px;
+  height: 290px;
+  border-radius: 12px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 10px;
   transition: border 0.2s;
+  gap: 7px;
 }
 .thumb:hover {
   border: 2px solid #ffd800;
@@ -194,18 +195,17 @@ onMounted(() => {
 .thumb {
   flex: 1;
   background: #0f1c1c;
-  border-radius: 6px;
+  border-radius: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .info {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   gap: 12px;
-  margin-top: 6px;
-  font-size: 0.9rem;
+  font-size: 1rem;
   margin: auto;
 }
 .info-item {
@@ -222,7 +222,10 @@ onMounted(() => {
   background: transparent;
   border: none;
   color: white;
-  font-size: 28px;
+  font-size: 3vh;
   cursor: pointer;
+}
+i{
+  color: #145D91;
 }
 </style>
