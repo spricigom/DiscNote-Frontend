@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import Header from '@/components/Header.vue'
+import ResenhaPerfil from '@/components/ResenhaPerfil.vue'
 
 
 const selectedTab = ref('resenhas')
@@ -52,7 +53,7 @@ const tabs = [
 
       <!-- Conteúdo da Aba Selecionada -->
       <div class="tab-content">
-        <div v-if="selectedTab === 'resenhas'">Conteúdo de Resenhas</div>
+        <div v-if="selectedTab === 'resenhas'"><ResenhaPerfil /><ResenhaPerfil /></div>
         <div v-else-if="selectedTab === 'playlists'">Conteúdo de Playlists</div>
         <div v-else-if="selectedTab === 'favoritos'">Conteúdo de Favoritos</div>
         <div v-else-if="selectedTab === 'mais-ouvidas'">Conteúdo de Mais Ouvidas</div>
@@ -63,9 +64,6 @@ const tabs = [
 </template>
 
 <style scoped>
-main {
-  height: 100vh;
-}
 
 
 .perfil-info {
@@ -154,4 +152,5 @@ main {
   text-align: center;
   font-size: 18px;
 }
+
 </style>

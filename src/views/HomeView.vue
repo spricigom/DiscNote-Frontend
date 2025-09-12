@@ -1,8 +1,7 @@
 <script setup>
 import Header from '@/components/Header.vue'
 import Slider from '@/components/Slider.vue'
-import Resenha from '@/components/Resenha.vue';
-
+import Resenha from '@/components/Resenha.vue'
 </script>
 
 <template>
@@ -16,17 +15,17 @@ import Resenha from '@/components/Resenha.vue';
 
     <div class="divisao">
       <h3>Músicas</h3>
-      <hr>
+      <hr />
     </div>
     <Slider />
 
     <div class="divisao">
       <h3>Albuns</h3>
-      <hr>
+      <hr />
     </div>
     <Slider />
 
-        <div class="divisao">
+    <div class="divisao">
       <h3>Resenhas</h3>
     </div>
     <Resenha />
@@ -35,31 +34,31 @@ import Resenha from '@/components/Resenha.vue';
 </template>
 
 <style scoped>
-.corpo{
+.corpo {
   height: 100%;
 }
-.foto-username{
+.foto-username {
   background-color: rgba(0, 0, 0, 0.315);
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
-.foto-username img{
+.foto-username img {
   object-fit: cover;
 }
-.username p{
+.username p {
   font-family: 'Archivo', sans-serif;
   color: #c4c4c4;
   font-weight: 500;
 }
-.username{
+.username {
   display: flex;
-  flex-direction:row;
+  flex-direction: row;
   margin-top: 4vh;
   align-items: center;
   gap: 3%;
 }
-.titulo h4{
+.titulo h4 {
   font-family: 'Archivo', sans-serif;
   color: white;
   font-weight: 400;
@@ -76,7 +75,6 @@ import Resenha from '@/components/Resenha.vue';
   height: 250px;
   border-radius: 2vw;
   display: flex;
-
 }
 
 .resenha {
@@ -87,7 +85,6 @@ import Resenha from '@/components/Resenha.vue';
   margin-bottom: 10vh;
   gap: 2vw;
 }
-
 
 main {
   display: flex;
@@ -136,4 +133,5 @@ main {
   width: 100%;
   border: #145d91 1px solid;
   margin-bottom: 2%;
-}</style>
+}
+</style>
