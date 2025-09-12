@@ -41,6 +41,8 @@ const tabs = [
             <span class="label">Playlists</span>
           </div>
         </div>
+
+        <button class="btn-seguir">Seguir</button>
       </div>
 
       <!-- Tabs -->
@@ -149,8 +151,25 @@ const tabs = [
 
 .tab-content {
   margin-top: 30px;
-  text-align: center;
-  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* garante que itens menores que 100% fiquem centrados */
+  gap: 5vh;
+  width: 100%;
 }
+
+.btn-seguir {
+  margin-top: 5vh;
+  padding: 10px 30px;
+  font-size: 1.2vw;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 
 </style>
