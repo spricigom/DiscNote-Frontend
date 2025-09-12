@@ -43,6 +43,11 @@ const router = createRouter({
     },
     { path: '/musicas', name: 'musicas', component: Musicas },
     { path: '/genero/:nome', name: 'genero', component: Genero, props: true },
+    {
+      path: '/criarResenha',
+      name: 'criarResenha',
+      component: () => import('../views/CriarView.vue')
+    },
     //{
       //path: '/musicas',
       //name: 'Musicas',
