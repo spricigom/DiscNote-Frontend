@@ -36,7 +36,7 @@
 
         <div class="texto-resenha">
           <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sed voluptate excepturi vero tempore similique...
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sed voluptate excepturi vero tempore similique... Lorem ipsum dolor sit, amet consectetur adipisicing elit. Hic maiores, vitae illo repellat voluptatum nostrum eius, dolorem error corporis recusandae, voluptas veritatis sequi excepturi. Molestias et soluta qui vitae deleniti? Lorem ipsum dolor sit amet consectetur adipisicing elit. Non mollitia delectus aspernatur deserunt ullam, quia cupiditate, odit blanditiis aliquid debitis maiores beatae quo ad illum ipsum voluptatem, quis ipsam fuga! Lorem ipsum dolor sit amet consectetur adipisicing elit. Non magnam amet repellendus dolores iure, asperiores quibusdam aliquam ut quo explicabo at tempora dolor? Doloremque optio, veritatis excepturi eligendi numquam suscipit! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis temporibus iste soluta sit dolorem asperiores aliquid aliquam. Fugiat ab fugit voluptatem atque quisquam, suscipit veniam soluta odit hic laboriosam molestiae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, aliquam dolorum blanditiis perspiciatis facere quibusdam corrupti quas obcaecati possimus tempore consequuntur tempora optio, iste fuga eos repudiandae libero quasi nobis!
           </p>
         </div>
 
@@ -61,7 +61,7 @@
 <style scoped>
 /* wrapper que garante centralização independente do pai */
 .resenha-wrapper {
-  width: 80%;        /* largura desejada para a resenha */
+  width: 60%;        /* largura desejada para a resenha */
   margin: 0 auto;    /* centraliza horizontalmente */
   display: flex;
   flex-direction: column;
@@ -71,12 +71,11 @@
 /* separador */
 .divisao {
   width: 100%;
-  margin-bottom: 2vh;
+  margin-bottom: 4vh;
 }
 .divisao hr {
   width: 100%;
   border: #145d91 1px solid;
-  margin-bottom: 2%;
 }
 
 /* layout interno: resenha ocupa 100% do wrapper */
@@ -84,7 +83,7 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  margin-bottom: 20vh;
+  margin-bottom: 10vh;
   gap: 2vw;
 }
 
