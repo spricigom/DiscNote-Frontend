@@ -44,7 +44,6 @@ import { ref } from 'vue'
   display: flex;
   flex-direction: column;
   color: white;
-  background: #000000 url('') no-repeat center center/cover; /* Troque '' pela sua imagem futuramente */
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -104,6 +103,8 @@ main {
   justify-content: center;
   text-align: center;
   padding: 0 20px;
+    background: #000000 url('@/assets/fundo.jpeg') no-repeat center center/cover; /* Troque '' pela sua imagem futuramente */
+
 }
 
 main h1 {
