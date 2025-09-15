@@ -4,7 +4,6 @@ import { ref } from 'vue'
 // Depois você pode integrar rotas ou props aqui.
 </script>
 
-
 <template>
   <div class="landing">
     <!-- Header -->
@@ -45,6 +44,8 @@ import { ref } from 'vue'
   flex-direction: column;
   color: white;
   font-family: Arial, Helvetica, sans-serif;
+
+  /* Fundo aplicado na página inteira */
 }
 
 /* Header */
@@ -54,15 +55,20 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 20px 50px;
-}
 
+  /* Transparente por cima da imagem */
+  background: transparent;
+  position: absolute; /* fica flutuando em cima */
+  top: 0;
+  left: 0;
+}
 .logo {
   font-size: 24px;
   font-weight: bold;
 }
 
 .logo .note {
-  color: #1e90ff; /* Destaque da nota musical */
+  color: #1e90ff;
 }
 
 nav {
@@ -103,8 +109,9 @@ main {
   justify-content: center;
   text-align: center;
   padding: 0 20px;
-    background: #000000 url('@/assets/fundo.jpeg') no-repeat center center/cover; /* Troque '' pela sua imagem futuramente */
-
+background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.4)),
+              url('@/assets/fundo2.jpeg') no-repeat center center/cover;
+  background-size: 145%;
 }
 
 main h1 {
