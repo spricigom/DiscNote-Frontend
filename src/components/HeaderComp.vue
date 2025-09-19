@@ -16,7 +16,7 @@ function toggleSidebar() {
 <template>
   <header>
     <div class="logo">
-      <RouterLink to="/LandingPage"> <img src="@/assets/logo.png" alt="Logo DiscNote"></RouterLink>
+      <RouterLink to="/"> <img src="@/assets/logo.png" alt="Logo DiscNote"></RouterLink>
 
     </div>
 
