@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import Musicas from '@/views/MusicasView.vue'
 import Genero from '@/views/GeneroView.vue'
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -47,6 +48,11 @@ const router = createRouter({
       path: '/criarResenha',
       name: 'criarResenha',
       component: () => import('../views/CriarView.vue')
+    },
+    {
+      path: '/LandingPage',
+      name: 'LandingPage',
+      component: () => import('../views/LandingPageView.vue')
     },
     //{
       //path: '/musicas',
