@@ -1,9 +1,9 @@
 <script setup>
-import Header from '@/components/Header.vue'
+import HeaderComp from '@/components/HeaderComp.vue'
 </script>
 
 <template>
-  <Header/>
+  <HeaderComp/>
   <main>
     <div class="geral">
       <div class="coluna1">
