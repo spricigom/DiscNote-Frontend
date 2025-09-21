@@ -1,52 +1,21 @@
 <script setup>
 import HeaderComp from '@/components/HeaderComp.vue'
 import { ref, onMounted } from "vue";
+import axios from "axios";
 
-// cada gênero tem músicas com ouvintes e nota
-const generos = [
-  {
-    nome: "Rock",
-    musicas: [
-      { titulo: "Rock 1", ouvintes: "666k", nota: "4.7/5" },
-      { titulo: "Rock 2", ouvintes: "320k", nota: "4.5/5" },
-      { titulo: "Rock 3", ouvintes: "210k", nota: "4.2/5" },
-      { titulo: "Rock 4", ouvintes: "150k", nota: "4.9/5" },
-      { titulo: "Rock 5", ouvintes: "98k", nota: "4.1/5" }
-    ]
-  },
-  {
-    nome: "Pop",
-    musicas: [
-      { titulo: "Pop 1", ouvintes: "500k", nota: "4.6/5" },
-      { titulo: "Pop 2", ouvintes: "300k", nota: "4.2/5" },
-      { titulo: "Pop 3", ouvintes: "280k", nota: "4.3/5" },
-      { titulo: "Pop 4", ouvintes: "180k", nota: "4.8/5" }
-    ]
-  },
-  {
-    nome: "Metal",
-    musicas: [
-      { titulo: "Metal 1", ouvintes: "420k", nota: "4.9/5" },
-      { titulo: "Metal 2", ouvintes: "250k", nota: "4.4/5" },
-      { titulo: "Metal 3", ouvintes: "190k", nota: "4.7/5" }
-    ]
-  },
-  {
-    nome: "Jazz",
-    musicas: [
-      { titulo: "Jazz 1", ouvintes: "120k", nota: "4.5/5" },
-      { titulo: "Jazz 2", ouvintes: "80k", nota: "4.3/5" },
-      { titulo: "Jazz 3", ouvintes: "60k", nota: "4.0/5" }
-    ]
-  }
-];
+const generos = ref([
+  { nome: "Rock", term: "rock" },
+  { nome: "Pop", term: "pop" },
+  { nome: "Metal", term: "metal" },
+  { nome: "Jazz", term: "jazz" }
+]);
 
 const carrosseis = ref({});
+const loading = ref(true);
+const musicasPorGenero = ref({});
 
 function setRef(el, key) {
-  if (el) {
-    carrosseis.value[key] = el;
-  }
+  if (el) carrosseis.value[key] = el;
 }
 
 function scrollLeft(key) {
@@ -59,25 +28,48 @@ function scrollRight(key) {
   if (el) el.scrollBy({ left: 200, behavior: "smooth" });
 }
 
-// garante loop
 function checkLoop(key) {
   const el = carrosseis.value[key];
   if (!el) return;
+  const scrollWidth = el.scrollWidth / 2;
+  if (el.scrollLeft <= 0) el.scrollLeft = scrollWidth;
+  else if (el.scrollLeft >= scrollWidth * 2 - el.clientWidth) el.scrollLeft = scrollWidth;
+}
 
-  const scrollWidth = el.scrollWidth / 2; // metade porque duplicamos
-  if (el.scrollLeft <= 0) {
-    el.scrollLeft = scrollWidth; // volta pro fim duplicado
-  } else if (el.scrollLeft >= scrollWidth * 2 - el.clientWidth) {
-    el.scrollLeft = scrollWidth; // volta pro meio
+// BUSCA MÚSICAS NO ITUNES
+async function fetchMusicas() {
+  loading.value = true;
+  for (const g of generos.value) {
+    try {
+      const res = await axios.get("https://itunes.apple.com/search", {
+        params: {
+          term: g.term,
+          entity: "musicTrack",
+          limit: 10
+        }
+      });
+      musicasPorGenero.value[g.nome] = res.data.results.map(track => ({
+        titulo: track.trackName,
+        artista: track.artistName,
+        capa: track.artworkUrl100,  // capa do álbum
+        ouvintes: `${Math.floor(Math.random() * 500 + 50)}k`,
+        nota: `${(Math.random() * 1.5 + 3.5).toFixed(1)}/5`,
+        previewUrl: track.previewUrl
+      }));
+    } catch (err) {
+      console.error(`Erro ao buscar ${g.nome}:`, err);
+      musicasPorGenero.value[g.nome] = [];
+    }
   }
+  loading.value = false;
+
+  Object.values(carrosseis.value).forEach(el => {
+    if (el) el.scrollLeft = el.scrollWidth / 2;
+  });
 }
 
 onMounted(() => {
-  // centraliza nos "itens reais"
-  Object.values(carrosseis.value).forEach(el => {
-    const half = el.scrollWidth / 2;
-    el.scrollLeft = half;
-  });
+  fetchMusicas();
 });
 </script>
 
@@ -86,25 +78,33 @@ onMounted(() => {
   <div class="page">
     <div class="container">
       <p class="titulo">Músicas</p>
-      <section v-for="g in generos" :key="g.nome" class="bloco">
+      <div v-if="loading">Carregando músicas...</div>
+
+      <section v-for="g in generos" :key="g.nome" class="bloco" v-else>
         <div class="bloco-header">
           <p>{{ g.nome }}</p>
-          <RouterLink :to="`/genero/rock`" class="vermais">ver mais ></RouterLink> <!-- ${g.nome} ir ao lado do "generos" dps da inegração com obanco--> 
+          <RouterLink :to="`/genero/${g.term}`" class="vermais">ver mais ></RouterLink>
         </div>
 
         <div class="carrossel">
           <button class="arrow left" @click="scrollLeft(g.nome)">‹</button>
           <div class="cards" :ref="el => setRef(el, g.nome)" @scroll="checkLoop(g.nome)">
-            <div v-for="(musica, i) in g.musicas.concat(g.musicas)" :key="i + g.nome" class="card">
-              <div class="thumb">{{ musica.titulo }}</div>
+            <div
+              v-for="(musica, i) in (musicasPorGenero[g.nome] || []).concat(musicasPorGenero[g.nome] || [])"
+              :key="i + g.nome"
+              class="card"
+            >
+              <!-- CAPA DO ÁLBUM -->
+              <img :src="musica.capa" alt="Capa do álbum" class="thumb"/>
+
               <div class="info">
+                <strong>{{ musica.titulo }}</strong>
+                <p>{{ musica.artista }}</p>
                 <div class="info-item">
-                  <!-- Ícone de "ouvintes" -->
                   <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5Z" fill="#145D91"/></svg>
                   <span>{{ musica.ouvintes }}</span>
                 </div>
                 <div class="info-item">
-                  <!-- Ícone de estrela -->
                   <svg viewBox="0 0 24 24"><path d="M12 2 15 9l7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-7Z" fill="#145D91"/></svg>
                   <span>{{ musica.nota }}</span>
                 </div>
@@ -117,6 +117,7 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -172,7 +173,7 @@ onMounted(() => {
   gap: 3vh;
   overflow-x: auto;
   flex: 1;
-  scroll-behavior: smooth;  
+  scroll-behavior: smooth;
 }
 .cards::-webkit-scrollbar {
   display: none;
