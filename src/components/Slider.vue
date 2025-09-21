@@ -1,133 +1,64 @@
 <script setup>
 import 'vue3-carousel/dist/carousel.css';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+// Lista de músicas que virão da API
+const items = ref([]);
+
+// Função para buscar músicas de rock no iTunes
+async function fetchRockSongs() {
+  try {
+    const res = await axios.get('https://itunes.apple.com/search', {
+      params: {
+        term: 'metal',
+        entity: 'musicTrack',
+        limit: 12 // quantidade de músicas
+      }
+    });
+    items.value = res.data.results;
+  } catch (err) {
+    console.error('Erro ao buscar músicas do iTunes:', err);
+    items.value = [];
+  }
+}
+
+onMounted(() => {
+  fetchRockSongs();
+});
+
+// funções auxiliares (simulando ouvintes e nota)
+function randomOuvintes(index) {
+  return `${500 + index * 100}k`;
+}
+function randomNota() {
+  return (Math.random() * 1.5 + 3.5).toFixed(1);
+}
 </script>
 
 <template>
   <Carousel :items-to-show="4" :wrap-around="true" :snap-align="'start'" class="carousel-custom">
-    <Slide>
+    <Slide v-for="(item, index) in items" :key="item.trackId">
       <div class="carousel-slide">
-        <img src="@/assets/figure8.jpeg" alt="" class="sliderImage">
+        <img :src="item.artworkUrl100" :alt="item.trackName" class="sliderImage" />
 
-        <!-- Overlay que aparece no hover -->
+        <!-- Overlay -->
         <div class="overlay">
-          <h3>Figure 8</h3>
-          <p>Elliott Smith</p>
+          <h3>{{ item.trackName }}</h3>
+          <p>{{ item.artistName }}</p>
         </div>
 
         <div class="avaliacao">
           <div class="av1">
-            <p><i class="pi pi-clipboard"></i>666k</p>
+            <p><i class="pi pi-clipboard"></i>{{ randomOuvintes(index) }}</p>
           </div>
           <div class="av2">
-            <p><i class="pi pi-star"></i>4.7/5</p>
+            <p><i class="pi pi-star"></i>{{ randomNota() }}/5</p>
           </div>
         </div>
       </div>
     </Slide>
-
-    <Slide>
-      <div class="carousel-slide">
-        <img src="@/assets/grace.jpeg" alt="" class="sliderImage">
-
-        <!-- Overlay que aparece no hover -->
-        <div class="overlay">
-          <h3>Grace</h3>
-          <p>Jeff Buckley</p>
-        </div>
-
-        <div class="avaliacao">
-          <div class="av1">
-            <p><i class="pi pi-clipboard"></i>666k</p>
-          </div>
-          <div class="av2">
-            <p><i class="pi pi-star"></i>4.7/5</p>
-          </div>
-        </div>
-      </div>
-    </Slide>
-
-    <Slide>
-      <div class="carousel-slide">
-        <img src="@/assets/inRainbows.jpeg" alt="" class="sliderImage">
-
-        <!-- Overlay que aparece no hover -->
-        <div class="overlay">
-          <h3>In Rainbows</h3>
-          <p>Radiohead</p>
-        </div>
-
-        <div class="avaliacao">
-          <div class="av1">
-            <p><i class="pi pi-clipboard"></i>666k</p>
-          </div>
-          <div class="av2">
-            <p><i class="pi pi-star"></i>4.7/5</p>
-          </div>
-        </div>
-      </div>
-    </Slide>
-    <Slide>
-      <div class="carousel-slide">
-        <img src="@/assets/abbeyRoad.jpeg" alt="" class="sliderImage">
-
-        <!-- Overlay que aparece no hover -->
-        <div class="overlay">
-          <h3>Abbey Road</h3>
-          <p>The Beatles</p>
-        </div>
-
-        <div class="avaliacao">
-          <div class="av1">
-            <p><i class="pi pi-clipboard"></i>666k</p>
-          </div>
-          <div class="av2">
-            <p><i class="pi pi-star"></i>4.7/5</p>
-          </div>
-        </div>
-      </div>
-    </Slide>
-    <Slide>
-      <div class="carousel-slide">
-        <img src="@/assets/figure8.jpeg" alt="" class="sliderImage">
-
-        <!-- Overlay que aparece no hover -->
-        <div class="overlay">
-          <h3>Figure 8</h3>
-          <p>Elliott Smith</p>
-        </div>
-
-        <div class="avaliacao">
-          <div class="av1">
-            <p><i class="pi pi-clipboard"></i>666k</p>
-          </div>
-          <div class="av2">
-            <p><i class="pi pi-star"></i>4.7/5</p>
-          </div>
-        </div>
-      </div>
-    </Slide>
-    <Slide>
-      <div class="carousel-slide">
-        <img src="@/assets/figure8.jpeg" alt="" class="sliderImage">
-
-        <!-- Overlay que aparece no hover -->
-        <div class="overlay">
-          <h3>Figure 8</h3>
-          <p>Elliott Smith</p>
-        </div>
-
-        <div class="avaliacao">
-          <div class="av1">
-            <p><i class="pi pi-clipboard"></i>666k</p>
-          </div>
-          <div class="av2">
-            <p><i class="pi pi-star"></i>4.7/5</p>
-          </div>
-        </div>
-      </div>
-    </Slide>
-
 
     <template #addons>
       <Navigation />
@@ -149,13 +80,21 @@ import { Carousel, Slide, Navigation } from 'vue3-carousel';
   overflow: hidden;
 }
 
+.sliderImage {
+  object-fit: cover;
+  width: 100%;
+  height: 85%;
+  border-radius: 2vw;
+  transition: 0.1s;
+  background-color: rgba(0, 0, 0, 0.397);
+}
+
 .overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 85%;
-  /* mesma altura da imagem */
   background-color: rgba(0, 0, 0, 0.6);
   opacity: 0;
   display: flex;
@@ -180,20 +119,9 @@ import { Carousel, Slide, Navigation } from 'vue3-carousel';
   font-family: 'Archivo', sans-serif;
 }
 
-/* Mostra o overlay no hover */
 .carousel-slide:hover .overlay {
   opacity: 1;
   border: #ecc415 3px solid;
-
-}
-
-.sliderImage {
-  object-fit: cover;
-  width: 100%;
-  height: 85%;
-  border-radius: 2vw;
-  transition: .1s;
-  background-color: rgba(0, 0, 0, 0.397);
 }
 
 .avaliacao {
@@ -215,32 +143,19 @@ import { Carousel, Slide, Navigation } from 'vue3-carousel';
   font-size: 1.2rem;
   margin-right: 0.4rem;
   position: relative;
-  top: .2vh;
+  top: 0.2vh;
 }
 
-.av1 {
+.av1, .av2 {
   display: flex;
   flex-direction: row;
   align-items: center;
   height: 100%;
-}
-
-.av2 {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 100%;
-
-}
-
-.sliderImage:hover {
-  border: #ecc415 3px solid;
 }
 
 .carousel-custom :deep(.carousel__prev),
 .carousel-custom :deep(.carousel__next) {
   transform: translateY(-50%);
-  /* centraliza verticalmente */
   color: white;
   padding: 0.5em;
   width: 3em;
@@ -249,9 +164,7 @@ import { Carousel, Slide, Navigation } from 'vue3-carousel';
 
 .carousel-custom :deep(.carousel__prev) {
   left: -5%;
-  /* coloca mais pra fora ou ajusta como quiser */
 }
-
 .carousel-custom :deep(.carousel__next) {
   right: -5%;
 }
