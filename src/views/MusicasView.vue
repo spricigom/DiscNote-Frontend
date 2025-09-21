@@ -2,6 +2,9 @@
 import HeaderComp from '@/components/HeaderComp.vue'
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const generos = ref([
   { nome: "Rock", term: "rock" },
@@ -49,9 +52,10 @@ async function fetchMusicas() {
         }
       });
       musicasPorGenero.value[g.nome] = res.data.results.map(track => ({
+        trackId: track.trackId, // importante para a rota da música
         titulo: track.trackName,
         artista: track.artistName,
-        capa: track.artworkUrl100,  // capa do álbum
+        capa: track.artworkUrl100,
         ouvintes: `${Math.floor(Math.random() * 500 + 50)}k`,
         nota: `${(Math.random() * 1.5 + 3.5).toFixed(1)}/5`,
         previewUrl: track.previewUrl
@@ -71,6 +75,10 @@ async function fetchMusicas() {
 onMounted(() => {
   fetchMusicas();
 });
+
+function irParaMusica(musica) {
+  router.push({ name: 'Musica', params: { id: musica.trackId } });
+}
 </script>
 
 <template>
@@ -93,10 +101,10 @@ onMounted(() => {
               v-for="(musica, i) in (musicasPorGenero[g.nome] || []).concat(musicasPorGenero[g.nome] || [])"
               :key="i + g.nome"
               class="card"
+              @click="irParaMusica(musica)"
             >
               <!-- CAPA DO ÁLBUM -->
               <img :src="musica.capa" alt="Capa do álbum" class="thumb"/>
-
               <div class="info">
                 <strong>{{ musica.titulo }}</strong>
                 <p>{{ musica.artista }}</p>
@@ -118,7 +126,6 @@ onMounted(() => {
   </div>
 </template>
 
-
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 .page {
@@ -129,13 +136,11 @@ onMounted(() => {
   justify-content: center;
   font-family: "Poppins", sans-serif;
 }
-
 .container {
   width: 100%;
   max-width: 70%;
   padding: 24px;
 }
-
 .titulo {
   font-size: 5vh;
   font-weight:600;
@@ -162,7 +167,6 @@ onMounted(() => {
   font-weight: bold;
   font-size:1.5vh;
 }
-
 .carrossel {
   display: flex;
   align-items: center;
@@ -188,6 +192,7 @@ onMounted(() => {
   justify-content: space-between;
   padding: 10px;
   transition: border 0.2s;
+  cursor: pointer;
 }
 .thumb:hover {
   border: 2px solid #ffd800;

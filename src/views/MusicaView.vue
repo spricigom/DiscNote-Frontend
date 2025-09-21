@@ -1,40 +1,74 @@
 <script setup>
 import HeaderComp from '@/components/HeaderComp.vue'
-import { computed, reactive } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import axios from 'axios'
 
+const route = useRoute()
 const musica = reactive({
-  titulo: 'Nome da Musica',
-  artista: 'nome do artista',
-  genero: ['Alt-Rock', 'Rock', 'Funk-Rock'],
+  titulo: '',
+  artista: '',
+  genero: [],
+  capa: '',
+  previewUrl: ''
 })
 
 const stats = reactive({
-  totalresenhas: 777314,
-  average: 5.0,
-  popularity: 86,
+  totalresenhas: 0,
+  average: 0,
+  popularity: 0,
 })
 
-const resenha = reactive({
-  user: 'username',
-  estrelas: '',
-  data: '28/08/2025',
-  likes: 2500,
-  body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra diam quis leo finibus, vel posuere augue volutpat. Aenean orci lacus, luctus sed faucibus vel, ultrices ut leo. Quisque cursus libero eros, eget fringilla mi convallis a. Nulla porttitor lorem ac diam mollis scelerisque. Praesent ut luctus tellus, id facilisis felis. Donec sit amet arcu vehicula, lacinia eros et, vestibulum risus. Aenean aliquet malesuada tristique. Ut porta diam nisl, eu posuere lorem sodales vel. Curabitur dignissim accumsan volutpat. Integer vita...`,
-})
+const resenhas = ref([]) // lista de resenhas, exemplo fictício
+const loading = ref(true)
 
-const truncatedresenha = computed(() => {
+const truncatedResenha = (resenha) => {
   const max = 420
-  return resenha.body.length > max ? resenha.body.slice(0, max) + '...' : resenha.body
+  return resenha.length > max ? resenha.slice(0, max) + '...' : resenha
+}
+
+async function fetchMusica() {
+  loading.value = true
+  try {
+    const res = await axios.get('https://itunes.apple.com/lookup', {
+      params: {
+        id: route.params.id
+      }
+    })
+    const track = res.data.results[0]
+    musica.titulo = track.trackName
+    musica.artista = track.artistName
+    musica.capa = track.artworkUrl100
+    musica.previewUrl = track.previewUrl
+    musica.genero = [track.primaryGenreName] // exemplo simples
+    // fake stats
+    stats.totalresenhas = Math.floor(Math.random() * 1000)
+    stats.average = (Math.random() * 2 + 3).toFixed(1)
+    stats.popularity = Math.floor(Math.random() * 100)
+    // fake resenhas
+    resenhas.value = [
+      { user: 'user1', estrelas: 5, data: '20/08/2025', likes: 120, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum' },
+      { user: 'user2', estrelas: 4, data: '18/08/2025', likes: 85, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum .' }
+    ]
+  } catch (err) {
+    console.error('Erro ao buscar música:', err)
+  }
+  loading.value = false
+}
+
+onMounted(() => {
+  fetchMusica()
 })
 </script>
 
 <template>
   <HeaderComp />
-  <main>
+  <main v-if="!loading">
     <div class="musica">
       <div class="left">
-        <div class="imgMusica"></div>
+        <img :src="musica.capa" alt="Capa da música" class="imgMusica" />
         <button id="escrever">Escrever Resenha</button>
+        <audio v-if="musica.previewUrl" :src="musica.previewUrl" controls />
       </div>
 
       <div class="center">
@@ -43,7 +77,7 @@ const truncatedresenha = computed(() => {
           <h2 class="artista">{{ musica.artista }}</h2>
         </div>
         <div id="generos">
-          <p>Generos:</p>
+          <p>Gêneros:</p>
           <div class="tags">
             <button v-for="g in musica.genero" :key="g" class="tag">{{ g }}</button>
           </div>
@@ -54,71 +88,44 @@ const truncatedresenha = computed(() => {
             <a href="#" class="ver-mais">ver todas &gt;</a>
           </div>
 
-          <article class="card-resenha">
+          <article class="card-resenha" v-for="(res, i) in resenhas" :key="i">
             <div class="meta">
               <div class="foto-username">
                 <img src="#" alt="" />
               </div>
               <div class="meta-text">
                 <div class="user-row">
-                  <strong>@{{ resenha.user }}</strong>
-                  <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
+                  <strong>@{{ res.user }}</strong>
+                  <div class="estrelas">{{ res.estrelas }} ★★★★★</div>
                   <div class="favorito">
                     <i class="pi pi-heart-fill"></i>
                   </div>
-                  <span class="data">{{ resenha.data }}</span>
+                  <span class="data">{{ res.data }}</span>
                 </div>
               </div>
             </div>
             <p class="resenha-body">
-              {{ truncatedresenha }}
+              {{ truncatedResenha(res.body) }}
               <a class="ver-maisResenha" href="#">ver mais &gt;</a>
             </p>
             <div class="resenha-footer">
-              <span class="likes"
-                ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
-              >
-            </div>
-          </article>
-          <article class="card-resenha">
-            <div class="meta">
-              <div class="foto-username">
-                <img src="#" alt="" />
-              </div>
-              <div class="meta-text">
-                <div class="user-row">
-                  <strong>@{{ resenha.user }}</strong>
-                  <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
-                  <div class="favorito">
-                    <i class="pi pi-heart-fill"></i>
-                  </div>
-                  <span class="data">{{ resenha.data }}</span>
-                </div>
-              </div>
-            </div>
-            <p class="resenha-body">
-              {{ truncatedresenha }}
-              <a class="ver-maisResenha" href="#">ver mais &gt;</a>
-            </p>
-            <div class="resenha-footer">
-              <span class="likes"
-                ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
-              >
+              <span class="likes"><i class="pi pi-thumbs-up"></i> {{ res.likes.toLocaleString() }} curtidas</span>
             </div>
           </article>
         </section>
       </div>
+
       <aside class="right">
         <div class="stat">
           <div class="big">{{ stats.totalresenhas.toLocaleString() }}</div>
-          <div class="label">Total de avaliacoes</div>
+          <div class="label">Total de avaliações</div>
         </div>
 
         <div class="stat rating">
           <div class="stars">
-            ★★★★★ <span class="avg">{{ stats.average.toFixed(1) }}</span>
+            ★★★★★ <span class="avg">{{ stats.average }}</span>
           </div>
-          <div class="label">Media das avaliacoes</div>
+          <div class="label">Média das avaliações</div>
         </div>
 
         <div class="stat">
@@ -128,6 +135,10 @@ const truncatedresenha = computed(() => {
       </aside>
     </div>
   </main>
+
+  <div v-else>
+    Carregando música...
+  </div>
 </template>
 
 <style scoped>
