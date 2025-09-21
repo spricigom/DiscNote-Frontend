@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import Musicas from '@/views/MusicasView.vue'
+import Genero from '@/views/GeneroView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +32,38 @@ const router = createRouter({
       name: 'Perfil',
       component: () => import('../views/PerfilView.vue'),
     },
+    {
+      path: '/resenhas',
+      name: 'Resenha',
+      component: () => import('../views/ResenhaView.vue'),
+    },
+    {
+      path: '/musica',
+      name: 'Musica',
+      component: () => import('../views/MusicaView.vue'),
+    },
+    { path: '/musicas', name: 'musicas', component: Musicas },
+    { path: '/genero/:nome', name: 'genero', component: Genero, props: true },
+    {
+      path: '/criarResenha',
+      name: 'criarResenha',
+      component: () => import('../views/CriarView.vue')
+    },
+    {
+      path: '/LandingPage',
+      name: 'LandingPage',
+      component: () => import('../views/LandingPageView.vue')
+    },
+    //{
+      //path: '/musicas',
+      //name: 'Musicas',
+     // component: () => import('../views/MusicasView.vue'),
+   // },
+    //{
+     // path: '/generos',
+     // name: 'generos',
+    //  component: () => import('../views/GenerosView.vue'),
+   // },
   ],
 })
 

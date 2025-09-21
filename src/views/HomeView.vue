@@ -1,12 +1,13 @@
 <script setup>
-import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue';
+import HeaderComp from '@/components/HeaderComp.vue'
 import Slider from '@/components/Slider.vue'
 import Resenha from '@/components/Resenha.vue';
 
 </script>
 
 <template>
-  <Header />
+  <HeaderComp />
 
   <main>
     <div class="apresenta">
@@ -21,7 +22,7 @@ import Resenha from '@/components/Resenha.vue';
     <Slider />
 
     <div class="divisao">
-      <h3>Albuns</h3>
+      <h3>Álbuns</h3>
       <hr>
     </div>
     <Slider />
@@ -29,12 +30,23 @@ import Resenha from '@/components/Resenha.vue';
         <div class="divisao">
       <h3>Resenhas</h3>
     </div>
-    <Resenha />
-    <Resenha />
+    <div class="campo-resenhas">
+      <Resenha />
+      <Resenha />
+    </div>
+
   </main>
+  
+  <Footer />
 </template>
 
 <style scoped>
+.campo-resenhas{
+  display: flex;
+  flex-direction: column;
+  width: 67%;
+}
+
 .corpo{
   height: 100%;
 }
