@@ -1,21 +1,69 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useUsersStore } from '@/stores/users'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
+const authStore = useAuthStore()
+const name = ref('')
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')  // Nova variável para "Confirmar Senha"
 const showPassword = ref(false)
+const usersStore = useUsersStore()
+const router = useRouter()
 
 function togglePassword() {
   showPassword.value = !showPassword.value
 }
 
-function login() {
-  if (password.value !== confirmPassword.value) {
-    alert('As senhas não coincidem. Por favor, tente novamente.');
+async function cadastro() {
+  try {
+    await usersStore.createUser(name.value, email.value, password.value, confirmPassword.value);
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      if (error.response.data) {
+
+        for (const key in error.response.data) {
+          alert(`${key}: ${error.response.data[key].join(', ')}`);
+        }
+      } else {
+        alert('Dados inválidos. Por favor, verifique e tente novamente.');
+      }
+    } else {
+      alert(error.message || error);
+    }
     return;
   }
-  console.log('Login com', email.value, password.value)
+  router.push('/home');
+}
+
+const GOOGLE_CLIENT_ID = '980695137185-00sjn8dnj2h9lq7k9ouhq8q3htp26ggc.apps.googleusercontent.com';
+
+onMounted(() => {
+  window.google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleCredentialResponse,
+  });
+
+  window.google.accounts.id.renderButton(
+    document.getElementById('google-button'),
+    {
+      theme: 'filled_black', 
+      size: 'large',
+      width: 380
+    }
+  );
+
+  window.google.accounts.id.prompt();
+});
+
+function handleCredentialResponse(response) {
+  const id_token = response.credential;
+
+  authStore.loginWithGoogle(id_token);
+
+  router.push('/home');
 }
 </script>
 
@@ -24,7 +72,7 @@ function login() {
     <div class="login-box">
       <h2>Crie sua conta</h2>
 
-      <button class="social-btn google">
+      <button id="google-button" @click="handleGoogleLogin" class="google">
         <span>G</span> Continue com Google
       </button>
 
@@ -34,15 +82,17 @@ function login() {
 
       <div class="divider">ou</div>
 
-      <form @submit.prevent="login">
+      <form @submit.prevent="cadastro">
+        <input type="text" v-model="name" placeholder="Nome completo" required />
         <input type="email" v-model="email" placeholder="E-mail" required />
 
         <div class="password-wrapper">
           <input :type="showPassword ? 'text' : 'password'" v-model="password" placeholder="Senha" required />
           <img class="eye" @click="togglePassword" src="@/assets/eye-3-16.png" alt="Mostrar senha" />
         </div>
-         <div class="password-wrapper">
-          <input :type="showPassword ? 'text' : 'password'" v-model="confirmPassword" placeholder="Confirmar Senha" required />
+        <div class="password-wrapper">
+          <input :type="showPassword ? 'text' : 'password'" v-model="confirmPassword" placeholder="Confirmar Senha"
+            required />
           <img class="eye" @click="togglePassword" src="@/assets/eye-3-16.png" alt="Mostrar senha" />
         </div>
 
@@ -58,6 +108,7 @@ function login() {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -69,7 +120,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-    font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
 
 }
 
@@ -79,7 +130,7 @@ body {
   padding: 40px;
   border-radius: 10px;
   width: 100%;
-    font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
 
   max-width: 380px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -88,7 +139,7 @@ body {
 h2 {
   text-align: center;
   margin-bottom: 30px;
-    font-family: "Poppins", sans-serif;
+  font-family: "Poppins", sans-serif;
 
 }
 
@@ -114,6 +165,23 @@ h2 {
 
 .google span {
   color: #f8f8f8;
+}
+
+.google {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .facebook span {

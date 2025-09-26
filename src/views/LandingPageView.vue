@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from 'vue'
-// Nenhuma lógica ainda, só layout.
-// Depois você pode integrar rotas ou props aqui.
+import { useAuthStore } from '@/stores/auth';
 import HeaderLandingPage from '@/components/HeaderLandingPage.vue'
+
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -17,8 +17,8 @@ import HeaderLandingPage from '@/components/HeaderLandingPage.vue'
         Descubra novos artistas <br />
         Compartilhe playlists com o mundo
       </h1>
-      <RouterLink to="/cadastro"><button class="btn-primary"><p>Cadastre-se</p></button></RouterLink>
-
+      <RouterLink v-if="authStore.isLogged" to="/home"><button class="btn-primary"><p>Ir para Home</p></button></RouterLink>
+      <RouterLink v-else to="/cadastro"><button class="btn-primary"><p>Cadastre-se</p></button></RouterLink>
     </main>
   </div>
 </template>
@@ -141,6 +141,7 @@ main h1 {
 
 .btn-primary:hover {
   background: #187bcd;
+  cursor: pointer;
 }
 
 .btn-primary p{

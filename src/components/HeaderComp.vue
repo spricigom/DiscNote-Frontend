@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
+const authStore = useAuthStore()
 const showSubmenu = ref(false)
 
 function toggleSubmenu() {
@@ -16,7 +18,7 @@ function toggleSidebar() {
 <template>
   <header>
     <div class="logo">
-      <RouterLink to="/"> <img src="@/assets/logo.png" alt="Logo DiscNote"></RouterLink>
+      <RouterLink to="/home"> <img src="@/assets/logo.png" alt="Logo DiscNote"></RouterLink>
 
     </div>
 
@@ -40,18 +42,19 @@ function toggleSidebar() {
     <div class="right">
       <span class="pi pi-search"></span>
       <span class="pi pi-plus"></span>
-      <div class="foto-user" @click="toggleSidebar">
-        <img src="#" alt="">
+      <div v-if="authStore.isLogged" class="foto-user" @click="toggleSidebar">
+        <img :src="authStore.user?.avatar" alt="Foto de Perfil">
       </div>
+      <RouterLink v-else to="/login"><span class="pi pi-user"></span></RouterLink>
 
-      <div class="sidebar" v-if="showSidebar">
+      <div class="sidebar" v-if="showSidebar && authStore.isLogged">
 
         <div class="top">
           <div class="user">
             <div class="foto-user">
-              <img src="@/assets/fotoPerfil.jpeg" alt="">
+              <img :src="authStore.user?.avatar" alt="Foto de Perfil">
             </div>
-            <h3>LuizEduardoCR</h3>
+            <h3>{{ authStore.user?.name || authStore.user?.username }}</h3>
           </div>
 
           <button class="close-btn" @click="toggleSidebar"><i class="pi pi-times" style="font-size: .5vw;"></i></button>
@@ -72,6 +75,10 @@ function toggleSidebar() {
           </p>
           <p>
             <RouterLink to="#"><i class="pi pi-star" style="color: #145d91; font-size: 1.2vw;"></i> Favoritos
+            </RouterLink>
+          </p>
+          <p>
+            <RouterLink to="#" @click="authStore.logout(); toggleSidebar()"><i class="pi pi-sign-out" style="color: #145d91; font-size: 1.2vw;"></i> Sair
             </RouterLink>
           </p>
         </div>
@@ -195,11 +202,11 @@ nav>a:hover::after {
   cursor: pointer;
 }
 
-.foto-user{
-    background-color: rgba(0, 0, 0, 0.342);
-width: 50px;
-height: 50px;
-border-radius: 50px;
+.foto-user {
+  background-color: rgba(0, 0, 0, 0.342);
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
 }
 
 .foto-user img {
