@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
 
-const apiURL = import.meta.env.VITE_API_URL || "http://localhost:19003/api";
+const apiURL = import.meta.env.VITE_API_URL || "https://discnote-backend.onrender.com//api";
 
 const api = axios.create({
     baseURL: apiURL,
