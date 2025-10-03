@@ -2,6 +2,13 @@
 import HeaderComp from '@/components/HeaderComp.vue'
 import { ref, onMounted } from "vue"
 import axios from "axios"
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+function irParaMusica(musica) {
+  router.push({ name: 'Musica', params: { id: musica.trackId } })
+}
 
 // Gêneros que vamos buscar na API
 const generos = ref([
@@ -50,12 +57,13 @@ async function fetchMusicas() {
         }
       })
       musicasPorGenero.value[g.nome] = res.data.results.map(track => ({
-        titulo: track.trackName,
-        artista: track.artistName,
-        capa: track.artworkUrl100,
-        ouvintes: `${Math.floor(Math.random() * 500 + 50)}k`, // demo
-        nota: `${(Math.random() * 1.5 + 3.5).toFixed(1)}/5`,   // demo
-        previewUrl: track.previewUrl
+          trackId: track.trackId,
+          titulo: track.trackName,
+          artista: track.artistName,
+          capa: track.artworkUrl100,
+          ouvintes: `${Math.floor(Math.random() * 500 + 50)}k`,
+          nota: `${(Math.random() * 1.5 + 3.5).toFixed(1)}/5`,
+         previewUrl: track.previewUrl
       }))
     } catch (err) {
       console.error(`Erro ao buscar ${g.nome}:`, err)
@@ -94,6 +102,7 @@ onMounted(() => {
               v-for="(musica, i) in (musicasPorGenero[g.nome] || []).concat(musicasPorGenero[g.nome] || [])"
               :key="i + g.nome"
               class="card"
+                @click="irParaMusica(musica)"
             >
               <!-- CAPA DO ÁLBUM -->
               <img :src="musica.capa" alt="Capa do álbum" class="thumb" />
