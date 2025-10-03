@@ -1,41 +1,25 @@
 <script setup>
 import HeaderComp from '@/components/HeaderComp.vue'
-import { ref, onMounted } from "vue"
+import { ref, onMounted, watch } from "vue"
 import axios from "axios"
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from "vue-router"
 
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 
-function irParaMusica(musica) {
-  router.push({ name: 'Musica', params: { id: musica.trackId } })
-}
-
-// Gêneros que vamos buscar na API
-const generos = ref([
-  { nome: "Hard Rock", term: "hard rock" },
-  { nome: "Indie Rock", term: "indie rock" },
-  { nome: "Surf Rock", term: "surf rock" },
-  { nome: "Grunge", term: "grunge" }
-])
-
+const generoPrincipal = ref(route.params.nome) // ex: "rock"
+const generos = ref([]) // subgêneros
 const carrosseis = ref({})
 const musicasPorGenero = ref({})
 const loading = ref(true)
 
-function setRef(el, key) {
-  if (el) carrosseis.value[key] = el
+function irParaMusica(musica) {
+  router.push({ name: "Musica", params: { id: musica.trackId } })
 }
 
-function scrollLeft(key) {
-  const el = carrosseis.value[key]
-  if (el) el.scrollBy({ left: -200, behavior: "smooth" })
-}
-
-function scrollRight(key) {
-  const el = carrosseis.value[key]
-  if (el) el.scrollBy({ left: 200, behavior: "smooth" })
-}
-
+function setRef(el, key) { if (el) carrosseis.value[key] = el }
+function scrollLeft(key) { const el = carrosseis.value[key]; if (el) el.scrollBy({ left: -200, behavior: "smooth" }) }
+function scrollRight(key) { const el = carrosseis.value[key]; if (el) el.scrollBy({ left: 200, behavior: "smooth" }) }
 function checkLoop(key) {
   const el = carrosseis.value[key]
   if (!el) return
@@ -44,26 +28,54 @@ function checkLoop(key) {
   else if (el.scrollLeft >= scrollWidth * 2 - el.clientWidth) el.scrollLeft = scrollWidth
 }
 
-// Busca músicas no iTunes
+// Definir subgêneros conforme o gênero principal
+function carregarSubgeneros() {
+  const mapa = {
+    rock: [
+      { nome: "Hard Rock", term: "hard rock" },
+      { nome: "Indie Rock", term: "indie rock" },
+      { nome: "Surf Rock", term: "surf rock" },
+      { nome: "Grunge", term: "grunge" }
+    ],
+    pop: [
+      { nome: "K-pop", term: "kpop" },
+      { nome: "Synthpop", term: "synthpop" },
+      { nome: "Indie Pop", term: "indie pop" },
+      { nome: "Electropop", term: "electropop" }
+    ],
+    jazz: [
+      { nome: "Smooth Jazz", term: "smooth jazz" },
+      { nome: "Bebop", term: "bebop" },
+      { nome: "Swing", term: "swing jazz" },
+      { nome: "Latin Jazz", term: "latin jazz" }
+    ],
+    metal: [
+      { nome: "Heavy Metal", term: "heavy metal" },
+      { nome: "Death Metal", term: "death metal" },
+      { nome: "Power Metal", term: "power metal" },
+      { nome: "Black Metal", term: "black metal" }
+    ]
+  }
+
+  generos.value = mapa[generoPrincipal.value] || []
+}
+
+// Busca músicas para cada subgênero
 async function fetchMusicas() {
   loading.value = true
   for (const g of generos.value) {
     try {
       const res = await axios.get("https://itunes.apple.com/search", {
-        params: {
-          term: g.term,
-          entity: "musicTrack",
-          limit: 8
-        }
+        params: { term: g.term, entity: "musicTrack", limit: 8 }
       })
       musicasPorGenero.value[g.nome] = res.data.results.map(track => ({
-          trackId: track.trackId,
-          titulo: track.trackName,
-          artista: track.artistName,
-          capa: track.artworkUrl100,
-          ouvintes: `${Math.floor(Math.random() * 500 + 50)}k`,
-          nota: `${(Math.random() * 1.5 + 3.5).toFixed(1)}/5`,
-         previewUrl: track.previewUrl
+        trackId: track.trackId,
+        titulo: track.trackName,
+        artista: track.artistName,
+        capa: track.artworkUrl100,
+        ouvintes: `${Math.floor(Math.random() * 500 + 50)}k`,
+        nota: `${(Math.random() * 1.5 + 3.5).toFixed(1)}/5`,
+        previewUrl: track.previewUrl
       }))
     } catch (err) {
       console.error(`Erro ao buscar ${g.nome}:`, err)
@@ -72,13 +84,19 @@ async function fetchMusicas() {
   }
   loading.value = false
 
-  // centraliza carrosséis
   Object.values(carrosseis.value).forEach(el => {
     if (el) el.scrollLeft = el.scrollWidth / 2
   })
 }
 
+// Recarregar ao entrar ou mudar rota
 onMounted(() => {
+  carregarSubgeneros()
+  fetchMusicas()
+})
+watch(() => route.params.nome, (novo) => {
+  generoPrincipal.value = novo
+  carregarSubgeneros()
   fetchMusicas()
 })
 </script>
@@ -87,7 +105,7 @@ onMounted(() => {
   <HeaderComp/>
   <div class="page">
     <div class="container">
-      <p class="titulo">Rock</p>
+      <p class="titulo">{{ generoPrincipal }}</p>
       <div v-if="loading" style="color:white;">Carregando músicas...</div>
 
       <section v-for="g in generos" :key="g.nome" class="bloco" v-else>
@@ -102,25 +120,12 @@ onMounted(() => {
               v-for="(musica, i) in (musicasPorGenero[g.nome] || []).concat(musicasPorGenero[g.nome] || [])"
               :key="i + g.nome"
               class="card"
-                @click="irParaMusica(musica)"
+              @click="irParaMusica(musica)"
             >
-              <!-- CAPA DO ÁLBUM -->
               <img :src="musica.capa" alt="Capa do álbum" class="thumb" />
-
               <div class="info" style="flex-direction: column; gap: 4px;">
                 <strong>{{ musica.titulo }}</strong>
                 <p style="font-size:0.8rem;color:#bdbdbd;margin:0;">{{ musica.artista }}</p>
-
-                <div style="display:flex;gap:8px;margin-top:4px;">
-                  <div class="info-item">
-                    <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5Z" fill="#145D91"/></svg>
-                    <span>{{ musica.ouvintes }}</span>
-                  </div>
-                  <div class="info-item">
-                    <svg viewBox="0 0 24 24"><path d="M12 2 15 9l7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-7Z" fill="#145D91"/></svg>
-                    <span>{{ musica.nota }}</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
