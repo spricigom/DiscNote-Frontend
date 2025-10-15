@@ -49,6 +49,12 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/teste',
+      name: 'teste',
+      component: () => import('../views/testesAPIView.vue'),
+      props: true
+    },
+    {
       path: '/musicas', 
       name: 'musicas',
       component: Musicas
