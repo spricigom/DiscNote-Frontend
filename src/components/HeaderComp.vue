@@ -1,25 +1,32 @@
 <script setup>
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
+const router = useRouter()
+
 const showSubmenu = ref(false)
-
-function toggleSubmenu() {
-  showSubmenu.value = !showSubmenu.value
-}
 const showSidebar = ref(false)
+const searchQuery = ref('')
 
-function toggleSidebar() {
-  showSidebar.value = !showSidebar.value
+// Funções para menu e sidebar
+function toggleSubmenu() { showSubmenu.value = !showSubmenu.value }
+function toggleSidebar() { showSidebar.value = !showSidebar.value }
+
+// Função de busca que redireciona
+function goToSearch() {
+  if (!searchQuery.value.trim()) return
+  router.push({ name: 'search', query: { q: searchQuery.value } })
 }
 </script>
 
 <template>
   <header>
     <div class="logo">
-      <RouterLink to="/home"> <img src="@/assets/logo.png" alt="Logo DiscNote"></RouterLink>
-
+      <RouterLink to="/home">
+        <img src="@/assets/logo.png" alt="Logo DiscNote">
+      </RouterLink>
     </div>
 
     <nav>
@@ -36,19 +43,27 @@ function toggleSidebar() {
       <RouterLink to="#">Playlists</RouterLink>
       <RouterLink to="#">Resenhas</RouterLink>
       <RouterLink to="/cadastro">Cadastro</RouterLink>
-
     </nav>
 
     <div class="right">
-      <span class="pi pi-search"></span>
+      <!-- Barra de busca -->
+      <input
+        v-model="searchQuery"
+        @keyup.enter="goToSearch"
+        placeholder="Buscar artista, álbum ou música..."
+        class="search-input"
+      />
+      <button @click="goToSearch">Buscar</button>
+
       <span class="pi pi-plus"></span>
+
       <div v-if="authStore.isLogged" class="foto-user" @click="toggleSidebar">
         <img :src="authStore.user?.avatar" alt="Foto de Perfil">
       </div>
       <RouterLink v-else to="/login"><span class="pi pi-user"></span></RouterLink>
 
+      <!-- Sidebar -->
       <div class="sidebar" v-if="showSidebar && authStore.isLogged">
-
         <div class="top">
           <div class="user">
             <div class="foto-user">
@@ -56,33 +71,18 @@ function toggleSidebar() {
             </div>
             <h3>{{ authStore.user?.name || authStore.user?.username }}</h3>
           </div>
-
           <button class="close-btn" @click="toggleSidebar"><i class="pi pi-times" style="font-size: .5vw;"></i></button>
         </div>
         <hr style="margin-top: 4vh; width: 100%;">
         <div class="itens-sidebar">
-          <p>
-            <RouterLink to="/perfil"><i class="pi pi-user" style="color: #145d91; font-size: 1.2vw;"></i> Seu Perfil
-            </RouterLink>
-          </p>
-          <p>
-            <RouterLink to="#"><i class="pi pi-clipboard" style="color: #145d91; font-size: 1.2vw;"></i> Suas Resenhas
-            </RouterLink>
-          </p>
-          <p>
-            <RouterLink to="#"><i class="pi pi-headphones" style="color: #145d91; font-size: 1.2vw;"></i> Suas Playlisys
-            </RouterLink>
-          </p>
-          <p>
-            <RouterLink to="#"><i class="pi pi-star" style="color: #145d91; font-size: 1.2vw;"></i> Favoritos
-            </RouterLink>
-          </p>
-          <p>
-            <RouterLink to="#" @click="authStore.logout(); toggleSidebar()"><i class="pi pi-sign-out" style="color: #145d91; font-size: 1.2vw;"></i> Sair
-            </RouterLink>
-          </p>
+          <p><RouterLink to="/perfil"><i class="pi pi-user" style="color: #145d91; font-size: 1.2vw;"></i> Seu Perfil</RouterLink></p>
+          <p><RouterLink to="#"><i class="pi pi-clipboard" style="color: #145d91; font-size: 1.2vw;"></i> Suas Resenhas</RouterLink></p>
+          <p><RouterLink to="#"><i class="pi pi-headphones" style="color: #145d91; font-size: 1.2vw;"></i> Suas Playlisys</RouterLink></p>
+          <p><RouterLink to="#"><i class="pi pi-star" style="color: #145d91; font-size: 1.2vw;"></i> Favoritos</RouterLink></p>
+          <p><RouterLink to="#" @click="authStore.logout(); toggleSidebar()"><i class="pi pi-sign-out" style="color: #145d91; font-size: 1.2vw;"></i> Sair</RouterLink></p>
         </div>
       </div>
+
       <div class="overlay" v-if="showSidebar" @click="toggleSidebar"></div>
     </div>
   </header>
