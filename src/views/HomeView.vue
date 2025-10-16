@@ -1,9 +1,48 @@
 <script setup>
 import Footer from '@/components/Footer.vue';
-import HeaderComp from '@/components/HeaderComp.vue'
-import Slider from '@/components/Slider.vue'
+import HeaderComp from '@/components/HeaderComp.vue';
+import Slider from '@/components/Slider.vue';
+import AlbumSlider from '@/components/AlbumSlider.vue';
+import { ref, onMounted, computed } from 'vue';
+import itunesService from '@/services/itunesService';
 import Resenha from '@/components/Resenha.vue';
+import { useResenhaStore } from '@/stores/resenhas';
 
+const resenhaStore = useResenhaStore();
+
+const items = ref([]);
+const resenhas = computed(() => resenhaStore.resenhas.slice(0, 10));
+
+async function fetchRockSongs() {
+  try {
+    const res = await itunesService.buscarPorGenero('rock', 12);
+    items.value = res;
+  } catch (err) {
+    console.error(`Erro ao buscar gênero rock:`, err);
+  }
+}
+
+const albums = ref([]);
+
+async function fetchRockAlbums() {
+  try {
+    const res = await itunesService.buscarPorGenero('rock', 12, 'album');
+    albums.value = res;
+  } catch (err) {
+    console.error(`Erro ao buscar álbuns rock:`, err);
+  }
+}
+
+onMounted(async () => {
+  await resenhaStore.fetchResenhas();
+  fetchRockSongs();
+  fetchRockAlbums();
+});
+
+onMounted(async () => {
+  await resenhaStore.fetchResenhas();
+  fetchRockSongs();
+});
 </script>
 
 <template>
@@ -12,70 +51,80 @@ import Resenha from '@/components/Resenha.vue';
   <main>
     <div class="apresenta">
       <h1>Populares no DiscNote</h1>
-      <p>um mix de tudo que está sendo mais falado por aqui</p>
+      <p>Um mix de tudo que está sendo mais falado por aqui</p>
     </div>
 
     <div class="divisao">
       <h3>Músicas</h3>
       <hr>
     </div>
-    <Slider />
+    <Slider :items="items" type="music" />
 
     <div class="divisao">
       <h3>Álbuns</h3>
       <hr>
     </div>
-    <Slider />
+    <AlbumSlider :albums="albums" />
 
-        <div class="divisao">
+    <div class="divisao">
       <h3>Resenhas</h3>
     </div>
-    <div class="campo-resenhas">
-      <Resenha />
-      <Resenha />
+    <div v-if="resenhas.length > 0" class="campo-resenhas">
+      <Resenha v-for="resenha in resenhas" :key="resenha.id" :resenha="resenha" />
     </div>
-
+    <p v-else>Nenhuma resenha disponível</p>
   </main>
-  
+
   <Footer />
 </template>
-
 <style scoped>
-.campo-resenhas{
+.slides {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.campo-resenhas {
   display: flex;
   flex-direction: column;
   width: 67%;
 }
 
-.corpo{
+.corpo {
   height: 100%;
 }
-.foto-username{
+
+.foto-username {
   background-color: rgba(0, 0, 0, 0.315);
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
-.foto-username img{
+
+.foto-username img {
   object-fit: cover;
 }
-.username p{
+
+.username p {
   font-family: 'Archivo', sans-serif;
   color: #c4c4c4;
   font-weight: 500;
 }
-.username{
+
+.username {
   display: flex;
-  flex-direction:row;
+  flex-direction: row;
   margin-top: 4vh;
   align-items: center;
   gap: 3%;
 }
-.titulo h4{
+
+.titulo h4 {
   font-family: 'Archivo', sans-serif;
   color: white;
   font-weight: 400;
 }
+
 .titulo h1 {
   font-family: 'Montserrat', sans-serif;
   color: white;
@@ -148,4 +197,5 @@ main {
   width: 100%;
   border: #145d91 1px solid;
   margin-bottom: 2%;
-}</style>
+}
+</style>

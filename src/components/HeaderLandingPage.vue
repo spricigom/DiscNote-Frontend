@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth';
 
+const authStore = useAuthStore();
 
 </script>
 
@@ -24,7 +26,8 @@ import { ref } from 'vue'
     </div>
 
     <div class="right">
-      <RouterLink to="/login"><button class="login"><p>Login</p> </button></RouterLink>
+      <RouterLink v-if="authStore.isLogged" to="/home"><button class="login"><p>Home</p> </button></RouterLink>
+      <RouterLink v-else to="/login"><button class="login"><p>Login</p> </button></RouterLink>
     </div>
   </header>
 </template>
@@ -36,6 +39,7 @@ import { ref } from 'vue'
   padding: 1.2vh 2vw;
   color: white;
   border-radius: 12px;
+  cursor: pointer;
 }
 .login p{
   font-family: 'Poppins', sans-serif;

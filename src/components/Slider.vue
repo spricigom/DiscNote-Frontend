@@ -1,60 +1,68 @@
 <script setup>
 import 'vue3-carousel/dist/carousel.css';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { useRouter } from 'vue-router';
+import { useResenhaStore } from '@/stores/resenhas';
+import { ref, watch } from 'vue';
 
-// Lista de músicas que virão da API
-const items = ref([]);
+const resenhaStore = useResenhaStore();
 
-// Função para buscar músicas de rock no iTunes
-async function fetchRockSongs() {
-  try {
-    const res = await axios.get('https://itunes.apple.com/search', {
-      params: {
-        term: 'metal',
-        entity: 'musicTrack',
-        limit: 12 // quantidade de músicas
-      }
-    });
-    items.value = res.data.results;
-  } catch (err) {
-    console.error('Erro ao buscar músicas do iTunes:', err);
-    items.value = [];
+const props = defineProps({
+  items: {
+    type: Array,
+    required: true
+  },
+  type: {
+    type: String,
+    default: 'music'
+  }
+});
+
+const router = useRouter();
+function goToItem(item) {
+  router.push({ path: '/musica/' + item.trackId });
+}
+
+const notas = ref({});
+const ouvintes = ref({});
+
+function fetchResenhasParaItem(item) {
+  console.log('Buscando resenhas para item:', item);
+  const id = item.trackId || item.collectionId;
+  const lista = resenhaStore.fetchResenhasPorMusica(id);
+  if (lista && lista.length > 0) {
+    const soma = lista.reduce((acc, r) => acc + parseFloat(r.nota || 0), 0);
+    notas.value[id] = (soma / lista.length).toFixed(1);
+    ouvintes.value[id] = lista.length;
+  } else {
+    notas.value[id] = 0;
   }
 }
 
-onMounted(() => {
-  fetchRockSongs();
+watch(() => props.items, (newItems) => {
+  newItems.forEach(fetchResenhasParaItem);
 });
-
-// funções auxiliares (simulando ouvintes e nota)
-function randomOuvintes(index) {
-  return `${500 + index * 100}k`;
-}
-function randomNota() {
-  return (Math.random() * 1.5 + 3.5).toFixed(1);
-}
 </script>
 
 <template>
   <Carousel :items-to-show="4" :wrap-around="true" :snap-align="'start'" class="carousel-custom">
-    <Slide v-for="(item, index) in items" :key="item.trackId">
-      <div class="carousel-slide">
-        <img :src="item.artworkUrl100" :alt="item.trackName" class="sliderImage" />
+    <Slide v-for="(item) in items" :key="item.trackId || item.collectionId">
+      <div class="carousel-slide" @click="goToItem(item)">
+        <img :src="item.capa" :alt="item.titulo" class="sliderImage" />
 
         <!-- Overlay -->
         <div class="overlay">
-          <h3>{{ item.trackName }}</h3>
-          <p>{{ item.artistName }}</p>
+          <h3>{{ item.titulo }}</h3>
+          <p>{{ item.artista }}</p>
         </div>
 
         <div class="avaliacao">
           <div class="av1">
-            <p><i class="pi pi-clipboard"></i>{{ randomOuvintes(index) }}</p>
+            <p><i class="pi pi-clipboard"></i>{{ ouvintes[item.trackId || item.collectionId] || 0 }}</p>
+
           </div>
           <div class="av2">
-            <p><i class="pi pi-star"></i>{{ randomNota() }}/5</p>
+            <p><i class="pi pi-star"></i>{{ notas[item.trackId || item.collectionId] || 0 }}/5</p>
           </div>
         </div>
       </div>
@@ -122,6 +130,7 @@ function randomNota() {
 .carousel-slide:hover .overlay {
   opacity: 1;
   border: #ecc415 3px solid;
+  cursor: pointer;
 }
 
 .avaliacao {
@@ -146,7 +155,8 @@ function randomNota() {
   top: 0.2vh;
 }
 
-.av1, .av2 {
+.av1,
+.av2 {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -165,6 +175,7 @@ function randomNota() {
 .carousel-custom :deep(.carousel__prev) {
   left: -5%;
 }
+
 .carousel-custom :deep(.carousel__next) {
   right: -5%;
 }

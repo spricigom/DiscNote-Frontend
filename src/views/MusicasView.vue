@@ -1,83 +1,68 @@
 <script setup>
 import HeaderComp from '@/components/HeaderComp.vue'
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
 
 const generos = ref([
   { nome: "Rock", term: "rock" },
   { nome: "Pop", term: "pop" },
   { nome: "Metal", term: "metal" },
   { nome: "Jazz", term: "jazz" }
-]);
+])
 
-const carrosseis = ref({});
-const loading = ref(true);
-const musicasPorGenero = ref({});
+const carrosseis = ref({})
+const loading = ref(true)
+const musicasPorGenero = ref({})
 
-function setRef(el, key) {
-  if (el) carrosseis.value[key] = el;
-}
-
-function scrollLeft(key) {
-  const el = carrosseis.value[key];
-  if (el) el.scrollBy({ left: -200, behavior: "smooth" });
-}
-
-function scrollRight(key) {
-  const el = carrosseis.value[key];
-  if (el) el.scrollBy({ left: 200, behavior: "smooth" });
-}
-
+function setRef(el, key) { if (el) carrosseis.value[key] = el }
+function scrollLeft(key) { const el = carrosseis.value[key]; if (el) el.scrollBy({ left: -200, behavior: "smooth" }) }
+function scrollRight(key) { const el = carrosseis.value[key]; if (el) el.scrollBy({ left: 200, behavior: "smooth" }) }
 function checkLoop(key) {
-  const el = carrosseis.value[key];
-  if (!el) return;
-  const scrollWidth = el.scrollWidth / 2;
-  if (el.scrollLeft <= 0) el.scrollLeft = scrollWidth;
-  else if (el.scrollLeft >= scrollWidth * 2 - el.clientWidth) el.scrollLeft = scrollWidth;
+  const el = carrosseis.value[key]
+  if (!el) return
+  const scrollWidth = el.scrollWidth / 2
+  if (el.scrollLeft <= 0) el.scrollLeft = scrollWidth
+  else if (el.scrollLeft >= scrollWidth * 2 - el.clientWidth) el.scrollLeft = scrollWidth
 }
 
-// BUSCA MÚSICAS NO ITUNES
 async function fetchMusicas() {
-  loading.value = true;
+  loading.value = true
   for (const g of generos.value) {
     try {
       const res = await axios.get("https://itunes.apple.com/search", {
-        params: {
-          term: g.term,
-          entity: "musicTrack",
-          limit: 10
-        }
-      });
+        params: { term: g.term, entity: "musicTrack", limit: 10 }
+      })
       musicasPorGenero.value[g.nome] = res.data.results.map(track => ({
-        trackId: track.trackId, // importante para a rota da música
+        trackId: track.trackId, // garante que existe
         titulo: track.trackName,
         artista: track.artistName,
         capa: track.artworkUrl100,
         ouvintes: `${Math.floor(Math.random() * 500 + 50)}k`,
         nota: `${(Math.random() * 1.5 + 3.5).toFixed(1)}/5`,
         previewUrl: track.previewUrl
-      }));
+      }))
     } catch (err) {
-      console.error(`Erro ao buscar ${g.nome}:`, err);
-      musicasPorGenero.value[g.nome] = [];
+      console.error(`Erro ao buscar ${g.nome}:`, err)
+      musicasPorGenero.value[g.nome] = []
     }
   }
-  loading.value = false;
+  loading.value = false
 
-  Object.values(carrosseis.value).forEach(el => {
-    if (el) el.scrollLeft = el.scrollWidth / 2;
-  });
+  // centraliza carrosséis
+  Object.values(carrosseis.value).forEach(el => { if (el) el.scrollLeft = el.scrollWidth / 2 })
 }
 
-onMounted(() => {
-  fetchMusicas();
-});
+onMounted(fetchMusicas)
 
 function irParaMusica(musica) {
-  router.push({ name: 'Musica', params: { id: musica.trackId } });
+  if (!musica || !musica.trackId) {
+    console.warn('musica sem trackId', musica)
+    return
+  }
+  router.push({ name: 'Musica', params: { id: musica.trackId } })
 }
 </script>
 
@@ -86,42 +71,44 @@ function irParaMusica(musica) {
   <div class="page">
     <div class="container">
       <p class="titulo">Músicas</p>
+
       <div v-if="loading">Carregando músicas...</div>
 
-      <section v-for="g in generos" :key="g.nome" class="bloco" v-else>
-        <div class="bloco-header">
-          <p>{{ g.nome }}</p>
-          <RouterLink :to="`/genero/${g.term}`" class="vermais">ver mais ></RouterLink>
-        </div>
+      <template v-else>
+        <section v-for="g in generos" :key="g.nome" class="bloco">
+          <div class="bloco-header">
+            <p>{{ g.nome }}</p>
+            <RouterLink :to="`/genero/${g.term}`" class="vermais">ver mais &gt;</RouterLink>
+          </div>
 
-        <div class="carrossel">
-          <button class="arrow left" @click="scrollLeft(g.nome)">‹</button>
-          <div class="cards" :ref="el => setRef(el, g.nome)" @scroll="checkLoop(g.nome)">
-            <div
-              v-for="(musica, i) in (musicasPorGenero[g.nome] || []).concat(musicasPorGenero[g.nome] || [])"
-              :key="i + g.nome"
-              class="card"
-              @click="irParaMusica(musica)"
-            >
-              <!-- CAPA DO ÁLBUM -->
-              <img :src="musica.capa" alt="Capa do álbum" class="thumb"/>
-              <div class="info">
-                <strong>{{ musica.titulo }}</strong>
-                <p>{{ musica.artista }}</p>
-                <div class="info-item">
-                  <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5Z" fill="#145D91"/></svg>
-                  <span>{{ musica.ouvintes }}</span>
-                </div>
-                <div class="info-item">
-                  <svg viewBox="0 0 24 24"><path d="M12 2 15 9l7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-7Z" fill="#145D91"/></svg>
-                  <span>{{ musica.nota }}</span>
+          <div class="carrossel">
+            <button class="arrow left" @click="scrollLeft(g.nome)">‹</button>
+            <div class="cards" :ref="el => setRef(el, g.nome)" @scroll="checkLoop(g.nome)">
+              <div
+                v-for="(musica, i) in (musicasPorGenero[g.nome] || []).concat(musicasPorGenero[g.nome] || [])"
+                :key="(musica.trackId ? musica.trackId + '-' : '') + i + '-' + g.nome"
+                class="card"
+                @click="irParaMusica(musica)"
+              >
+                <img :src="musica.capa" alt="Capa do álbum" class="thumb" />
+                <div class="info">
+                  <strong>{{ musica.titulo }}</strong>
+                  <p>{{ musica.artista }}</p>
+                  <div class="info-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5Z" fill="#145D91"/></svg>
+                    <span>{{ musica.ouvintes }}</span>
+                  </div>
+                  <div class="info-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2 15 9l7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-7Z" fill="#145D91"/></svg>
+                    <span>{{ musica.nota }}</span>
+                  </div>
                 </div>
               </div>
             </div>
+            <button class="arrow right" @click="scrollRight(g.nome)">›</button>
           </div>
-          <button class="arrow right" @click="scrollRight(g.nome)">›</button>
-        </div>
-      </section>
+        </section>
+      </template>
     </div>
   </div>
 </template>
@@ -173,6 +160,7 @@ function irParaMusica(musica) {
   gap: 2.2vh;
 }
 .cards {
+  cursor: pointer;
   display: flex;
   gap: 3vh;
   overflow-x: auto;
@@ -181,6 +169,7 @@ function irParaMusica(musica) {
 }
 .cards::-webkit-scrollbar {
   display: none;
+  cursor: pointer;
 }
 .card {
   width: 200px;

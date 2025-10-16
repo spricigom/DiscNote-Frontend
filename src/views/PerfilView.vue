@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import HeaderComp from '@/components/HeaderComp.vue'
-
+import { useAuthStore } from '@/stores/auth'
 
 const selectedTab = ref('resenhas')
+const authStore = useAuthStore()
 
 const tabs = [
   { key: 'resenhas', label: 'Resenhas' },
@@ -11,6 +12,8 @@ const tabs = [
   { key: 'favoritos', label: 'Favoritos' },
   { key: 'mais-ouvidas', label: 'Mais Ouvidas' },
 ]
+
+
 </script>
 
 <template>
@@ -18,9 +21,9 @@ const tabs = [
   <main>
     <div class="container">
       <div class="perfil-info">
-        <img class="foto-perfil" src="#"   />
-        <h2 class="username">Username</h2>
-        <p class="arroba">@username</p>
+        <img class="foto-perfil" :src="authStore.user?.avatar" />
+        <h2 class="username">{{ authStore.user.name }}</h2>
+        <p class="arroba">@{{ authStore.user.username }}</p>
 
         <div class="stats">
           <div class="stat">
