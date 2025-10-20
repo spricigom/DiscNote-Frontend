@@ -119,7 +119,6 @@ async function searchItunes() {
   </div>
 </header>
 
-<!-- Resultados da busca -->
 <div v-if="searched" class="search-results">
   <div class="tabs">
     <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id">
@@ -128,7 +127,6 @@ async function searchItunes() {
   </div>
 
   <div v-if="!isLoading">
-    <!-- Álbuns -->
     <div v-show="activeTab === 'albums'">
       <div v-if="results.albums.length">
         <div v-for="album in results.albums" :key="album.collectionId">
@@ -140,7 +138,6 @@ async function searchItunes() {
       <div v-else>Nenhum álbum encontrado.</div>
     </div>
 
-    <!-- Músicas -->
     <div v-show="activeTab === 'songs'">
       <div v-if="results.songs.length">
         <div v-for="song in results.songs" :key="song.trackId">
@@ -153,7 +150,6 @@ async function searchItunes() {
       <div v-else>Nenhuma música encontrada.</div>
     </div>
 
-    <!-- Artistas -->
     <div v-show="activeTab === 'artists'">
       <div v-if="results.artists.length">
         <div v-for="artist in results.artists" :key="artist.artistId">
