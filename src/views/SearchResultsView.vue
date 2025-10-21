@@ -2,8 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import HeaderComp from '@/components/HeaderComp.vue'
-import Footer from '@/components/Footer.vue';
-
+import Footer from '@/components/Footer.vue'
 
 const route = useRoute()
 const searchQuery = ref(route.query.q || '')
@@ -23,13 +22,19 @@ async function searchItunes() {
   results.value = { albums: [], songs: [], artists: [] }
 
   const term = encodeURIComponent(searchQuery.value)
-  const limit = 200
+  const limit = 20
 
   try {
     const [albumsRes, songsRes, artistsRes] = await Promise.all([
-      fetch(`https://itunes.apple.com/search?term=${term}&entity=album&limit=${limit}`).then(r => r.json()),
-      fetch(`https://itunes.apple.com/search?term=${term}&entity=musicTrack&limit=${limit}`).then(r => r.json()),
-      fetch(`https://itunes.apple.com/search?term=${term}&entity=musicArtist&limit=${limit}`).then(r => r.json()),
+      fetch(`https://itunes.apple.com/search?term=${term}&entity=album&limit=${limit}`).then((r) =>
+        r.json(),
+      ),
+      fetch(`https://itunes.apple.com/search?term=${term}&entity=musicTrack&limit=${limit}`).then(
+        (r) => r.json(),
+      ),
+      fetch(`https://itunes.apple.com/search?term=${term}&entity=musicArtist&limit=${limit}`).then(
+        (r) => r.json(),
+      ),
     ])
 
     results.value.albums = albumsRes.results || []
@@ -52,75 +57,81 @@ onMounted(() => {
   <HeaderComp />
   <main>
     <div class="search-results-page">
-    <h1>Resultados para "{{ searchQuery }}"</h1>
+      <h1>Resultados para "{{ searchQuery }}"</h1>
 
-    <div class="tabs">
-  <button
-    v-for="tab in tabs"
-    :key="tab.id"
-    @click="activeTab = tab.id"
-    :class="['tab', { active: activeTab === tab.id }]"
-  >
-    {{ tab.label }}
-  </button>
-</div>
+      <div class="tabs">
+        <button
+          v-for="tab in tabs"
+          :key="tab.id"
+          @click="activeTab = tab.id"
+          :class="['tab', { active: activeTab === tab.id }]"
+        >
+          {{ tab.label }}
+        </button>
+      </div>
 
+      <div v-if="isLoading">Carregando...</div>
 
-    <div v-if="isLoading">Carregando...</div>
+      <div v-else>
+        <!-- ÁLBUNS -->
+        <div v-show="activeTab === 'albums'">
+          <div v-if="results.albums.length" class="results-list">
+            <div v-for="album in results.albums" :key="album.collectionId" class="result-item">
+              <div class="result-image">
+                <img
+                  :src="album.artworkUrl100?.replace('100x100bb', '1200x1200bb')"
+                  alt="Capa do Álbum"
+                />
+              </div>
 
-    <div v-else>
-  <!-- ÁLBUNS -->
-  <div v-show="activeTab === 'albums'">
-    <div v-if="results.albums.length" class="results-list">
-      <div v-for="album in results.albums" :key="album.collectionId" class="result-item">
-        <img
-          :src="album.artworkUrl100?.replace('100x100bb', '200x200bb')"
-          alt="Capa do Álbum"
-          class="result-image"
-        />
-        <div class="result-info">
-          <p class="title">{{ album.collectionName }}</p>
-          <p class="artist">{{ album.artistName }}</p>
+              <div class="result-info">
+                <p class="title">{{ album.collectionName }}</p>
+
+                <div class="ano-artista">
+                  <p>{{ album.releaseDate.slice(0, 4) }} • {{ album.artistName }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-else>Nenhum álbum encontrado.</div>
+        </div>
+
+        <!-- MÚSICAS -->
+        <div v-show="activeTab === 'songs'">
+          <div v-if="results.songs.length" class="results-list">
+            <div v-for="song in results.songs" :key="song.trackId" class="result-item">
+              <div class="result-image">
+                <img
+                  :src="song.artworkUrl100?.replace('100x100bb', '1200x1200bb')"
+                  alt="Capa da Música"
+                />
+              </div>
+
+              <div class="result-info">
+                <p class="title">{{ song.trackName }}</p>
+                <p class="artist">{{ song.artistName }}</p>
+                <audio :src="song.previewUrl" controls class="audio-preview"></audio>
+              </div>
+            </div>
+          </div>
+          <div v-else>Nenhuma música encontrada.</div>
+        </div>
+
+        <!-- ARTISTAS -->
+        <div v-show="activeTab === 'artists'">
+          <div v-if="results.artists.length" class="results-list">
+            <div v-for="artist in results.artists" :key="artist.artistId" class="result-item">
+              <div class="result-info">
+                <p class="title">{{ artist.artistName }}</p>
+                <p class="artist">{{ artist.primaryGenreName || 'Gênero desconhecido' }}</p>
+              </div>
+            </div>
+          </div>
+          <div v-else>Nenhum artista encontrado.</div>
         </div>
       </div>
     </div>
-    <div v-else>Nenhum álbum encontrado.</div>
-  </div>
-
-  <!-- MÚSICAS -->
-  <div v-show="activeTab === 'songs'">
-    <div v-if="results.songs.length" class="results-list">
-      <div v-for="song in results.songs" :key="song.trackId" class="result-item">
-        <img
-          :src="song.artworkUrl100?.replace('100x100bb', '200x200bb')"
-          alt="Capa da Música"
-          class="result-image"
-        />
-        <div class="result-info">
-          <p class="title">{{ song.trackName }}</p>
-          <p class="artist">{{ song.artistName }}</p>
-          <audio :src="song.previewUrl" controls class="audio-preview"></audio>
-        </div>
-      </div>
-    </div>
-    <div v-else>Nenhuma música encontrada.</div>
-  </div>
-
-  <!-- ARTISTAS -->
-  <div v-show="activeTab === 'artists'">
-    <div v-if="results.artists.length" class="results-list">
-      <div v-for="artist in results.artists" :key="artist.artistId" class="result-item">
-        <div class="result-info">
-          <p class="title">{{ artist.artistName }}</p>
-          <p class="artist">{{ artist.primaryGenreName || 'Gênero desconhecido' }}</p>
-        </div>
-      </div>
-    </div>
-    <div v-else>Nenhum artista encontrado.</div>
-  </div>
-</div>
-
-  </div>
   </main>
   <Footer />
 </template>
@@ -169,24 +180,35 @@ main {
   border-bottom: 2px solid #f9d849; /* Amarelo quando ativa */
 }
 /* Resultados */
+.ano-artista {
+  display: flex;
+  flex-direction: row;
+  font-size: 1vw;
+  color: #bcbcbc;
+  margin-bottom: 8px;
+}
+.search-results-page h1 {
+  margin-top: 5vh;
+}
 .results-list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 4vh;
   gap: 20px;
+  margin-bottom: 10vh;
 }
 
 .result-item {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   border-radius: 12px;
-  background-color: black;
+  border: 1px solid #99999946;
   transition: background 0.3s;
-  width: 30vw;
-  
+  width: 40vw;
+  gap: 20px;
+  padding: 0.5rem;
 }
 
 .result-item:hover {
@@ -197,9 +219,11 @@ main {
   width: 200px;
   height: 200px;
   object-fit: cover;
+}
+.result-image img {
+  width: 100%;
   border-radius: 10px;
 }
-
 .result-info {
   text-align: left;
   flex: 1;
@@ -207,7 +231,7 @@ main {
 
 .title {
   font-weight: 600;
-  font-size: 1.3vw;
+  font-size: 1.7vw;
   color: white;
   margin-bottom: 5px;
 }
