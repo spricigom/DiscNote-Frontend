@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useMusicasStore } from '@/stores/musicas'
 import { useAuthStore } from '@/stores/auth'
 import { useResenhaStore } from '@/stores/resenhas'
-import md5 from 'crypto-js/md5';
+import md5 from 'crypto-js/md5'
 
 const route = useRoute()
 const router = useRouter()
@@ -26,7 +26,7 @@ const truncatedResenha = (resenha) => {
 
 const minhaResenha = computed(() => {
   if (!authStore.isLogged) return null
-  return resenhas.value.find(r => r.usuario?.id === authStore.user.id) || null
+  return resenhas.value.find((r) => r.usuario?.id === authStore.user.id) || null
 })
 
 onMounted(() => {
@@ -80,67 +80,27 @@ function deleteResenha() {
         </div>
         <section class="resenhas">
           <div id="cabecalho-resenha">
-            <h3>Resenhas</h3>
-            <a href="#" class="ver-mais">ver todas &gt;</a>
+            <h2>Nome da Música</h2>
+            <h3>nome do artista</h3>
           </div>
 
           <article class="card-resenha" v-for="(res, i) in resenhas" :key="i">
-            <div class="meta">
-              <div class="foto-username">
-                <img class="foto-username" :src="`https://www.gravatar.com/avatar/${md5(res.usuario.email.trim().toLowerCase())}?s=200&d=identicon`" alt="" />
-              </div>
-              <div class="meta-text">
-                <div class="user-row">
-                  <strong>@{{ res.usuario.username }}</strong>
-                  <div class="estrelas">{{ res.nota }} <span v-for="n in 5" :key="n" class="estrelas"
-                      :class="{ ativo: n <= res.nota }">
-                      ★
-                    </span></div>
-                  <div class="favorito">
-                    <i class="pi pi-heart-fill"></i>
-                  </div>
-                  <span class="data">{{ res.data }}</span>
-                </div>
-              </div>
-            </div>
             <p class="resenha-body">
               {{ truncatedResenha(res.texto) }}
-              <a class="ver-maisResenha" href="#">ver mais &gt;</a>
             </p>
             <div class="resenha-footer">
-              <span class="likes"><i class="pi pi-thumbs-up"></i> {{ res.curtidas_count.toLocaleString() }}
-                curtidas</span>
+              <span class="likes"
+                ><i class="pi pi-thumbs-up"></i>
+                {{ res.curtidas_count.toLocaleString() }} curtidas</span
+              >
             </div>
           </article>
         </section>
       </div>
-
-      <aside class="right">
-        <div class="stat">
-          <div class="big">{{ stats.totalresenhas.toLocaleString() }}</div>
-          <div class="label">Total de avaliações</div>
-        </div>
-
-        <div class="stat rating">
-          <div class="stars">
-            <span v-for="n in 5" :key="n" class="estrelas" :class="{ ativo: n <= stats.average }">
-              ★
-            </span> <span class="avg">{{ stats.average }}</span>
-          </div>
-          <div class="label">Média das avaliações</div>
-        </div>
-
-        <!-- <div class="stat">
-          <div class="big">{{ stats.popularity }}%</div>
-          <div class="label">Popularidade</div>
-        </div> -->
-      </aside>
     </div>
   </main>
 
-  <div v-else>
-    Carregando música...
-  </div>
+  <div v-else>Carregando música...</div>
 </template>
 
 <style scoped>
@@ -148,17 +108,17 @@ function deleteResenha() {
 
 .musica {
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
-  padding: 32px;
+  grid-template-columns: 1fr 3fr;
+  padding: 40px;
   height: 100%;
-  font-family: 'Archivo', sans-serif
+  font-family: 'Archivo', sans-serif;
 }
 
 .left {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5vh;
+  gap:1.5vh
 }
 
 .imgMusica {
@@ -185,8 +145,8 @@ function deleteResenha() {
 }
 
 .center {
-  margin-left: 3vh;
   padding-top: 6px;
+  max-width: 80%;
 }
 
 .area-titulos .titulo {
@@ -208,43 +168,29 @@ function deleteResenha() {
 }
 
 #escrita p {
-  color: #145d91;
+  color: #dadada;
   border-bottom: 2px solid #145d91;
-  font-size: 2.3vh
+  font-size: 2.3vh;
 }
 #escrita a {
-    color:#ecc815
-}
-
-.tags {
-  display: flex;
-  gap: 10px;
-}
-
-.tag {
-  background: transparent;
-  border: 2px solid #ecc815;
   color: #ecc815;
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 1.5vh
 }
 
 #cabecalho-resenha {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid #145d91;
+  margin-top: 5px;
   padding-bottom: 10px;
   margin-bottom: 1vh;
-  margin-top: 3vh;
-  color: #145d91;
 }
 
-#cabecalho-resenha h3 {
+#cabecalho-resenha h2 {
   margin: 0;
-  font-size: 3vh
+  font-size: 5vh;
+  color: #FFFF;
+}
+
+#cabecalho-resenha h3{
+  font-size: 2vh;
+  color: #D8D8D8
 }
 
 .resenha {
@@ -257,112 +203,24 @@ function deleteResenha() {
   text-decoration: none;
 }
 
-.foto-username {
-  background-color: rgba(0, 0, 0, 0.315);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 0.5vw;
-}
-
-.foto-username img {
-  object-fit: cover;
-}
-
-strong {
-  font-size: 1.7vh
-}
-
-.favorito {
-  display: flex;
-  flex-direction: row;
-  font-size: 1.2vw;
-  color: #145d91;
-}
 
 .card-resenha {
   margin-top: 2vh;
   padding: 8px 0;
   color: white;
 }
-
-.meta {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.user-row {
-  display: flex;
-  gap: 2.3vh;
-  align-items: center;
-}
-
-.estrelas {
-  color: #888;
-  font-weight: 900;
-  font-size: 2.5vh;
-}
-
-.estrelas.ativo {
-  color: gold;
-}
-
-.data {
-  color: #9e9e9e;
-  font-size: 14px;
-}
-
 .resenha-body {
   margin-top: 0.7px;
   line-height: 1.45;
   color: #f3f7f7;
-  font-size: 1.8vh
+  font-size: 1.8vh;
 }
 
-.ver-maisResenha {
-  color: #9e9e9e;
-  text-decoration: none;
-}
 
 .resenha-footer {
   margin-top: 12px;
   color: white;
   font-family: 'Archivo', sans-serif;
-  gap: 1.5vh
-}
-
-.right {
-  display: flex;
-  flex-direction: column;
-  gap: 1vh;
-  align-items: flex-end;
-  margin-right: 7vh;
-  font-family: 'Archivo', sans-serif;
-  font-size: 2.5vh
-}
-
-.stat {
-  background: transparent;
-  text-align: right;
-}
-
-.stat .big {
-  font-size: 3.5vh;
-  color: #ecc815;
-}
-
-.stat .label {
-  color: white;
-}
-
-.rating .stars {
-  font-size: 3vh;
-  color: #ecc815;
-}
-
-.rating .avg {
-  margin-left: 8px;
-  color: #fff;
+  gap: 1.5vh;
 }
 </style>
