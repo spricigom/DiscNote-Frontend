@@ -11,8 +11,12 @@ const showSidebar = ref(false)
 const searchQuery = ref('')
 
 // Funções para menu e sidebar
-function toggleSubmenu() { showSubmenu.value = !showSubmenu.value }
-function toggleSidebar() { showSidebar.value = !showSidebar.value }
+function toggleSubmenu() {
+  showSubmenu.value = !showSubmenu.value
+}
+function toggleSidebar() {
+  showSidebar.value = !showSidebar.value
+}
 
 // Função de busca que redireciona
 function goToSearch() {
@@ -25,40 +29,45 @@ function goToSearch() {
   <header>
     <div class="logo">
       <RouterLink to="/home">
-        <img src="@/assets/logo.png" alt="Logo DiscNote">
+        <img src="@/assets/logo.png" alt="Logo DiscNote" />
       </RouterLink>
     </div>
 
     <nav>
       <div class="nav-item" @click="toggleSubmenu">
-        <RouterLink to="#">Explorar <span><i class="pi pi-angle-down"></i></span></RouterLink>
+        <RouterLink to="#"
+          >Explorar <span><i class="pi pi-angle-down"></i></span
+        ></RouterLink>
         <div class="submenu" v-if="showSubmenu">
           <RouterLink to="#">Álbuns</RouterLink>
-          <hr>
+          <hr />
           <RouterLink to="/musicas">Músicas</RouterLink>
-          <hr>
+          <hr />
           <RouterLink to="#">Artistas</RouterLink>
         </div>
       </div>
       <RouterLink to="#">Playlists</RouterLink>
       <RouterLink to="#">Resenhas</RouterLink>
-      <RouterLink to="/cadastro">Cadastro</RouterLink>
+      <RouterLink to="/cadastro" v-if="!authStore.isLogged" >Cadastro</RouterLink>
     </nav>
 
     <div class="right">
       <!-- Barra de busca -->
-      <input
-        v-model="searchQuery"
-        @keyup.enter="goToSearch"
-        placeholder="Buscar artista, álbum ou música..."
-        class="search-input"
-      />
-      <button @click="goToSearch">Buscar</button>
+      <div class="search-input">
+        <input
+          v-model="searchQuery"
+          @keyup.enter="goToSearch"
+          placeholder="O que procuras, jovem?"
+        />
+        <button @click="goToSearch" class="botao-pesquisa">
+          <span class="pi pi-search"></span>
+        </button>
+      </div>
 
       <span class="pi pi-plus"></span>
 
       <div v-if="authStore.isLogged" class="foto-user" @click="toggleSidebar">
-        <img :src="authStore.user?.avatar" alt="Foto de Perfil">
+        <img :src="authStore.user?.avatar" alt="Foto de Perfil" />
       </div>
       <RouterLink v-else to="/login"><span class="pi pi-user"></span></RouterLink>
 
@@ -67,19 +76,51 @@ function goToSearch() {
         <div class="top">
           <div class="user">
             <div class="foto-user">
-              <img :src="authStore.user?.avatar" alt="Foto de Perfil">
+              <img :src="authStore.user?.avatar" alt="Foto de Perfil" />
             </div>
             <h3>{{ authStore.user?.name || authStore.user?.username }}</h3>
           </div>
-          <button class="close-btn" @click="toggleSidebar"><i class="pi pi-times" style="font-size: .5vw;"></i></button>
+          <button class="close-btn" @click="toggleSidebar">
+            <i class="pi pi-times" style="font-size: 0.5vw"></i>
+          </button>
         </div>
-        <hr style="margin-top: 4vh; width: 100%;">
+        <hr style="margin-top: 4vh; width: 100%" />
         <div class="itens-sidebar">
-          <p><RouterLink to="/perfil"><i class="pi pi-user" style="color: #145d91; font-size: 1.2vw;"></i> Seu Perfil</RouterLink></p>
-          <p><RouterLink to="#"><i class="pi pi-clipboard" style="color: #145d91; font-size: 1.2vw;"></i> Suas Resenhas</RouterLink></p>
-          <p><RouterLink to="#"><i class="pi pi-headphones" style="color: #145d91; font-size: 1.2vw;"></i> Suas Playlisys</RouterLink></p>
-          <p><RouterLink to="#"><i class="pi pi-star" style="color: #145d91; font-size: 1.2vw;"></i> Favoritos</RouterLink></p>
-          <p><RouterLink to="#" @click="authStore.logout(); toggleSidebar()"><i class="pi pi-sign-out" style="color: #145d91; font-size: 1.2vw;"></i> Sair</RouterLink></p>
+          <p>
+            <RouterLink to="/perfil"
+              ><i class="pi pi-user" style="color: #145d91; font-size: 1.2vw"></i> Seu
+              Perfil</RouterLink
+            >
+          </p>
+          <p>
+            <RouterLink to="#"
+              ><i class="pi pi-clipboard" style="color: #145d91; font-size: 1.2vw"></i> Suas
+              Resenhas</RouterLink
+            >
+          </p>
+          <p>
+            <RouterLink to="#"
+              ><i class="pi pi-headphones" style="color: #145d91; font-size: 1.2vw"></i> Suas
+              Playlisys</RouterLink
+            >
+          </p>
+          <p>
+            <RouterLink to="#"
+              ><i class="pi pi-star" style="color: #145d91; font-size: 1.2vw"></i>
+              Favoritos</RouterLink
+            >
+          </p>
+          <p>
+            <RouterLink
+              to="#"
+              @click="
+                authStore.logout(),
+                toggleSidebar()
+              "
+              ><i class="pi pi-sign-out" style="color: #145d91; font-size: 1.2vw"></i>
+              Sair</RouterLink
+            >
+          </p>
         </div>
       </div>
 
@@ -89,6 +130,27 @@ function goToSearch() {
 </template>
 
 <style scoped>
+.search-input {
+  display: flex;
+  border: 1px solid white;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 12px;
+  border-radius: 15px;
+}
+.search-input input{
+  background: none;
+  border: none;
+    outline: none;
+color: white;
+caret-color: white;
+}
+
+.botao-pesquisa {
+  background: none;
+  border: none;
+}
 .submenu hr {
   border: 1px #145d91 solid;
   width: 7vw;
@@ -98,7 +160,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #101A1A;
+  background-color: #101a1a;
   height: 15vh;
   padding: 0 2vw;
 }
@@ -108,17 +170,20 @@ header {
   height: 30px;
   object-fit: contain;
 }
+.logo{
+  width: 25%;
+}
 
 nav {
   display: flex;
   gap: 2rem;
   flex: 1;
   justify-content: center;
-  position: relative;
+  width: 50%;
 }
 
-.nav-item>a,
-nav>a {
+.nav-item > a,
+nav > a {
   font-family: 'Archivo', sans-serif;
   text-decoration: none;
   color: white;
@@ -126,33 +191,33 @@ nav>a {
   padding-bottom: 3px;
 }
 
-.nav-item>a::after {
+.nav-item > a::after {
   content: '';
   position: absolute;
   left: -5%;
   bottom: -5px;
   width: 0%;
   height: 2px;
-  background-color: #ECC815;
+  background-color: #ecc815;
   transition: width 0.3s ease;
 }
 
-.nav-item>a:hover::after {
+.nav-item > a:hover::after {
   width: 110%;
 }
 
-nav>a::after {
+nav > a::after {
   content: '';
   position: absolute;
   left: -5%;
   bottom: -5px;
   width: 0%;
   height: 2px;
-  background-color: #ECC815;
+  background-color: #ecc815;
   transition: width 0.3s ease;
 }
 
-nav>a:hover::after {
+nav > a:hover::after {
   width: 110%;
 }
 
@@ -165,7 +230,7 @@ nav>a:hover::after {
   display: flex;
   flex-direction: column;
   position: absolute;
-  background-color: #101A1A;
+  background-color: #101a1a;
   align-items: center;
   height: 18vh;
   width: 10vw;
@@ -186,15 +251,17 @@ nav>a:hover::after {
 }
 
 .submenu a:hover {
-  color: #ECC815;
+  color: #ecc815;
 }
 
 .right {
+  width: 25%;
   display: flex;
-  flex-direction: row;
+  justify-content: flex-end;
   align-items: center;
   gap: 1.2rem;
 }
+
 
 .right span {
   color: whitesmoke;
@@ -225,7 +292,7 @@ nav>a:hover::after {
   right: 0;
   width: 15vw;
   height: 100vh;
-  background-color: #101A1A;
+  background-color: #101a1a;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
   padding-top: 4vh;
   padding-left: 1.5vw;
@@ -245,16 +312,15 @@ nav>a:hover::after {
   color: white;
   font-family: 'Archivo', sans-serif;
   padding-left: 0.5vw;
-  transition: color .3s ease;
-
+  transition: color 0.3s ease;
 }
 
 .itens-sidebar a:hover {
-  color: #ECC815;
+  color: #ecc815;
 }
 
 .itens-sidebar i {
-  margin-right: .5vw;
+  margin-right: 0.5vw;
 }
 
 .close-btn {
@@ -271,8 +337,8 @@ nav>a:hover::after {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-left: .5vw;
-  padding-right: .5vw;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
   width: 100%;
 }
 
@@ -280,7 +346,7 @@ nav>a:hover::after {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: .7vw;
+  gap: 0.7vw;
 }
 
 .user h3 {

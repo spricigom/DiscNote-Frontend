@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import HeaderComp from '@/components/HeaderComp.vue'
 import Footer from '@/components/Footer.vue'
@@ -51,7 +51,18 @@ async function searchItunes() {
 onMounted(() => {
   searchItunes()
 })
+
+watch(
+  () => route.query.q,
+  (newQuery, oldQuery) => {
+    if (newQuery && newQuery !== oldQuery) {
+      searchQuery.value = newQuery
+      searchItunes()
+    }
+  }
+)
 </script>
+
 
 <template>
   <HeaderComp />
