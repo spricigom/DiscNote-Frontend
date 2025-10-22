@@ -32,11 +32,6 @@ const router = createRouter({
       component: () => import('../views/PerfilView.vue'),
     },
     {
-      path: '/resenhas',
-      name: 'Resenha',
-      component: () => import('../views/ResenhaView.vue'),
-    },
-    {
       path: '/musica/:id', 
       name: 'Musica',
       component: () => import('../views/MusicaView.vue'),
@@ -64,6 +59,12 @@ const router = createRouter({
       name: 'LandingPage',
       component: () => import('../views/LandingPageView.vue')
     },
+    {
+      path: '/vermais',
+      name: 'VerMais',
+      component: () => import('../views/VerMaisView.vue')
+    },
+    
   ],
 })
 
