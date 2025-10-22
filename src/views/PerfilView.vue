@@ -1,8 +1,30 @@
 <script setup>
 import { ref } from 'vue'
 import HeaderComp from '@/components/HeaderComp.vue'
+import ResenhaPerfil from '@/components/ResenhaPerfil.vue'
+import PlaylistsPerfil from '@/components/PlaylistsPerfil.vue'
+import FavoritosPerfil from '@/components/FavoritosPerfil.vue'
+  
 import { useAuthStore } from '@/stores/auth'
 
+// Aqui vai vir via props ou de uma chamada inicial da API
+const isFollowing = ref(false)
+
+// Função que alterna estado e chama a integração
+function toggleFollow() {
+  isFollowing.value = !isFollowing.value
+
+  // Placeholder para integração:
+  // Aqui quem for integrar pode colocar a chamada ao backend
+  // Exemplo:
+  // if (isFollowing.value) {
+  //   api.followUser(userId)
+  // } else {
+  //   api.unfollowUser(userId)
+  // }
+
+  console.log("Estado de seguir mudou para:", isFollowing.value)
+}
 const selectedTab = ref('resenhas')
 const authStore = useAuthStore()
 
@@ -10,7 +32,7 @@ const tabs = [
   { key: 'resenhas', label: 'Resenhas' },
   { key: 'playlists', label: 'Playlists' },
   { key: 'favoritos', label: 'Favoritos' },
-  { key: 'mais-ouvidas', label: 'Mais Ouvidas' },
+//  { key: 'mais-ouvidas', label: 'Mais Ouvidas' },
 ]
 
 
@@ -43,6 +65,10 @@ const tabs = [
             <span class="label">Playlists</span>
           </div>
         </div>
+
+        <button class="btn-seguir" @click="toggleFollow">
+      {{ isFollowing ? 'Seguindo' : 'Seguir' }}
+    </button>
       </div>
 
       <!-- Tabs -->
@@ -55,21 +81,27 @@ const tabs = [
 
       <!-- Conteúdo da Aba Selecionada -->
       <div class="tab-content">
-        <div v-if="selectedTab === 'resenhas'">Conteúdo de Resenhas</div>
-        <div v-else-if="selectedTab === 'playlists'">Conteúdo de Playlists</div>
-        <div v-else-if="selectedTab === 'favoritos'">Conteúdo de Favoritos</div>
-        <div v-else-if="selectedTab === 'mais-ouvidas'">Conteúdo de Mais Ouvidas</div>
+        <div v-if="selectedTab === 'resenhas'"><ResenhaPerfil /><ResenhaPerfil /></div>
+        <div class="playlists" v-else-if="selectedTab === 'playlists'"><PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil /></div>
+        <div v-else-if="selectedTab === 'favoritos'"><FavoritosPerfil /></div>
+    <!--<div v-else-if="selectedTab === 'mais-ouvidas'">Conteúdo de Mais Ouvidas</div>-->
       </div>
+      <div class="divisao">hr</div>
     </div>
   </main>
 
 </template>
 
 <style scoped>
-main {
-  height: 100vh;
-}
+.playlists{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 45vw;
+  flex-wrap: wrap;
 
+}
 
 .perfil-info {
   text-align: center;
@@ -139,8 +171,8 @@ main {
   cursor: pointer;
   font-size: 1.3vw;
   border-bottom: 2px solid #145d91;
-  transition: all 0.3s;
-  width: 15%;
+  transition: all 0.2s;
+  width: 20vw;
 }
 
 .tab:hover {
@@ -154,7 +186,33 @@ main {
 
 .tab-content {
   margin-top: 30px;
-  text-align: center;
-  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* garante que itens menores que 100% fiquem centrados */
+  gap: 5vh;
+  width: 100%;
 }
+
+.btn-seguir {
+  margin-top: 5vh;
+  padding: 10px 30px;
+  font-size: 1.2vw;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.divisao {
+  width: 100%;
+  margin-bottom: 4vh;
+}
+.divisao hr {
+  width: 100%;
+  border: #145d91 1px solid;
+}
+
 </style>

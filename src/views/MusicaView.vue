@@ -59,7 +59,7 @@ function deleteResenha() {
   <main v-if="!loading">
     <div class="musica">
       <div class="left">
-        <img :src="musica.capa" alt="Capa da música" class="imgMusica" />
+        <img :src="musica.capa?.replace('100x100bb', '1200x1200bb')" alt="Capa da música" class="imgMusica" />
         <button @click="goToResenha()" id="escrever" :disabled="minhaResenha">
           {{ minhaResenha ? 'Resenha publicada' : 'Escrever Resenha' }}
         </button>

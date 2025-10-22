@@ -1,73 +1,80 @@
 <script setup>
-import HeaderComp from '@/components/HeaderComp.vue'
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
-import { useRouter } from 'vue-router'
+import 'vue3-carousel/dist/carousel.css';
+import { Carousel, Slide, Navigation } from 'vue3-carousel';
+import HeaderComp from '@/components/HeaderComp.vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import { useResenhaStore } from '@/stores/resenhas'; // ✅ importa o store
 
-const router = useRouter()
+const router = useRouter();
+const resenhaStore = useResenhaStore(); // ✅ instancia o store
 
 const generos = ref([
   { nome: "Rock", term: "rock" },
   { nome: "Pop", term: "pop" },
   { nome: "Metal", term: "metal" },
   { nome: "Jazz", term: "jazz" }
-])
+]);
 
-const carrosseis = ref({})
-const loading = ref(true)
-const musicasPorGenero = ref({})
+const musicasPorGenero = ref({});
+const notas = ref({}); // ✅ notas calculadas
+const ouvintes = ref({}); // ✅ número de resenhas
+const loading = ref(true);
 
-function setRef(el, key) { if (el) carrosseis.value[key] = el }
-function scrollLeft(key) { const el = carrosseis.value[key]; if (el) el.scrollBy({ left: -200, behavior: "smooth" }) }
-function scrollRight(key) { const el = carrosseis.value[key]; if (el) el.scrollBy({ left: 200, behavior: "smooth" }) }
-function checkLoop(key) {
-  const el = carrosseis.value[key]
-  if (!el) return
-  const scrollWidth = el.scrollWidth / 2
-  if (el.scrollLeft <= 0) el.scrollLeft = scrollWidth
-  else if (el.scrollLeft >= scrollWidth * 2 - el.clientWidth) el.scrollLeft = scrollWidth
+// calcula as notas e ouvintes
+function fetchResenhasParaItem(item) {
+  const id = item.trackId || item.collectionId;
+  const lista = resenhaStore.fetchResenhasPorMusica(id);
+
+  if (lista && lista.length > 0) {
+    const soma = lista.reduce((acc, r) => acc + parseFloat(r.nota || 0), 0);
+    notas.value[id] = (soma / lista.length).toFixed(1);
+    ouvintes.value[id] = lista.length;
+  } else {
+    notas.value[id] = 0;
+    ouvintes.value[id] = 0;
+  }
 }
 
+// busca músicas por gênero
 async function fetchMusicas() {
-  loading.value = true
+  loading.value = true;
   for (const g of generos.value) {
     try {
       const res = await axios.get("https://itunes.apple.com/search", {
         params: { term: g.term, entity: "musicTrack", limit: 10 }
-      })
+      });
+
       musicasPorGenero.value[g.nome] = res.data.results.map(track => ({
-        trackId: track.trackId, // garante que existe
+        trackId: track.trackId,
         titulo: track.trackName,
         artista: track.artistName,
         capa: track.artworkUrl100,
-        ouvintes: `${Math.floor(Math.random() * 500 + 50)}k`,
-        nota: `${(Math.random() * 1.5 + 3.5).toFixed(1)}/5`,
         previewUrl: track.previewUrl
-      }))
+      }));
+
+      // busca as notas pra cada música
+      musicasPorGenero.value[g.nome].forEach(fetchResenhasParaItem);
     } catch (err) {
-      console.error(`Erro ao buscar ${g.nome}:`, err)
-      musicasPorGenero.value[g.nome] = []
+      console.error(`Erro ao buscar ${g.nome}:`, err);
+      musicasPorGenero.value[g.nome] = [];
     }
   }
-  loading.value = false
-
-  // centraliza carrosséis
-  Object.values(carrosseis.value).forEach(el => { if (el) el.scrollLeft = el.scrollWidth / 2 })
+  loading.value = false;
 }
 
-onMounted(fetchMusicas)
+onMounted(fetchMusicas);
 
 function irParaMusica(musica) {
-  if (!musica || !musica.trackId) {
-    console.warn('musica sem trackId', musica)
-    return
-  }
-  router.push({ name: 'Musica', params: { id: musica.trackId } })
+  if (!musica?.trackId) return;
+  router.push({ name: 'Musica', params: { id: musica.trackId } });
 }
 </script>
 
 <template>
-  <HeaderComp/>
+  <HeaderComp />
+
   <div class="page">
     <div class="container">
       <p class="titulo">Músicas</p>
@@ -81,32 +88,32 @@ function irParaMusica(musica) {
             <RouterLink :to="`/genero/${g.term}`" class="vermais">ver mais &gt;</RouterLink>
           </div>
 
-          <div class="carrossel">
-            <button class="arrow left" @click="scrollLeft(g.nome)">‹</button>
-            <div class="cards" :ref="el => setRef(el, g.nome)" @scroll="checkLoop(g.nome)">
-              <div
-                v-for="(musica, i) in (musicasPorGenero[g.nome] || []).concat(musicasPorGenero[g.nome] || [])"
-                :key="(musica.trackId ? musica.trackId + '-' : '') + i + '-' + g.nome"
-                class="card"
-                @click="irParaMusica(musica)"
-              >
-                <img :src="musica.capa" alt="Capa do álbum" class="thumb" />
-                <div class="info">
-                  <strong>{{ musica.titulo }}</strong>
+          <Carousel :items-to-show="4" :wrap-around="true" :snap-align="'start'" class="carousel-custom">
+            <Slide v-for="musica in musicasPorGenero[g.nome]" :key="musica.trackId">
+              <div class="carousel-slide" @click="irParaMusica(musica)">
+                <img :src="musica.capa?.replace('100x100bb', '1200x1200bb')" :alt="musica.titulo" class="sliderImage" />
+
+                <!-- Overlay -->
+                <div class="overlay">
+                  <h3>{{ musica.titulo }}</h3>
                   <p>{{ musica.artista }}</p>
-                  <div class="info-item">
-                    <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5Zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5Z" fill="#145D91"/></svg>
-                    <span>{{ musica.ouvintes }}</span>
+                </div>
+
+                <div class="avaliacao">
+                  <div class="av1">
+                    <p><i class="pi pi-clipboard"></i>{{ ouvintes[musica.trackId] || 0 }}</p>
                   </div>
-                  <div class="info-item">
-                    <svg viewBox="0 0 24 24"><path d="M12 2 15 9l7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-7Z" fill="#145D91"/></svg>
-                    <span>{{ musica.nota }}</span>
+                  <div class="av2">
+                    <p><i class="pi pi-star"></i>{{ notas[musica.trackId] || 0 }}/5</p>
                   </div>
                 </div>
               </div>
-            </div>
-            <button class="arrow right" @click="scrollRight(g.nome)">›</button>
-          </div>
+            </Slide>
+
+            <template #addons>
+              <Navigation />
+            </template>
+          </Carousel>
         </section>
       </template>
     </div>
@@ -114,9 +121,10 @@ function irParaMusica(musica) {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=DM+Mono&family=Archivo&display=swap');
+
 .page {
-  background: #0f2626;
+  background: #162326;
   color: white;
   min-height: 100vh;
   display: flex;
@@ -141,7 +149,7 @@ function irParaMusica(musica) {
   margin-top:5vh;
   margin-bottom: 2.5vh;
   color: #145D91;
-  border-bottom: 2px solid #145D91
+  border-bottom: 2px solid #145D91;
 }
 .bloco-header p {
   margin: 0;
@@ -154,70 +162,85 @@ function irParaMusica(musica) {
   font-weight: bold;
   font-size:1.5vh;
 }
-.carrossel {
-  display: flex;
-  align-items: center;
-  gap: 2.2vh;
+.carousel-custom {
+  width: 100%;
+  height: 35vh;
+  margin-bottom: 8vh;
 }
-.cards {
-  cursor: pointer;
-  display: flex;
-  gap: 3vh;
-  overflow-x: auto;
-  flex: 1;
-  scroll-behavior: smooth;
+.carousel-slide {
+  position: relative;
+  width: 85%;
+  height: 100%;
+  overflow: hidden;
 }
-.cards::-webkit-scrollbar {
-  display: none;
-  cursor: pointer;
+.sliderImage {
+  object-fit: cover;
+  width: 100%;
+  height: 85%;
+  border-radius: 2vw;
+  transition: 0.1s;
+  background-color: rgba(0, 0, 0, 0.397);
 }
-.card {
-  width: 200px;
-  height: 230px;
-  border-radius: 8px;
-  flex-shrink: 0;
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 85%;
+  background-color: rgba(0, 0, 0, 0.6);
+  opacity: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 10px;
-  transition: border 0.2s;
-  cursor: pointer;
-}
-.thumb:hover {
-  border: 2px solid #ffd800;
-}
-.thumb {
-  flex: 1;
-  background: #0f1c1c;
-  border-radius: 6px;
-  display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  transition: opacity 0.3s ease;
+  border-radius: 2vw;
 }
-.info {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 12px;
-  margin-top: 6px;
-  font-size: 0.9rem;
-  margin: auto;
-}
-.info-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #bdbdbd;
-}
-.info-item svg {
-  width: 16px;
-  height: 16px;
-}
-.arrow {
-  background: transparent;
-  border: none;
+.overlay h3 {
   color: white;
-  font-size: 28px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.overlay p {
+  color: #c4c4c4;
+  font-size: 0.9rem;
+}
+.carousel-slide:hover .overlay {
+  opacity: 1;
+  border: #ecc415 3px solid;
   cursor: pointer;
 }
+.avaliacao {
+  height: 15%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10%;
+}
+.av1,
+.av2 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+}
+.avaliacao i {
+  color: #145d91;
+  font-size: 1.2rem;
+  margin-right: 0.4rem;
+  position: relative;
+  top: 0.2vh;
+}
+.carousel-custom :deep(.carousel__prev),
+.carousel-custom :deep(.carousel__next) {
+  transform: translateY(-50%);
+  color: white;
+  padding: 0.5em;
+  width: 3em;
+  height: 3em;
+}
+.carousel-custom :deep(.carousel__prev) { left: -5%; }
+.carousel-custom :deep(.carousel__next) { right: -5%; }
 </style>

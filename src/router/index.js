@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Musicas from '@/views/MusicasView.vue'
 import Genero from '@/views/GeneroView.vue'
+import Search from '@/views/SearchResultsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,11 +37,14 @@ const router = createRouter({
       name: 'Resenha',
       component: () => import('../views/ResenhaView.vue'),
     },
+    { path: '/search',
+      name: 'search',
+      component: () => import('../views/SearchResultsView.vue')},
     {
-      path: '/musica/:id', 
+      path: '/musica/:id',
       name: 'Musica',
       component: () => import('../views/MusicaView.vue'),
-      props: true, 
+      props: true,
     },
     {
       path: '/musica/:musicaId/criarResenha',
@@ -49,7 +53,13 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/musicas', 
+      path: '/teste',
+      name: 'teste',
+      component: () => import('../views/testesAPIView.vue'),
+      props: true
+    },
+    {
+      path: '/musicas',
       name: 'musicas',
       component: Musicas
     },

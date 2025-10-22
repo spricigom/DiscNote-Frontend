@@ -46,9 +46,9 @@ watch(() => props.items, (newItems) => {
 
 <template>
   <Carousel :items-to-show="4" :wrap-around="true" :snap-align="'start'" class="carousel-custom">
-    <Slide v-for="(item) in items" :key="item.trackId || item.collectionId">
+    <Slide v-for="(item) in items" :key="item.trackId.art || item.collectionId">
       <div class="carousel-slide" @click="goToItem(item)">
-        <img :src="item.capa" :alt="item.titulo" class="sliderImage" />
+        <img :src="item.capa?.replace('100x100bb', '1200x1200bb')" :alt="item.titulo" class="sliderImage" />
 
         <!-- Overlay -->
         <div class="overlay">
@@ -78,7 +78,7 @@ watch(() => props.items, (newItems) => {
 .carousel-custom {
   width: 70%;
   height: 35vh;
-  margin-bottom: 25vh;
+  margin-bottom: 12vh;
 }
 
 .carousel-slide {
