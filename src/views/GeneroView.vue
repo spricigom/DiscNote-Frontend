@@ -155,7 +155,7 @@ watch(() => route.params.nome, (novo) => {
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=DM+Mono&family=Archivo&display=swap');
 
 .page {
-  background: #0f2626;
+  background: #162326;
   color: white;
   min-height: 100vh;
   display: flex;
