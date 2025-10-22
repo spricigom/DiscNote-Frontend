@@ -108,6 +108,10 @@ watch(
           <div v-else>Nenhum álbum encontrado.</div>
         </div>
 
+
+
+
+
         <!-- MÚSICAS -->
         <div v-show="activeTab === 'songs'">
           <div v-if="results.songs.length" class="results-list">
@@ -178,7 +182,7 @@ main {
   font-size: 1.3vw;
   border-bottom: 2px solid #145d91; /* Azul padrão */
   transition: all 0.3s;
-  width: 20%;
+  width: 25%;
   margin-bottom: 5vh;
 }
 
