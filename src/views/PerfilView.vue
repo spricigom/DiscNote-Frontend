@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import Header from '@/components/Header.vue'
+import HeaderComp from '@/components/HeaderComp.vue'
 import ResenhaPerfil from '@/components/ResenhaPerfil.vue'
 import PlaylistsPerfil from '@/components/PlaylistsPerfil.vue'
 import FavoritosPerfil from '@/components/FavoritosPerfil.vue'
+  
+import { useAuthStore } from '@/stores/auth'
 
 // Aqui vai vir via props ou de uma chamada inicial da API
 const isFollowing = ref(false)
@@ -23,9 +25,8 @@ function toggleFollow() {
 
   console.log("Estado de seguir mudou para:", isFollowing.value)
 }
-
-
 const selectedTab = ref('resenhas')
+const authStore = useAuthStore()
 
 const tabs = [
   { key: 'resenhas', label: 'Resenhas' },
@@ -38,13 +39,13 @@ const tabs = [
 </script>
 
 <template>
-  <Header />
+  <HeaderComp />
   <main>
     <div class="container">
       <div class="perfil-info">
-        <img class="foto-perfil" src="#"   />
-        <h2 class="username">Username</h2>
-        <p class="arroba">@username</p>
+        <img class="foto-perfil" :src="authStore.user?.avatar" />
+        <h2 class="username">{{ authStore.user.name }}</h2>
+        <p class="arroba">@{{ authStore.user.username }}</p>
 
         <div class="stats">
           <div class="stat">
