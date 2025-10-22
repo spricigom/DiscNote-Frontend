@@ -61,6 +61,8 @@ watch(
     }
   }
 )
+
+
 </script>
 
 
@@ -115,7 +117,7 @@ watch(
         <!-- MÚSICAS -->
         <div v-show="activeTab === 'songs'">
           <div v-if="results.songs.length" class="results-list">
-            <div v-for="song in results.songs" :key="song.trackId" class="result-item">
+            <div v-for="song in results.songs" :key="song.trackId" class="result-item"  @click="irParaMusica(musica)" >
               <div class="result-image">
                 <img
                   :src="song.artworkUrl100?.replace('100x100bb', '1200x1200bb')"
