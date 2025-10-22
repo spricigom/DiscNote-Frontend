@@ -56,7 +56,7 @@ onMounted(async () => {
 
     <div class="divisao">
       <h3>Músicas</h3>
-      <hr>
+      <hr />
     </div>
     <Slider :items="items" type="music" />
 
@@ -93,7 +93,6 @@ onMounted(async () => {
 .corpo {
   height: 100%;
 }
-
 .foto-username {
   background-color: rgba(0, 0, 0, 0.315);
   width: 40px;
@@ -137,7 +136,6 @@ onMounted(async () => {
   height: 250px;
   border-radius: 2vw;
   display: flex;
-
 }
 
 .resenha {
@@ -148,7 +146,6 @@ onMounted(async () => {
   margin-bottom: 10vh;
   gap: 2vw;
 }
-
 
 main {
   display: flex;
