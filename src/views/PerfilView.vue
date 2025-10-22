@@ -97,7 +97,7 @@ const tabs = [
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  width: 50vw;
+  width: 45vw;
   flex-wrap: wrap;
 
 }

@@ -69,7 +69,7 @@ import { ref } from 'vue'
 }
 
 .card-playlist{
-    display: grid;
+  display: grid;
   grid-template-columns: 1fr;
   margin-bottom: 15vh;
   align-items: center;
