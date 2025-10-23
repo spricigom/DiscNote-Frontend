@@ -87,7 +87,7 @@ function goToSearch() {
         <hr style="margin-top: 4vh; width: 100%" />
         <div class="itens-sidebar">
           <p>
-            <RouterLink to="/perfil"
+            <RouterLink to="/perfilUsuario"
               ><i class="pi pi-user" style="color: #145d91; font-size: 1.2vw"></i> Seu
               Perfil</RouterLink
             >

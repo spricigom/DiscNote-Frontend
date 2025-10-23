@@ -59,6 +59,12 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/perfilUsuario',
+      name: 'perfilUsuario',
+      component: () => import('../views/perfilUsuarioView.vue'),
+      props: true
+    },
+    {
       path: '/musicas',
       name: 'musicas',
       component: Musicas
