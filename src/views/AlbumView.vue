@@ -2,7 +2,7 @@
 import HeaderComp from '@/components/HeaderComp.vue'
 import { onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useAlbunsStore } from '@/stores/albuns' // ✅ novo store
+import { useAlbunsStore } from '@/stores/albuns' 
 import { useAuthStore } from '@/stores/auth'
 import { useResenhaStore } from '@/stores/resenhas'
 import md5 from 'crypto-js/md5'
