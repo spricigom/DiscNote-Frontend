@@ -149,6 +149,19 @@ function deleteResenha() {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #0b1a1a; /* mesmo fundo do site */
+  overflow-x: hidden;
+}
+
+main {
+  min-height: 100vh;
+  background-color: #0b1a1a;
+}
+
 .musica {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
