@@ -65,6 +65,12 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/MusicaEstatica',
+      name: 'MusicaEstatica',
+      component: () => import('../views/MusicaEstaticaView.vue'),
+      props: true
+    },
+    {
       path: '/musicas',
       name: 'musicas',
       component: Musicas
