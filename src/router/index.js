@@ -86,6 +86,11 @@ const router = createRouter({
       name: 'LandingPage',
       component: () => import('../views/LandingPageView.vue')
     },
+    {
+      path: '/VerMais',
+      name: 'VerMais',
+      component: () => import('../views/VerMaisView.vue')
+    },
   ],
 })
 
