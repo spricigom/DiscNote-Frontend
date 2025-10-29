@@ -51,7 +51,7 @@ onMounted(() => {
     {
       theme: 'filled_black', 
       size: 'large',
-      width: 380
+      width: 250
     }
   );
 
@@ -72,7 +72,7 @@ function handleCredentialResponse(response) {
     <div class="login-box">
       <h2>Crie sua conta</h2>
 
-      <button id="google-button" @click="handleGoogleLogin" class="google">
+      <button id="google-button" @click="handleGoogleLogin" class= "social-bnt google">
         <span>G</span> Continue com Google
       </button>
 
@@ -144,6 +144,7 @@ h2 {
 }
 
 .social-btn {
+  display: flex;
   width: 100%;
   padding: 10px;
   margin-bottom: 12px;
@@ -156,6 +157,7 @@ h2 {
   display: flex;
   align-items: center;
   gap: 10px;
+  justify-content: center;
 }
 
 .social-btn span {
@@ -173,7 +175,7 @@ h2 {
   width: 100%;
   padding: 10px;
   margin-bottom: 12px;
-  border: none;
+  border: 1px solid #2f4f5b;
   border-radius: 8px;
   background: none;
   color: white;
@@ -250,5 +252,15 @@ form input {
 .footer .forgot {
   display: block;
   margin-top: 10px;
+}
+
+
+@media (max-width:400px){
+  .container{
+    height: 100%;
+  }
+  .login-box{
+    width: 250px;
+  }
 }
 </style>
