@@ -1,6 +1,7 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import Header from '@/components/HeaderComp.vue'
+import Footer  from '@/components/Footer.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const authStore = useAuthStore()
@@ -93,6 +94,7 @@ const authStore = useAuthStore()
       </div>
     </div>
   </main>
+  <footer><Footer /></footer>
 </template>
 
 <style scoped>

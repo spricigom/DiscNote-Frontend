@@ -1,7 +1,7 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import Header from '@/components/HeaderComp.vue'
-
+import Footer from '@/components/Footer.vue'
 const musica = reactive({
   titulo: 'Nome da Musica',
   artista: 'nome do artista',
@@ -76,70 +76,70 @@ const truncatedresenha = computed(() => {
           </div>
         </div>
 
-
         <section class="resenhas">
-        <div id="cabecalho-resenha">
-          <h3>Resenhas</h3>
-          <a href="#" class="ver-mais">ver todas &gt;</a>
-        </div>
+          <div id="cabecalho-resenha">
+            <h3>Resenhas</h3>
+            <a href="/VerMaisResenhas" class="ver-mais">ver todas &gt;</a>
+          </div>
 
-        <article class="card-resenha">
-          <div class="meta">
-            <div class="foto-username">
-              <img src="#" alt="" />
-            </div>
-            <div class="meta-text">
-              <div class="user-row">
-                <strong>@{{ resenha.user }}</strong>
-                <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
-                <div class="favorito">
-                  <i class="pi pi-heart-fill"></i>
+          <article class="card-resenha">
+            <div class="meta">
+              <div class="foto-username">
+                <img src="#" alt="" />
+              </div>
+              <div class="meta-text">
+                <div class="user-row">
+                  <strong>@{{ resenha.user }}</strong>
+                  <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
+                  <div class="favorito">
+                    <i class="pi pi-heart-fill"></i>
+                  </div>
+                  <span class="data">{{ resenha.data }}</span>
                 </div>
-                <span class="data">{{ resenha.data }}</span>
               </div>
             </div>
-          </div>
-          <p class="resenha-body">
-            {{ truncatedresenha }}
-            <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
-          </p>
-          <div class="resenha-footer">
-            <span class="likes"
-              ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
-            >
-          </div>
-        </article>
-        <article class="card-resenha">
-          <div class="meta">
-            <div class="foto-username">
-              <img src="#" alt="" />
+            <p class="resenha-body">
+              {{ truncatedresenha }}
+              <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
+            </p>
+            <div class="resenha-footer">
+              <span class="likes"
+                ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
+              >
             </div>
-            <div class="meta-text">
-              <div class="user-row">
-                <strong>@{{ resenha.user }}</strong>
-                <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
-                <div class="favorito">
-                  <i class="pi pi-heart-fill"></i>
+          </article>
+          <article class="card-resenha">
+            <div class="meta">
+              <div class="foto-username">
+                <img src="#" alt="" />
+              </div>
+              <div class="meta-text">
+                <div class="user-row">
+                  <strong>@{{ resenha.user }}</strong>
+                  <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
+                  <div class="favorito">
+                    <i class="pi pi-heart-fill"></i>
+                  </div>
+                  <span class="data">{{ resenha.data }}</span>
                 </div>
-                <span class="data">{{ resenha.data }}</span>
               </div>
             </div>
-          </div>
-          <p class="resenha-body">
-            {{ truncatedresenha }}
-            <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
-          </p>
-          <div class="resenha-footer">
-            <span class="likes"
-              ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
-            >
-          </div>
-        </article>
-      </section>
+            <p class="resenha-body">
+              {{ truncatedresenha }}
+              <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
+            </p>
+            <div class="resenha-footer">
+              <span class="likes"
+                ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
+              >
+            </div>
+          </article>
+        </section>
       </div>
-
     </div>
   </main>
+  <footer><Footer /></footer>
+
 </template>
 
 <style scoped>
@@ -190,9 +190,7 @@ const truncatedresenha = computed(() => {
   gap: 1.5vh;
   height: 70vh;
   margin-left: 7vw;
-    margin-top: 7vh;
-
-
+  margin-top: 7vh;
 }
 .right {
   display: flex;

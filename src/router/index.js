@@ -91,6 +91,11 @@ const router = createRouter({
       name: 'VerMais',
       component: () => import('../views/VerMaisView.vue')
     },
+    {
+      path: '/VerMaisResenhas',
+      name: 'VerMaisResenhas',
+      component: () => import('../views/VerMaisResenhasView.vue')
+    },
   ],
 })
 
