@@ -42,7 +42,7 @@ onMounted(() => {
     {
       theme: 'filled_black',
       size: 'large',
-      width: 380
+      width: 250
     }
   );
 
@@ -130,6 +130,7 @@ h2 {
 }
 
 .social-btn {
+  display: flex;
   width: 100%;
   padding: 10px;
   margin-bottom: 12px;
@@ -142,6 +143,7 @@ h2 {
   display: flex;
   align-items: center;
   gap: 10px;
+  justify-content: center;
 }
 
 .social-btn span {
@@ -159,7 +161,7 @@ h2 {
   width: 100%;
   padding: 10px;
   margin-bottom: 12px;
-  border: none;
+  border: 1px solid #2f4f5b;
   border-radius: 8px;
   background: none;
   color: white;
@@ -169,6 +171,7 @@ h2 {
   align-items: center;
   gap: 10px;
 }
+
 
 .facebook span {
   color: #ffffff;
@@ -236,5 +239,15 @@ form input {
 .footer .forgot {
   display: block;
   margin-top: 10px;
+}
+
+
+@media (max-width:400px){
+  .container{
+    height: 100%;
+  }
+  .login-box{
+    width: 250px;
+  }
 }
 </style>
