@@ -29,9 +29,9 @@ const authStore = useAuthStore()
 //  const max = 420
 //  return resenha.body.length > max ? resenha.body.slice(0, max) + '...' : resenha.body
 //})
-const stats = reactive({
-  average: 5.0,
-})
+//const stats = reactive({
+//  average: 5.0,
+//})
 </script>
 
 <template>
@@ -52,7 +52,7 @@ const stats = reactive({
         <div class="user">
           <img src="" alt="" />
           <p>
-            Resenha escrita por <span>@{{ authStore.user.username }}</span>
+            Resenha escrita por <span>@username</span>
           </p>
         </div>
         <hr />
@@ -80,7 +80,7 @@ const stats = reactive({
 
         <div class="texto-resenha">
           <p>
-           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra diam quis leo finibus, vel posuere augue volutpat. Aenean orci lacus, luctus sed faucibus vel, ultrices ut leo. Quisque cursus libero eros, eget fringilla mi convallis a. Nulla porttitor lorem ac diam mollis scelerisque. Praesent ut luctus tellus, id facilisis felis. Donec sit amet arcu vehicula, lacinia eros et, vestibulum risus. Aenean aliquet malesuada tristique. Ut porta diam nisl, eu posuere lorem sodales vel. Curabitur dignissim accumsan volutpat. Integer vitae neque non erat iaculis laoreet. Curabitur auctor vel nisl sed bibendum. Nunc ipsum leo, pharetra tempor leo eget, tincidunt placerat libero. Pellentesque non tortor velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra diam quis leo finibus, vel posuere augue volutpat. Aenean orci lacus, luctus sed faucibus vel, ultrices ut leo. Quisque cursus libero eros, eget fringilla mi convallis a. Nulla porttitor lorem ac diam mollis scelerisque. Praesent ut luctus tellus, id facilisis felis. Donec sit amet arcu vehicula, lacinia eros et, vestibulum risus. Aenean aliquet malesuada tristique. Ut porta diam nisl, eu posuere lorem sodales vel. Curabitur dignissim accumsan volutpat. Integer vitae neque non erat iaculis laoreet. Curabitur auctor vel nisl sed bibendum. Nunc ipsum leo, pharetra tempor leo eget, tincidunt placerat libero. Pellentesque non tortor velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra diam quis leo finibus, vel posuere augue volutpat. Aenean orci lacus, luctus sed faucibus vel, ultrices ut leo. Quisque cursus libero eros, eget fringilla mi convallis a. Nulla porttitor lorem ac diam mollis scelerisque. Praesent ut luctus tellus, id facilisis felis. Donec sit amet arcu vehicula, lacinia eros et, vestibulum risus. Aenean aliquet malesuada tristique. Ut porta diam nisl, eu posuere lorem sodales vel. Curabitur dignissim accumsan volutpat. Integer vitae neque non erat iaculis laoreet. Curabitur auctor vel nisl sed bibendum. Nunc ipsum leo, pharetra tempor leo eget, tincidunt placerat libero. Pellentesque non tortor velit. 
+           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra diam quis leo finibus, vel posuere augue volutpat. Aenean orci lacus, luctus sed faucibus vel, ultrices ut leo. Quisque cursus libero eros, eget fringilla mi convallis a. Nulla porttitor lorem ac diam mollis scelerisque. Praesent ut luctus tellus, id facilisis felis. Donec sit amet arcu vehicula, lacinia eros et, vestibulum risus. Aenean aliquet malesuada tristique. Ut porta diam nisl, eu posuere lorem sodales vel. Curabitur dignissim accumsan volutpat. Integer vitae neque non erat iaculis laoreet. Curabitur auctor vel nisl sed bibendum. Nunc ipsum leo, pharetra tempor leo eget, tincidunt placerat libero. Pellentesque non tortor velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra diam quis leo finibus, vel posuere augue volutpat. Aenean orci lacus, luctus sed faucibus vel, ultrices ut leo. Quisque cursus libero eros, eget fringilla mi convallis a. Nulla porttitor lorem ac diam mollis scelerisque. Praesent ut luctus tellus, id facilisis felis. Donec sit amet arcu vehicula, lacinia eros et, vestibulum risus. Aenean aliquet malesuada tristique. Ut porta diam nisl, eu posuere lorem sodales vel. Curabitur dignissim accumsan volutpat. Integer vitae neque non erat iaculis laoreet. Curabitur auctor vel nisl sed bibendum. Nunc ipsum leo, pharetra tempor leo eget, tincidunt placerat libero. Pellentesque non tortor velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra diam quis leo finibus, vel posuere augue volutpat. Aenean orci lacus, luctus sed faucibus vel, ultrices ut leo. Quisque cursus libero eros, eget fringilla mi convallis a. Nulla porttitor lorem ac diam mollis scelerisque. Praesent ut luctus tellus, id facilisis felis. Donec sit amet arcu vehicula, lacinia eros et, vestibulum risus. Aenean aliquet malesuada tristique. Ut porta diam nisl, eu posuere lorem sodales vel. Curabitur dignissim accumsan volutpat. Integer vitae neque non erat iaculis laoreet. Curabitur auctor vel nisl sed bibendum. Nunc ipsum leo, pharetra tempor leo eget, tincidunt placerat libero. Pellentesque non tortor velit.
           </p>
         </div>
         <div class="curtida-e-comentario">
