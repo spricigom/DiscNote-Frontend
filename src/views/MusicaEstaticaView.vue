@@ -1,7 +1,7 @@
 <script setup>
 import { computed, reactive } from 'vue'
 import Header from '@/components/HeaderComp.vue'
-
+import Footer from '@/components/Footer.vue'
 const musica = reactive({
   titulo: 'Nome da Musica',
   artista: 'nome do artista',
@@ -32,53 +32,54 @@ const truncatedresenha = computed(() => {
   <Header />
   <main>
     <div class="musica">
-      <div class="cima">
-        <div class="left">
-          <div class="imgMusica"></div>
-        </div>
+      <div class="left">
+        <div class="imgMusica"><img src="" alt="" /></div>
 
-        <div class="center">
-          <div class="area-titulos">
-            <h1 class="titulo">{{ musica.titulo }}</h1>
-            <h2 class="artista">{{ musica.artista }}</h2>
-          </div>
-          <div id="generos">
-            <p>Generos:</p>
-            <div class="tags">
-              <button v-for="g in musica.genero" :key="g" class="tag">{{ g }}</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="right">
-          <div class="stat">
-            <div class="big">{{ stats.totalresenhas.toLocaleString() }}</div>
-            <div class="label">Total de avaliacoes</div>
-          </div>
-
-          <div class="stat rating">
-            <div class="stars">
-              ★★★★★ <span class="avg">{{ stats.average.toFixed(1) }}</span>
-            </div>
-            <div class="label">Media das avaliacoes</div>
-          </div>
-
-          <div class="stat">
-            <div class="big">{{ stats.popularity }}%</div>
-            <div class="label">Popularidade</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="baixo">
         <div class="acoes">
           <button>Escrever Resenha</button>
           <button>Adicionar à Playlist</button>
         </div>
+      </div>
+
+      <div class="direita">
+        <div class="cima">
+          <div class="center">
+            <div class="area-titulos">
+              <h1 class="titulo">{{ musica.titulo }}</h1>
+              <h2 class="artista">{{ musica.artista }}</h2>
+            </div>
+            <div id="generos">
+              <p>Generos:</p>
+              <div class="tags">
+                <button v-for="g in musica.genero" :key="g" class="tag">{{ g }}</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="right">
+            <div class="stat">
+              <div class="big">{{ stats.totalresenhas.toLocaleString() }}</div>
+              <div class="label">Total de avaliacoes</div>
+            </div>
+
+            <div class="stat rating">
+              <div class="stars">
+                ★★★★★ <span class="avg">{{ stats.average.toFixed(1) }}</span>
+              </div>
+              <div class="label">Media das avaliacoes</div>
+            </div>
+
+            <div class="stat">
+              <div class="big">{{ stats.popularity }}%</div>
+              <div class="label">Popularidade</div>
+            </div>
+          </div>
+        </div>
+
         <section class="resenhas">
           <div id="cabecalho-resenha">
             <h3>Resenhas</h3>
-            <a href="#" class="ver-mais">ver todas &gt;</a>
+            <a href="/VerMaisResenhas" class="ver-mais">ver todas &gt;</a>
           </div>
 
           <article class="card-resenha">
@@ -99,7 +100,7 @@ const truncatedresenha = computed(() => {
             </div>
             <p class="resenha-body">
               {{ truncatedresenha }}
-              <a class="ver-maisResenha" href="#">ver mais &gt;</a>
+              <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
             </p>
             <div class="resenha-footer">
               <span class="likes"
@@ -125,7 +126,7 @@ const truncatedresenha = computed(() => {
             </div>
             <p class="resenha-body">
               {{ truncatedresenha }}
-              <a class="ver-maisResenha" href="#">ver mais &gt;</a>
+              <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
             </p>
             <div class="resenha-footer">
               <span class="likes"
@@ -137,30 +138,32 @@ const truncatedresenha = computed(() => {
       </div>
     </div>
   </main>
+  <footer><Footer /></footer>
+
 </template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
-.baixo{
+
+.direita {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   min-height: 100vh;
   width: 100%;
-
+  margin-left: 4vw;
 }
-.acoes{
+.acoes {
   display: flex;
   flex-direction: column;
 }
-.acoes button{
+.acoes button {
   border: 1px solid white;
   background: transparent;
   color: white;
-  margin-left: 11vw;
   padding-left: 1vw;
   padding-right: 1vw;
-  padding-top:1vh ;
+  padding-top: 1vh;
   padding-bottom: 1vh;
   border-radius: 7px;
   font-size: 1.1vw;
@@ -171,7 +174,8 @@ const truncatedresenha = computed(() => {
   flex-direction: column;
   height: 100%;
   font-family: 'Archivo', sans-serif;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1.5fr 5fr 1fr;
 }
 .cima {
   display: flex;
@@ -184,7 +188,9 @@ const truncatedresenha = computed(() => {
   flex-direction: column;
   align-items: center;
   gap: 1.5vh;
-  margin-left: 8vw;
+  height: 70vh;
+  margin-left: 7vw;
+  margin-top: 7vh;
 }
 .right {
   display: flex;
@@ -195,14 +201,12 @@ const truncatedresenha = computed(() => {
   margin-left: 7vh;
 }
 .center {
-  margin-left: 3vh;
   padding-top: 6px;
   width: 40vw;
-  margin-left: 4vw;
 }
 .imgMusica {
-  width: 250px;
-  height: 250px;
+  width: 270px;
+  height: 270px;
   background: #00000050;
   border-radius: 25px;
 }
@@ -215,8 +219,8 @@ const truncatedresenha = computed(() => {
   cursor: pointer;
 }
 .resenhas {
+  margin-top: 2vh;
   width: 50vw;
-  margin-left: 7vw;
 }
 
 .area-titulos .titulo {

@@ -86,6 +86,16 @@ const router = createRouter({
       name: 'LandingPage',
       component: () => import('../views/LandingPageView.vue')
     },
+    {
+      path: '/VerMais',
+      name: 'VerMais',
+      component: () => import('../views/VerMaisView.vue')
+    },
+    {
+      path: '/VerMaisResenhas',
+      name: 'VerMaisResenhas',
+      component: () => import('../views/VerMaisResenhasView.vue')
+    },
   ],
 })
 
