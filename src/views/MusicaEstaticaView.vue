@@ -99,7 +99,7 @@ const truncatedresenha = computed(() => {
             </div>
             <p class="resenha-body">
               {{ truncatedresenha }}
-              <a class="ver-maisResenha" href="#">ver mais &gt;</a>
+              <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
             </p>
             <div class="resenha-footer">
               <span class="likes"
@@ -125,7 +125,7 @@ const truncatedresenha = computed(() => {
             </div>
             <p class="resenha-body">
               {{ truncatedresenha }}
-              <a class="ver-maisResenha" href="#">ver mais &gt;</a>
+              <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
             </p>
             <div class="resenha-footer">
               <span class="likes"
