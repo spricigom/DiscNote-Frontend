@@ -2,7 +2,7 @@ import api from '@/plugins/api';
 
 export default new class ResenhaService {
     async fetchResenhas(musica_id = null) {
-        const data = await api.get('/resenhas', musica_id ? {
+        const { data }= await api.get('/resenhas', musica_id ? {
             params: { musica_id }
         } : {});
         return data;
