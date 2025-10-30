@@ -1,26 +1,47 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, nextTick } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import HeaderComp from '@/components/HeaderComp.vue'
 import ResenhaPerfil from '@/components/ResenhaPerfil.vue'
 import PlaylistsPerfil from '@/components/PlaylistsPerfil.vue'
 import FavoritosPerfil from '@/components/FavoritosPerfil.vue'
-
 import { useAuthStore } from '@/stores/auth'
 
-const selectedTab = ref('resenhas')
+const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
+
+const selectedTab = ref('resenhas')
+const perfilMain = ref(null)
 
 const tabs = [
   { key: 'resenhas', label: 'Resenhas' },
   { key: 'playlists', label: 'Playlists' },
   { key: 'favoritos', label: 'Favoritos' },
-  //  { key: 'mais-ouvidas', label: 'Mais Ouvidas' },
 ]
+
+watch(
+  () => route.query.tab,
+  async (newTab) => {
+    if (['resenhas', 'playlists', 'favoritos'].includes(newTab)) {
+      selectedTab.value = newTab
+      await nextTick()
+      perfilMain.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  },
+  { immediate: true }
+)
+
+function changeTab(tabKey) {
+  selectedTab.value = tabKey
+  router.push({ query: { tab: tabKey } })
+  perfilMain.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 </script>
 
 <template>
   <HeaderComp />
-  <main>
+  <main ref="perfilMain">
     <div class="container">
       <div class="perfil-info">
         <img class="foto-perfil" :src="authStore.user?.avatar" />
@@ -46,9 +67,9 @@ const tabs = [
           </div>
         </div>
 
-        <RouterLink to="/EditarPerfil"
-          ><button class="btn-seguir" @click="toggleFollow">Editar perfil</button></RouterLink
-        >
+        <RouterLink to="/EditarPerfil">
+          <button class="btn-seguir">Editar perfil</button>
+        </RouterLink>
       </div>
 
       <!-- Tabs -->
@@ -57,22 +78,26 @@ const tabs = [
           v-for="tab in tabs"
           :key="tab.key"
           :class="['tab', { active: selectedTab === tab.key }]"
-          @click="selectedTab = tab.key"
+          @click="changeTab(tab.key)"
         >
           {{ tab.label }}
         </button>
       </div>
 
-      <!-- Conteúdo da Aba Selecionada -->
       <div class="tab-content">
-        <div v-if="selectedTab === 'resenhas'"><ResenhaPerfil /><ResenhaPerfil /></div>
-        <div class="playlists" v-else-if="selectedTab === 'playlists'">
+        <div v-if="selectedTab === 'resenhas'">
+          <ResenhaPerfil /><ResenhaPerfil />
+        </div>
+
+        <div v-else-if="selectedTab === 'playlists'" class="playlists">
           <PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil />
         </div>
-        <div v-else-if="selectedTab === 'favoritos'"><FavoritosPerfil /></div>
-        <!--<div v-else-if="selectedTab === 'mais-ouvidas'">Conteúdo de Mais Ouvidas</div>-->
+
+        <div v-else-if="selectedTab === 'favoritos'">
+          <FavoritosPerfil />
+        </div>
       </div>
-      <div class="divisao">hr</div>
+
     </div>
   </main>
 </template>
@@ -172,7 +197,7 @@ const tabs = [
   margin-top: 30px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* garante que itens menores que 100% fiquem centrados */
+  align-items: center;
   gap: 5vh;
   width: 100%;
 }
@@ -194,6 +219,7 @@ const tabs = [
   width: 100%;
   margin-bottom: 4vh;
 }
+
 .divisao hr {
   width: 100%;
   border: #145d91 1px solid;
