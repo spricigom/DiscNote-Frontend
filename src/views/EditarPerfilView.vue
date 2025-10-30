@@ -16,29 +16,29 @@ function handleFileChange(e) {
   const file = e.target.files[0]
   if (file) {
     const reader = new FileReader()
-    reader.onload = () => (avatarPreview.value = reader.result)
+    reader.onload = () => {
+      avatarPreview.value = reader.result // só preview, sem tocar no store
+    }
     reader.readAsDataURL(file)
   }
 }
 
+
 // Simulação de envio ao backend
 async function salvarAlteracoes() {
   try {
-    const updatedData = {
-      username: username.value,
-      name: apelido.value,
-      avatar: avatarPreview.value,
-    }
+    authStore.user.username = username.value
+    authStore.user.name = apelido.value
+    authStore.user.avatar = avatarPreview.value // agora salva só quando clica em salvar
 
-    await authStore.updateUser(updatedData)
     alert('✅ Alterações salvas!')
-
-    console.log('📦 Dados enviados:', updatedData)
+    console.log('📦 Dados salvos no localStorage:', authStore.user)
   } catch (error) {
     console.error('❌ Erro ao salvar perfil:', error)
     alert('Erro ao salvar alterações.')
   }
 }
+
 
 </script>
 
