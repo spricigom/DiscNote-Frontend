@@ -1,8 +1,45 @@
 <script setup>
-import { computed, reactive } from 'vue'
-import Header from '@/components/HeaderComp.vue'
-import Footer from '@/components/Footer.vue'
+import { ref } from 'vue'
 import HeaderComp from '@/components/HeaderComp.vue'
+import Footer from '@/components/Footer.vue'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
+
+// Estados locais com os dados atuais do usuário
+const username = ref(authStore.user?.username || '')
+const apelido = ref(authStore.user?.name || '')
+const avatarPreview = ref(authStore.user?.avatar || '')
+
+// Manipulação de imagem (preview)
+function handleFileChange(e) {
+  const file = e.target.files[0]
+  if (file) {
+    const reader = new FileReader()
+    reader.onload = () => (avatarPreview.value = reader.result)
+    reader.readAsDataURL(file)
+  }
+}
+
+// Simulação de envio ao backend
+async function salvarAlteracoes() {
+  try {
+    const updatedData = {
+      username: username.value,
+      name: apelido.value,
+      avatar: avatarPreview.value,
+    }
+
+    await authStore.updateUser(updatedData)
+    alert('✅ Alterações salvas!')
+
+    console.log('📦 Dados enviados:', updatedData)
+  } catch (error) {
+    console.error('❌ Erro ao salvar perfil:', error)
+    alert('Erro ao salvar alterações.')
+  }
+}
+
 </script>
 
 <template>
@@ -10,8 +47,9 @@ import HeaderComp from '@/components/HeaderComp.vue'
   <main>
     <div class="cabecalho">
       <h1>Editar Perfil</h1>
-      <hr>
+      <hr />
     </div>
+
     <div class="cima">
       <div class="label">
         <h2>Editar foto</h2>
@@ -19,32 +57,36 @@ import HeaderComp from '@/components/HeaderComp.vue'
       </div>
 
       <div class="troca-foto">
-        <img src="" alt="" />
+        <img :src="avatarPreview" alt="Foto do perfil" />
+        <input type="file" accept="image/*" @change="handleFileChange" />
       </div>
     </div>
+
     <div class="baixo">
       <div class="form">
         <div class="campo">
-           <div class="label">
-        <h2>Username</h2>
-        <span class="pi pi-pencil"></span>
-      </div>
-          <input type="text" placeholder="@username">
-          
+          <div class="label">
+            <h2>Username</h2>
+            <span class="pi pi-pencil"></span>
+          </div>
+          <input type="text" v-model="username" placeholder="@username" />
         </div>
-        <div class="campo">
-           <div class="label">
-        <h2>Apelido</h2>
-        <span class="pi pi-pencil"></span>
-      </div>
-          <input type="text" placeholder="Apelido">
 
+        <div class="campo">
+          <div class="label">
+            <h2>Apelido</h2>
+            <span class="pi pi-pencil"></span>
+          </div>
+          <input type="text" v-model="apelido" placeholder="Apelido" />
         </div>
       </div>
-        
+      <div class="salvar">
+
+        <button class="btn-salvar" @click="salvarAlteracoes">Salvar Alterações</button>
+      </div>
     </div>
   </main>
-  <Footer/>
+  <Footer />
 </template>
 
 <style scoped>
@@ -55,20 +97,20 @@ main {
   flex-direction: column;
   align-items: center;
 }
-.cabecalho{
+.cabecalho {
   display: flex;
   flex-direction: column;
   width: 100%;
   margin-bottom: 6vh;
 }
-.cabecalho h1{
+.cabecalho h1 {
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
   margin-left: 10vw;
   margin-top: 7vh;
   color: white;
 }
-.cabecalho hr{
+.cabecalho hr {
   border: #145d91 solid 1px;
   margin-left: 10vw;
   margin-right: 10vw;
@@ -90,41 +132,49 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
-.troca-foto img{
+.troca-foto img {
   background-color: rgba(0, 0, 0, 0.384);
   width: 420px;
   height: 420px;
   border-radius: 50%;
+  object-fit: cover;
 }
-.label{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: .4vh;
+.troca-foto input[type='file'] {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ecc815;
 }
-.label h2{
+.label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4vh;
+}
+.label h2 {
   font-family: 'Montserrat', sans-serif;
   color: #bdbdbd;
   font-weight: 500;
   font-size: 1.2vw;
 }
-.label span{
+.label span {
   color: #bdbdbd;
 }
-.form{
+.form {
   display: flex;
   flex-direction: row;
   width: 65vw;
   justify-content: space-around;
-  margin-bottom: 20vh;
+  margin-bottom: 6vh;
 }
-.campo{
+.campo {
   display: flex;
   flex-direction: column;
 }
-.campo input{
+.campo input {
   border: 1px solid #ecc815;
   background: none;
   color: #145d91;
@@ -135,9 +185,25 @@ main {
   height: 6vh;
   font-size: 1.3vw;
 }
-
-.campo input::placeholder{
-color: #145d91a8;
-font-size: 1.3vw;
+.campo input::placeholder {
+  color: #145d91a8;
+  font-size: 1.3vw;
+}
+.btn-salvar {
+  padding: 10px 25px;
+  border: 1px solid #ffffff;
+  background: transparent;
+  color: #ffffff;
+  font-size: 1.2vw;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.salvar{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10vh;
 }
 </style>

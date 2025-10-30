@@ -49,7 +49,8 @@ const tabs = [
           </div>
         </div>
 
-        <button class="btn-seguir" @click="toggleFollow">Editar perfil</button>
+        <RouterLink to="/EditarPerfil"><button class="btn-seguir" @click="toggleFollow">Editar perfil</button></RouterLink>
+        
       </div>
 
       <!-- Tabs -->
