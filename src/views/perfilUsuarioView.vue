@@ -7,7 +7,6 @@ import FavoritosPerfil from '@/components/FavoritosPerfil.vue'
 
 import { useAuthStore } from '@/stores/auth'
 
-
 const selectedTab = ref('resenhas')
 const authStore = useAuthStore()
 
@@ -15,10 +14,8 @@ const tabs = [
   { key: 'resenhas', label: 'Resenhas' },
   { key: 'playlists', label: 'Playlists' },
   { key: 'favoritos', label: 'Favoritos' },
-//  { key: 'mais-ouvidas', label: 'Mais Ouvidas' },
+  //  { key: 'mais-ouvidas', label: 'Mais Ouvidas' },
 ]
-
-
 </script>
 
 <template>
@@ -49,14 +46,19 @@ const tabs = [
           </div>
         </div>
 
-        <RouterLink to="/EditarPerfil"><button class="btn-seguir" @click="toggleFollow">Editar perfil</button></RouterLink>
-        
+        <RouterLink to="/EditarPerfil"
+          ><button class="btn-seguir" @click="toggleFollow">Editar perfil</button></RouterLink
+        >
       </div>
 
       <!-- Tabs -->
       <div class="tabs">
-        <button v-for="tab in tabs" :key="tab.key" :class="['tab', { active: selectedTab === tab.key }]"
-          @click="selectedTab = tab.key">
+        <button
+          v-for="tab in tabs"
+          :key="tab.key"
+          :class="['tab', { active: selectedTab === tab.key }]"
+          @click="selectedTab = tab.key"
+        >
           {{ tab.label }}
         </button>
       </div>
@@ -64,25 +66,25 @@ const tabs = [
       <!-- Conteúdo da Aba Selecionada -->
       <div class="tab-content">
         <div v-if="selectedTab === 'resenhas'"><ResenhaPerfil /><ResenhaPerfil /></div>
-        <div class="playlists" v-else-if="selectedTab === 'playlists'"><PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil /></div>
+        <div class="playlists" v-else-if="selectedTab === 'playlists'">
+          <PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil />
+        </div>
         <div v-else-if="selectedTab === 'favoritos'"><FavoritosPerfil /></div>
-    <!--<div v-else-if="selectedTab === 'mais-ouvidas'">Conteúdo de Mais Ouvidas</div>-->
+        <!--<div v-else-if="selectedTab === 'mais-ouvidas'">Conteúdo de Mais Ouvidas</div>-->
       </div>
       <div class="divisao">hr</div>
     </div>
   </main>
-
 </template>
 
 <style scoped>
-.playlists{
+.playlists {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
   width: 45vw;
   flex-wrap: wrap;
-
 }
 
 .perfil-info {
@@ -196,5 +198,4 @@ const tabs = [
   width: 100%;
   border: #145d91 1px solid;
 }
-
 </style>

@@ -46,8 +46,8 @@ function goToSearch() {
           <RouterLink to="#">Artistas</RouterLink>
         </div>
       </div>
-      <RouterLink to="#">Playlists</RouterLink>
-      <RouterLink to="#">Resenhas</RouterLink>
+      <RouterLink to="/Playlists">Playlists</RouterLink>
+      <RouterLink to="/Resenhas">Resenhas</RouterLink>
       <RouterLink to="/cadastro" v-if="!authStore.isLogged" >Cadastro</RouterLink>
     </nav>
 
