@@ -96,6 +96,11 @@ const router = createRouter({
       name: 'VerMaisResenhas',
       component: () => import('../views/VerMaisResenhasView.vue')
     },
+    {
+      path: '/EditarPerfil',
+      name: 'EditarPerfil',
+      component: () => import('../views/EditarPerfilView.vue')
+    },
   ],
 })
 
