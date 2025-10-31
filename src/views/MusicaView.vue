@@ -75,7 +75,6 @@ function deleteResenha() {
   <HeaderComp />
   <main v-if="!loading">
     <div class="musica">
-      <!-- LADO ESQUERDO -->
       <div class="left">
         <div class="imgMusica">
           <img
@@ -95,7 +94,6 @@ function deleteResenha() {
         <audio v-if="musica.previewUrl" :src="musica.previewUrl" controls />
       </div>
 
-      <!-- CENTRO -->
       <div class="direita">
         <div class="cima">
           <div class="center">
@@ -134,7 +132,6 @@ function deleteResenha() {
           </div>
         </div>
 
-        <!-- RESENHAS -->
         <section class="resenhas">
           <div id="cabecalho-resenha">
             <h3>Resenhas</h3>
@@ -340,7 +337,9 @@ main {
   font-size: 2vw;
   font-family: 'DM Mono', sans-serif;
 }
-
+.resenhas{
+  margin-bottom: 10vh;
+}
 #cabecalho-resenha {
   display: flex;
   justify-content: space-between;
