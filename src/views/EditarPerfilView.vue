@@ -3,8 +3,12 @@ import { ref } from 'vue'
 import HeaderComp from '@/components/HeaderComp.vue'
 import Footer from '@/components/Footer.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useMusicasStore } from '@/stores/musicas'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
+const musicasStore = useMusicasStore()
+const router = useRouter()
 
 // Estados locais com os dados atuais do usuário
 const username = ref(authStore.user?.username || '')
@@ -17,29 +21,35 @@ function handleFileChange(e) {
   if (file) {
     const reader = new FileReader()
     reader.onload = () => {
-      avatarPreview.value = reader.result // só preview, sem tocar no store
+      avatarPreview.value = reader.result // só preview
     }
     reader.readAsDataURL(file)
   }
 }
 
-
-// Simulação de envio ao backend
-async function salvarAlteracoes() {
+// Salvar alterações no store e atualizar resenhas locais
+function salvarAlteracoes() {
   try {
     authStore.user.username = username.value
     authStore.user.name = apelido.value
-    authStore.user.avatar = avatarPreview.value // agora salva só quando clica em salvar
+    authStore.user.avatar = avatarPreview.value
+
+    // Atualiza todas as resenhas locais do usuário
+    musicasStore.resenhasMusica.forEach(res => {
+      if (res.usuario.id === authStore.user.id) {
+        res.usuario.username = username.value
+        res.usuario.name = apelido.value
+        res.usuario.avatar = avatarPreview.value
+      }
+    })
 
     alert('✅ Alterações salvas!')
-    console.log('📦 Dados salvos no localStorage:', authStore.user)
+    router.push('/perfilUsuario') // volta pro perfil
   } catch (error) {
     console.error('❌ Erro ao salvar perfil:', error)
     alert('Erro ao salvar alterações.')
   }
 }
-
-
 </script>
 
 <template>
@@ -81,8 +91,9 @@ async function salvarAlteracoes() {
         </div>
       </div>
       <div class="salvar">
-
-        <RouterLink to="/perfilUsuario"> <button class="btn-salvar" @click="salvarAlteracoes">Salvar Alterações</button></RouterLink>
+        <RouterLink to="/perfilUsuario">
+          <button class="btn-salvar" @click="salvarAlteracoes">Salvar Alterações</button>
+        </RouterLink>
       </div>
     </div>
   </main>
@@ -90,6 +101,7 @@ async function salvarAlteracoes() {
 </template>
 
 <style scoped>
+/* ===== CSS ORIGINAL ===== */
 main {
   min-height: 90vh;
   width: 100%;
