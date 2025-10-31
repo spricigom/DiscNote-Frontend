@@ -1,76 +1,96 @@
 <script setup>
-defineProps({
+import { ref, defineProps, onMounted } from 'vue'
+import itunesService from '@/services/itunesService'
+import md5 from 'crypto-js/md5'
+
+const props = defineProps({
   resenha: {
     type: Object,
     required: true
-  }
+  },
+})
+
+const musica = ref({})
+
+onMounted(async () => {
+  musica.value = await itunesService.lookup(props.resenha.musica_id)
 })
 </script>
 
 <template>
-  <div class="resenha-wrapper">
+  <div class="container">
+<div class="resenha-wrapper">
     <div class="resenha">
       <div class="foto-resenha">
-        <img :src="resenha?.musica?.capa || '#'" alt="Capa da música" />
+        <img :src="musica.capa || '#'" :alt="musica.titulo || 'Capa da música'" />
       </div>
 
       <div class="corpo">
         <div class="titulo">
-          <h1>{{ resenha?.musica?.titulo }}</h1>
-          <h4>{{ resenha?.musica?.artista }}</h4>
+          <h1>{{ musica.titulo || '' }}</h1>
+          <h4>{{ musica.artista || '' }}</h4>
         </div>
 
         <div class="user-av-e-fav">
-          
+          <div class="username">
+            <div class="foto-username">
+              <img
+                :src="`https://www.gravatar.com/avatar/${md5(resenha.usuario.email.trim().toLowerCase())}?s=200&d=identicon`"
+                alt=""
+              />
+            </div>
+            <p>@{{ resenha.usuario.username }}</p>
+          </div>
 
           <div class="avaliacao-e-favorito">
-           <div class="avaliacao">
-     <i
-    v-for="i in 5"
-    :key="i"
-    :class="['pi', i <= (resenha?.nota || 0) ? 'pi-star-fill' : 'pi-star']"
-  ></i>
-</div>
+            <div class="avaliacao">
+              <i
+                v-for="i in 5"
+                :key="i"
+                :class="['pi', i <= (resenha.nota || 0) ? 'pi-star-fill' : 'pi-star']"
+              ></i>
+            </div>
             <div class="favorito">
-              <i class="pi pi-heart-fill"></i>
+              <i :class="['pi', resenha.favorito ? 'pi-heart-fill' : 'pi-heart']"></i>
             </div>
           </div>
         </div>
 
         <div class="texto-resenha">
-          <p>{{ resenha?.texto }}</p>
+          <p>{{ resenha.texto }}</p>
         </div>
 
         <div class="curtida-e-comentario">
           <div class="curtida">
             <i class="pi pi-thumbs-up"></i>
-            <p>{{ resenha?.curtidas || 0 }} curtidas</p>
+            <p>{{ resenha.curtidas_count.toLocaleString() || 0 }} curtidas</p>
           </div>
           <div class="comentarios">
             <i class="pi pi-comment"></i>
-            <p>{{ resenha?.comentarios?.length || 0 }} comentários</p>
+            <p>{{ resenha.comentarios?.length || 0 }} comentários</p>
           </div>
         </div>
       </div>
     </div>
+
     <div class="divisao">
       <hr />
     </div>
   </div>
+  </div>
+  
 </template>
 
-
 <style scoped>
-/* wrapper que garante centralização independente do pai */
+
 .resenha-wrapper {
-  width: 60%;        /* largura desejada para a resenha */
-  margin: 0 auto;    /* centraliza horizontalmente */
+  width: 60%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: stretch;
 }
 
-/* separador */
 .divisao {
   width: 100%;
   margin-bottom: 4vh;
@@ -95,20 +115,20 @@ defineProps({
   width: 250px;
   height: 250px;
   border-radius: 2vw;
-  overflow: hidden;         /* força a imagem a respeitar o border-radius */
+  overflow: hidden;
   display: flex;
 }
 
 .foto-resenha img {
   width: 100%;
   height: 100%;
-  object-fit: cover;        /* ajusta o enquadramento */
-  border-radius: 2vw;       /* garante que siga o mesmo raio da div */
+  object-fit: cover;
+  border-radius: 2vw;
 }
 
 /* corpo do texto */
 .corpo {
-  width: calc(100% - 250px - 2vw); /* ocupa o restante à direita da foto */
+  width: calc(100% - 250px - 2vw);
   height: 100%;
 }
 
@@ -132,6 +152,7 @@ defineProps({
   align-items: center;
   gap: 3vw;
 }
+
 .username {
   display: flex;
   flex-direction: row;
@@ -142,9 +163,11 @@ defineProps({
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: .5vw;
+  margin-right: 0.5vw;
 }
-.foto-username img { object-fit: cover; }
+.foto-username img {
+  object-fit: cover;
+}
 .username p {
   font-family: 'Archivo', sans-serif;
   color: #c4c4c4;
@@ -152,20 +175,51 @@ defineProps({
 }
 
 /* avaliação e favorito */
-.avaliacao-e-favorito { display:flex; gap:1.5vw; }
-.avaliacao { display:flex; gap:0.3vw; font-size:1.3vw; color:#ecc815; }
-.favorito { font-size:1.3vw; color:#145d91; }
+.avaliacao-e-favorito {
+  display: flex;
+  gap: 1.5vw;
+}
+.avaliacao {
+  display: flex;
+  gap: 0.3vw;
+  font-size: 1.3vw;
+  color: #ecc815;
+}
+.favorito {
+  font-size: 1.3vw;
+  color: #145d91;
+}
 
 /* texto da resenha */
-.texto-resenha { width: 100%; margin-top: 2vh; }
+.texto-resenha {
+  width: 100%;
+  margin-top: 2vh;
+}
 .texto-resenha p {
   font-family: 'Archivo', sans-serif;
   color: white;
 }
 
 /* curtidas e comentários */
-.curtida-e-comentario { display:flex; gap:2vw; margin-top:4vh; }
-.curtida, .comentarios { display:flex; align-items:center; gap:.5vw; }
-.curtida i, .comentarios i { color:#145d91; font-size:1.4vw; }
-.curtida p, .comentarios p { font-family:'DM Mono', sans-serif; color:white; }
+.curtida-e-comentario {
+  display: flex;
+  gap: 2vw;
+  margin-top: 4vh;
+}
+.curtida,
+.comentarios {
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+}
+.curtida i,
+.comentarios i {
+  color: #145d91;
+  font-size: 1.4vw;
+}
+.curtida p,
+.comentarios p {
+  font-family: 'DM Mono', sans-serif;
+  color: white;
+}
 </style>

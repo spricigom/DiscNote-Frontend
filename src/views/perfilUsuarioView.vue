@@ -113,6 +113,9 @@ function changeTab(tabKey) {
 </template>
 
 <style scoped>
+.container{
+  min-height:100vh;
+}
 .playlists {
   display: flex;
   flex-direction: row;
