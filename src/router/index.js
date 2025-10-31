@@ -54,6 +54,22 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/Albuns',
+      name: 'Albuns',
+      component: () => import('../views/AlbunsView.vue'),
+      props: true
+    },
+    {
+      path: '/genero/:nome/albuns',
+      name: 'GeneroAlbuns',
+      component: () => import('../views/GeneroAlbunsView.vue')
+    },
+    {
+      path: '/album/:id',
+      name: 'Album',
+      component: () => import('../views/AlbumView.vue') 
+    },
+    {
       path: '/perfilUsuario',
       name: 'perfilUsuario',
       component: () => import('../views/perfilUsuarioView.vue'),

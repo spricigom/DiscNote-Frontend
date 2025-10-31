@@ -39,7 +39,7 @@ function goToSearch() {
           >Explorar <span><i class="pi pi-angle-down"></i></span
         ></RouterLink>
         <div class="submenu" v-if="showSubmenu">
-          <RouterLink to="#">Álbuns</RouterLink>
+          <RouterLink to="/Albuns">Álbuns</RouterLink>
           <hr />
           <RouterLink to="/musicas">Músicas</RouterLink>
           <hr />
