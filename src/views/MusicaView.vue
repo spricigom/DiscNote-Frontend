@@ -16,8 +16,25 @@ const resenhaStore = useResenhaStore()
 
 const musica = computed(() => musicasStore.musicaAtual || {})
 const stats = computed(() => musicasStore.stats || {})
-const resenhas = computed(() => musicasStore.resenhasMusica || [])
 const loading = computed(() => musicasStore.loading)
+
+// **Modificação mínima aqui**
+const resenhas = computed(() => {
+  return (musicasStore.resenhasMusica || []).map(res => {
+    if (res.usuario.id === authStore.user?.id) {
+      return {
+        ...res,
+        usuario: {
+          ...res.usuario,
+          username: authStore.user.username,
+          avatar: authStore.user.avatar,
+          name: authStore.user.name
+        }
+      }
+    }
+    return res
+  })
+})
 
 const truncatedResenha = (texto) => {
   const max = 420
@@ -144,7 +161,7 @@ function deleteResenha() {
 
             <p class="resenha-body">
               {{ truncatedResenha(res.texto) }}
-              <a class="ver-maisResenha" href="#">ver mais &gt;</a>
+            <!--  <a class="ver-maisResenha" href="#">ver mais &gt;</a>-->
             </p>
 
             <div class="resenha-footer">
