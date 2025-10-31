@@ -18,18 +18,18 @@ const musica = computed(() => musicasStore.musicaAtual || {})
 const stats = computed(() => musicasStore.stats || {})
 const loading = computed(() => musicasStore.loading)
 
-// **Modificação mínima aqui**
+// **Atualiza automaticamente avatar e username do usuário logado nas resenhas**
 const resenhas = computed(() => {
-  return (musicasStore.resenhasMusica || []).map(res => {
+  return (musicasStore.resenhasMusica || []).map((res) => {
     if (res.usuario.id === authStore.user?.id) {
       return {
         ...res,
         usuario: {
           ...res.usuario,
           username: authStore.user.username,
-          avatar: authStore.user.avatar,
-          name: authStore.user.name
-        }
+          avatar: authStore.user.avatar, // <--- avatar do perfil
+          name: authStore.user.name,
+        },
       }
     }
     return res
@@ -43,7 +43,7 @@ const truncatedResenha = (texto) => {
 
 const minhaResenha = computed(() => {
   if (!authStore.isLogged) return null
-  return resenhas.value.find(r => r.usuario?.id === authStore.user.id) || null
+  return resenhas.value.find((r) => r.usuario?.id === authStore.user.id) || null
 })
 
 onMounted(() => {
@@ -119,7 +119,12 @@ function deleteResenha() {
 
             <div class="stat rating">
               <div class="stars">
-                <span v-for="n in 5" :key="n" class="estrelas" :class="{ ativo: n <= stats.average }">
+                <span
+                  v-for="n in 5"
+                  :key="n"
+                  class="estrelas"
+                  :class="{ ativo: n <= stats.average }"
+                >
                   ★
                 </span>
                 <span class="avg">{{ stats.average?.toFixed(1) || '0.0' }}</span>
@@ -140,7 +145,10 @@ function deleteResenha() {
             <div class="meta">
               <div class="foto-username">
                 <img
-                  :src="`https://www.gravatar.com/avatar/${md5(res.usuario.email.trim().toLowerCase())}?s=200&d=identicon`"
+                  :src="
+                    res.usuario.avatar ||
+                    `https://www.gravatar.com/avatar/${md5(res.usuario.email.trim().toLowerCase())}?s=200&d=identicon`
+                  "
                   alt="Avatar"
                 />
               </div>
@@ -161,12 +169,13 @@ function deleteResenha() {
 
             <p class="resenha-body">
               {{ truncatedResenha(res.texto) }}
-            <!--  <a class="ver-maisResenha" href="#">ver mais &gt;</a>-->
+              <!--  <a class="ver-maisResenha" href="#">ver mais &gt;</a>-->
             </p>
 
             <div class="resenha-footer">
               <span class="likes"
-                ><i class="pi pi-thumbs-up"></i> {{ res.curtidas_count?.toLocaleString() }} curtidas</span
+                ><i class="pi pi-thumbs-up"></i>
+                {{ res.curtidas_count?.toLocaleString() }} curtidas</span
               >
             </div>
           </article>
@@ -347,7 +356,7 @@ main {
   font-size: 3vh;
 }
 
-.ver-todas{
+.ver-todas {
   text-decoration: none;
   color: #145d91;
 }
