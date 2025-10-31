@@ -31,10 +31,9 @@ const minhaResenha = computed(() => {
 
 onMounted(() => {
   if (route.params.id) {
-    albunsStore.fetchAlbum(route.params.id)
+    albunsStore.fetchAlbuns(route.params.id)
   }
 })
-
 function goToResenha() {
   if (!authStore.isLogged) {
     alert('Você precisa estar logado para escrever uma resenha.')
@@ -52,89 +51,111 @@ function deleteResenha() {
     })
   }
 }
+
+
 </script>
 
 <template>
   <HeaderComp />
-  <main v-if="!loading">
-    <div class="album">
-      <div class="left">
-        <img :src="album.capa?.replace('100x100bb', '1200x1200bb')" alt="Capa do álbum" class="imgAlbum" />
-        <button @click="goToResenha()" id="escrever" :disabled="minhaResenha">
+
+ <main v-if="!loading">
+  <div class="album">
+    <div class="left">
+      <div class="imgAlbum">
+        <img
+          v-if="album.capa"
+          :src="album.capa.replace('100x100bb', '1200x1200bb')"
+          alt="Capa do álbum"
+        />
+      </div>
+
+      <div class="acoes">
+        <button @click="goToResenha()" :disabled="minhaResenha">
           {{ minhaResenha ? 'Resenha publicada' : 'Escrever Resenha' }}
         </button>
-        <button @click="deleteResenha()" id="escrever" v-if="minhaResenha">
-          Excluir minha resenha
-        </button>
+        <button v-if="minhaResenha" @click="deleteResenha()">Excluir minha resenha</button>
       </div>
-
-      <div class="center">
-        <div class="area-titulos">
-          <h1 class="titulo">{{ album.titulo }}</h1>
-          <h2 class="artista">{{ album.artista }}</h2>
-        </div>
-        <div id="generos">
-          <p>Gêneros:</p>
-          <div class="tags">
-            <button class="tag">{{ album.genero }}</button>
-          </div>
-        </div>
-        <section class="resenhas">
-          <div id="cabecalho-resenha">
-            <h3>Resenhas</h3>
-            <a href="#" class="ver-mais">ver todas &gt;</a>
-          </div>
-
-          <article class="card-resenha" v-for="(res, i) in resenhas" :key="i">
-            <div class="meta">
-              <div class="foto-username">
-                <img
-                  class="foto-username"
-                  :src="`https://www.gravatar.com/avatar/${md5(res.usuario.email.trim().toLowerCase())}?s=200&d=identicon`"
-                  alt=""
-                />
-              </div>
-              <div class="meta-text">
-                <div class="user-row">
-                  <strong>@{{ res.usuario.username }}</strong>
-                  <div class="estrelas">
-                    {{ res.nota }}
-                    <span v-for="n in 5" :key="n" class="estrelas" :class="{ ativo: n <= res.nota }">★</span>
-                  </div>
-                  <div class="favorito">
-                    <i class="pi pi-heart-fill"></i>
-                  </div>
-                  <span class="data">{{ res.data }}</span>
-                </div>
-              </div>
-            </div>
-            <p class="resenha-body">
-              {{ truncatedResenha(res.texto) }}
-              <a class="ver-maisResenha" href="#">ver mais &gt;</a>
-            </p>
-            <div class="resenha-footer">
-              <span class="likes"><i class="pi pi-thumbs-up"></i> {{ res.curtidas_count.toLocaleString() }} curtidas</span>
-            </div>
-          </article>
-        </section>
-      </div>
-
-      <aside class="right">
-        <div class="stat">
-          <div class="big">{{ stats.totalresenhas.toLocaleString() }}</div>
-          <div class="label">Total de avaliações</div>
-        </div>
-
-        <div class="stat rating">
-          <div class="stars">
-            <span v-for="n in 5" :key="n" class="estrelas" :class="{ ativo: n <= stats.average }">★</span>
-            <span class="avg">{{ stats.average }}</span>
-          </div>
-          <div class="label">Média das avaliações</div>
-        </div>
-      </aside>
     </div>
-  </main>
+
+    <div class="direita">
+      <div class="cima">
+        <div class="center">
+          <div class="area-titulos">
+            <h1 class="titulo">{{ album.titulo }}</h1>
+            <h2 class="artista">{{ album.artista }}</h2>
+          </div>
+
+          <div id="generos">
+            <p>Gêneros:</p>
+            <div class="tags">
+              <button v-if="album.genero" class="tag">{{ album.genero }}</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="stat">
+            <div class="big">{{ stats.totalresenhas?.toLocaleString() || 0 }}</div>
+            <div class="label">Total de avaliações</div>
+          </div>
+
+          <div class="stat rating">
+            <div class="stars">
+              <span v-for="n in 5" :key="n" class="estrelas" :class="{ ativo: n <= stats.average }">★</span>
+              <span class="avg">{{ stats.average?.toFixed(1) || '0.0' }}</span>
+            </div>
+            <div class="label">Média das avaliações</div>
+          </div>
+        </div>
+      </div>
+
+      <section class="resenhas">
+        <div id="cabecalho-resenha">
+          <h3>Resenhas</h3>
+          <RouterLink class="ver-todas" to="/VerMaisResenhas">ver todas</RouterLink>
+        </div>
+
+        <article class="card-resenha" v-for="(res, i) in resenhas" :key="i">
+          <div class="meta">
+            <div class="foto-username">
+              <img
+                :src="`https://www.gravatar.com/avatar/${md5(res.usuario.email.trim().toLowerCase())}?s=200&d=identicon`"
+                alt="Avatar"
+              />
+            </div>
+
+            <div class="meta-text">
+              <div class="user-row">
+                <strong>@{{ res.usuario.username }}</strong>
+                <div class="estrelas">
+                  <span v-for="n in 5" :key="n" :class="{ ativo: n <= res.nota }">★</span>
+                  <span>({{ res.nota }})</span>
+                </div>
+                <div class="favorito">
+                  <i class="pi pi-heart-fill"></i>
+                </div>
+                <span class="data">{{ res.data }}</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="resenha-body">
+            {{ truncatedResenha(res.texto) }}
+            <a class="ver-maisResenha" href="#">ver mais &gt;</a>
+          </p>
+
+          <div class="resenha-footer">
+            <span class="likes">
+              <i class="pi pi-thumbs-up"></i>
+              {{ res.curtidas_count?.toLocaleString() }} curtidas
+            </span>
+          </div>
+        </article>
+      </section>
+    </div>
+  </div>
+</main>
+
 
    <div v-else class="loading-container">
   <div class="loader"></div>
@@ -144,25 +165,15 @@ function deleteResenha() {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Montserrat:wght@100..900&display=swap');
-
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background-color: #0b1a1a; /* mesmo fundo do site */
-  overflow-x: hidden;
-}
-
 main {
   min-height: 100vh;
-  background-color: #0b1a1a;
+  background-color: #162326;
+  color: white;
 }
-
 
 .album {
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
-  padding: 32px;
+  grid-template-columns: 1.5fr 5fr 1fr;
   height: 100%;
   font-family: 'Archivo', sans-serif;
 }
@@ -172,64 +183,87 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 1.5vh;
+  margin-left: 7vw;
+  margin-top: 7vh;
 }
 
 .imgAlbum {
-  width: 220px;
-  height: 220px;
-  background: #0b1a1a;
-  border-radius: 18px;
-  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.3);
+  width: 270px;
+  height: 270px;
+  background: #00000050;
+  border-radius: 25px;
+  overflow: hidden;
+}
+.imgAlbum img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-#escrever {
-  border: 1.5px solid #fff;
+.acoes {
+  display: flex;
+  flex-direction: column;
+}
+.acoes button {
+  border: 1px solid white;
   background: transparent;
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 10px;
+  color: white;
+  padding: 1vh 1vw;
+  border-radius: 7px;
+  font-size: 1.1vw;
+  margin-top: 3vh;
   cursor: pointer;
 }
-
-#escrever:disabled {
-  border: 1.5px solid #888;
-  color: #888;
+.acoes button:disabled {
+  border-color: #777;
+  color: #777;
   cursor: not-allowed;
 }
 
+.direita {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  margin-left: 4vw;
+}
+
+.cima {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 7vh;
+}
+
 .center {
-  margin-left: 3vh;
   padding-top: 6px;
+  width: 40vw;
 }
 
 .area-titulos .titulo {
   color: white;
-  font-size: 5vh;
+  font-size: 6vh;
   margin: 0;
 }
-
 .area-titulos .artista {
   margin-top: 0;
-  color: #d8d8d8;
-  font-size: 2vh;
+  color: #a3a3a3;
+  font-size: 3.5vh;
 }
 
 #generos {
   margin-top: 5vh;
   color: #145d91;
 }
-
 #generos p {
   color: #145d91;
   border-bottom: 2px solid #145d91;
-  font-size: 2.3vh;
+  font-size: 1.4vw;
 }
-
 .tags {
   display: flex;
   gap: 10px;
 }
-
 .tag {
   background: transparent;
   border: 2px solid #ecc815;
@@ -238,6 +272,42 @@ main {
   border-radius: 6px;
   cursor: pointer;
   margin-top: 1.5vh;
+  font-size: 1.1vw;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5vh;
+  font-family: 'Archivo', sans-serif;
+  font-size: 2.5vh;
+  margin-left: 7vh;
+}
+
+.stat {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.stat .big {
+  font-size: 2vw;
+  color: #ecc815;
+  font-family: 'DM Mono', sans-serif;
+}
+.stat .label {
+  color: white;
+  font-size: 1.6vw;
+}
+.rating .stars {
+  font-size: 1.8vw;
+  color: #ecc815;
+}
+.rating .avg {
+  margin-left: 5px;
+  color: #ecc815;
+  font-size: 2vw;
+  font-family: 'DM Mono', sans-serif;
 }
 
 #cabecalho-resenha {
@@ -250,111 +320,74 @@ main {
   margin-top: 3vh;
   color: #145d91;
 }
-
 #cabecalho-resenha h3 {
   margin: 0;
   font-size: 3vh;
 }
 
-.ver-mais {
-  color: #145d91;
+.ver-todas{
   text-decoration: none;
+  color: #145d91;
 }
-
-.foto-username {
-  background-color: rgba(0, 0, 0, 0.315);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 0.5vw;
-}
-
-strong {
-  font-size: 1.7vh;
-}
-
 .card-resenha {
   margin-top: 2vh;
   padding: 8px 0;
   color: white;
 }
-
 .meta {
   display: flex;
   gap: 12px;
   align-items: flex-start;
 }
-
 .user-row {
   display: flex;
   gap: 2.3vh;
   align-items: center;
 }
-
 .estrelas {
   color: #888;
   font-weight: 900;
   font-size: 2.5vh;
 }
-
 .estrelas.ativo {
   color: gold;
 }
-
 .data {
   color: #9e9e9e;
   font-size: 14px;
 }
-
 .resenha-body {
   margin-top: 0.7px;
   line-height: 1.45;
   color: #f3f7f7;
   font-size: 1.8vh;
 }
-
 .ver-maisResenha {
   color: #9e9e9e;
   text-decoration: none;
 }
-
 .resenha-footer {
   margin-top: 12px;
   color: white;
   font-family: 'Archivo', sans-serif;
+  gap: 1.5vh;
+}
+.foto-username {
+  background-color: rgba(0, 0, 0, 0.315);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.foto-username img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.right {
-  display: flex;
-  flex-direction: column;
-  gap: 1vh;
-  align-items: flex-end;
-  margin-right: 7vh;
-  font-family: 'Archivo', sans-serif;
-  font-size: 2.5vh;
-}
-
-.stat .big {
-  font-size: 3.5vh;
-  color: #ecc815;
-}
-
-.stat .label {
-  color: white;
-}
-
-.rating .stars {
-  font-size: 3vh;
-  color: #ecc815;
-}
-
-.rating .avg {
-  margin-left: 8px;
-  color: #fff;
-}
 .loading-container {
   height: 100vh;
-  background-color: #0b1a1a;
+  background-color: #162326;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -364,7 +397,6 @@ strong {
   font-size: 2.3vh;
   letter-spacing: 0.5px;
 }
-
 .loader {
   width: 48px;
   height: 48px;
@@ -374,7 +406,6 @@ strong {
   margin-bottom: 18px;
   animation: rotation 1s linear infinite;
 }
-
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
