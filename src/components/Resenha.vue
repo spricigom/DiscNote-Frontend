@@ -14,6 +14,12 @@ const musica = ref({})
 
 onMounted(async () => {
   musica.value = await itunesService.lookup(props.resenha.musica_id)
+
+    if (musica.value?.capa) {
+    musica.value.capa = musica.value.capa.replace('100x100bb.jpg', '600x600bb.jpg')
+  } else if (musica.value?.artworkUrl100) {
+    musica.value.capa = musica.value.artworkUrl100.replace('100x100bb.jpg', '600x600bb.jpg')
+  }
 })
 </script>
 

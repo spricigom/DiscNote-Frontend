@@ -40,7 +40,7 @@ async function searchItunes() {
     results.value.albums = albumsRes.results || []
     results.value.songs = songsRes.results || []
     results.value.artists = artistsRes.results || []
-    activeTab.value = 'albums'
+    activeTab.value = 'songs'
   } catch (err) {
     console.error('Erro ao buscar na API do iTunes:', err)
   } finally {
@@ -86,11 +86,11 @@ watch(
         <div v-show="activeTab === 'albums'">
           <div v-if="results.albums.length" class="results-list">
             <RouterLink
-  v-for="album in results.albums"
-  :key="album.collectionId"
-  class="result-item"
-  :to="`/album/${album.collectionId}`"
->
+              v-for="album in results.albums"
+              :key="album.collectionId"
+              class="result-item"
+              :to="`/album/${album.collectionId}`"
+            >
               <div class="result-image">
                 <img
                   :src="album.artworkUrl100?.replace('100x100bb', '1200x1200bb')"
@@ -105,7 +105,7 @@ watch(
                   <p>{{ album.releaseDate.slice(0, 4) }} • {{ album.artistName }}</p>
                 </div>
               </div>
-            </RouterLink>mmmmmmm
+            </RouterLink>
           </div>
 
           <div v-else>Nenhum álbum encontrado.</div>
@@ -225,6 +225,7 @@ main {
   transition: background 0.3s;
   width: 40vw;
   gap: 20px;
+  text-decoration: none;
   padding: 0.5rem;
 }
 
