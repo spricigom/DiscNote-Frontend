@@ -116,7 +116,7 @@ function deleteResenha() {
         <section class="resenhas">
           <div id="cabecalho-resenha">
             <h3>Resenhas</h3>
-            <RouterLink to="/VerMaisResenhas">ver todas</RouterLink>
+            <RouterLink class="ver-todas" to="/VerMaisResenhas">ver todas</RouterLink>
           </div>
 
           <article class="card-resenha" v-for="(res, i) in resenhas" :key="i">
@@ -330,6 +330,10 @@ main {
   font-size: 3vh;
 }
 
+.ver-todas{
+  text-decoration: none;
+  color: #145d91;
+}
 .card-resenha {
   margin-top: 2vh;
   padding: 8px 0;

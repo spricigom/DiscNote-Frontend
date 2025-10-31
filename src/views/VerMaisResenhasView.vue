@@ -3,6 +3,7 @@ import { computed, reactive } from 'vue'
 import Header from '@/components/HeaderComp.vue'
 import Footer  from '@/components/Footer.vue'
 import { useAuthStore } from '@/stores/auth'
+import { RouterLink } from 'vue-router' 
 
 const authStore = useAuthStore()
 
@@ -41,141 +42,65 @@ const truncatedresenha = computed(() => {
         <h2 class="artista">{{ musica.artista }}</h2>
       </div>
       <section class="resenhas">
-        <div id="cabecalho-resenha">
-          <h3>Resenhas</h3>
-        </div>
+          <div id="cabecalho-resenha">
+            <h3>Resenhas</h3>
+          </div>
 
-        <article class="card-resenha">
-          <div class="meta">
-            <div class="foto-username">
-              <img src="#" alt="" />
-            </div>
-            <div class="meta-text">
-              <div class="user-row">
-                <strong>@{{ resenha.user }}</strong>
-                <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
-                <div class="favorito">
-                  <i class="pi pi-heart-fill"></i>
+          <article class="card-resenha">
+            <div class="meta">
+              <div class="foto-username">
+                <img src="#" alt="" />
+              </div>
+              <div class="meta-text">
+                <div class="user-row">
+                  <strong>@{{ resenha.user }}</strong>
+                  <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
+                  <div class="favorito">
+                    <i class="pi pi-heart-fill"></i>
+                  </div>
+                  <span class="data">{{ resenha.data }}</span>
                 </div>
-                <span class="data">{{ resenha.data }}</span>
               </div>
             </div>
-          </div>
-          <p class="resenha-body">
-            {{ truncatedresenha }}
-            <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
-          </p>
-          <div class="resenha-footer">
-            <span class="likes"
-              ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
-            >
-          </div>
-        </article>
-        <article class="card-resenha">
-          <div class="meta">
-            <div class="foto-username">
-              <img src="#" alt="" />
+            <div class="resenha-body">
+
+              <p>{{ truncatedresenha }}</p>
+              <RouterLink class="ver-maisResenha" to="/VerMais">ver mais &gt;</RouterLink>
             </div>
-            <div class="meta-text">
-              <div class="user-row">
-                <strong>@{{ resenha.user }}</strong>
-                <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
-                <div class="favorito">
-                  <i class="pi pi-heart-fill"></i>
+            <div class="resenha-footer">
+              <span class="likes"
+                ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
+              >
+            </div>
+          </article>
+          <article class="card-resenha">
+            <div class="meta">
+              <div class="foto-username">
+                <img src="#" alt="" />
+              </div>
+              <div class="meta-text">
+                <div class="user-row">
+                  <strong>@{{ resenha.user }}</strong>
+                  <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
+                  <div class="favorito">
+                    <i class="pi pi-heart-fill"></i>
+                  </div>
+                  <span class="data">{{ resenha.data }}</span>
                 </div>
-                <span class="data">{{ resenha.data }}</span>
               </div>
             </div>
-          </div>
-          <p class="resenha-body">
-            {{ truncatedresenha }}
-            <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
-          </p>
-          <div class="resenha-footer">
-            <span class="likes"
-              ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
-            >
-          </div>
-        </article>
-        <article class="card-resenha">
-          <div class="meta">
-            <div class="foto-username">
-              <img src="#" alt="" />
+            <div class="resenha-body">
+
+              <p>{{ truncatedresenha }}</p>
+              <RouterLink class="ver-maisResenha" to="/VerMais">ver mais &gt;</RouterLink>
             </div>
-            <div class="meta-text">
-              <div class="user-row">
-                <strong>@{{ resenha.user }}</strong>
-                <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
-                <div class="favorito">
-                  <i class="pi pi-heart-fill"></i>
-                </div>
-                <span class="data">{{ resenha.data }}</span>
-              </div>
+            <div class="resenha-footer">
+              <span class="likes"
+                ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
+              >
             </div>
-          </div>
-          <p class="resenha-body">
-            {{ truncatedresenha }}
-            <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
-          </p>
-          <div class="resenha-footer">
-            <span class="likes"
-              ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
-            >
-          </div>
-        </article>
-        <article class="card-resenha">
-          <div class="meta">
-            <div class="foto-username">
-              <img src="#" alt="" />
-            </div>
-            <div class="meta-text">
-              <div class="user-row">
-                <strong>@{{ resenha.user }}</strong>
-                <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
-                <div class="favorito">
-                  <i class="pi pi-heart-fill"></i>
-                </div>
-                <span class="data">{{ resenha.data }}</span>
-              </div>
-            </div>
-          </div>
-          <p class="resenha-body">
-            {{ truncatedresenha }}
-            <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
-          </p>
-          <div class="resenha-footer">
-            <span class="likes"
-              ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
-            >
-          </div>
-        </article>
-        <article class="card-resenha">
-          <div class="meta">
-            <div class="foto-username">
-              <img src="#" alt="" />
-            </div>
-            <div class="meta-text">
-              <div class="user-row">
-                <strong>@{{ resenha.user }}</strong>
-                <div class="estrelas">{{ resenha.estrelas }} ★★★★★</div>
-                <div class="favorito">
-                  <i class="pi pi-heart-fill"></i>
-                </div>
-                <span class="data">{{ resenha.data }}</span>
-              </div>
-            </div>
-          </div>
-          <p class="resenha-body">
-            {{ truncatedresenha }}
-            <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
-          </p>
-          <div class="resenha-footer">
-            <span class="likes"
-              ><i class="pi pi-thumbs-up"></i> {{ resenha.likes.toLocaleString() }} curtidas</span
-            >
-          </div>
-        </article>
-      </section>
+          </article>
+        </section>
     </div>
     <div class="direita">
       <div class="img-e-av">
@@ -200,11 +125,14 @@ const truncatedresenha = computed(() => {
         </div>
       </div>
     </div>
+                  <RouterLink class="ver-maisResenha" to="/VerMais">ver mais &gt;</RouterLink>
+
   </main>
   <footer><Footer /></footer>
 </template>
 
 <style scoped>
+
 main {
   min-height: 100vh;
   display: grid;
