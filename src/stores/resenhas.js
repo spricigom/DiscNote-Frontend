@@ -1,87 +1,63 @@
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import resenhaService from '@/services/resenhas';
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import resenhaService from '@/services/resenhas'
 
 export const useResenhaStore = defineStore('resenha', () => {
-    const resenhas = ref([]);
-    const page = ref(1);
-    const pageSize = ref(10);
-    const totalPages = ref(1);
-    const loading = ref(false);
-    const error = ref(null);
+  const resenhas = ref([])
+  const loading = ref(false)
+  const error = ref(null)
 
-    async function fetchResenhas() {
-        loading.value = true;
-        error.value = null;
-        try {
-            const { data } = await resenhaService.fetchResenhas();
-            resenhas.value = data;
-            page.value = data.page;
-            pageSize.value = data.page_size;
-            totalPages.value = data.total_pages;
-        } catch (err) {
-            error.value = err;
-            console.error('Error fetching resenhas:', err);
-        } finally {
-            loading.value = false;
-        }
+  // 🔹 Buscar resenhas do usuário logado com todos os dados completos
+  async function fetchResenhasDoUsuario(userId) {
+    loading.value = true
+    error.value = null
+
+    try {
+      const { data } = await resenhaService.fetchResenhasPorUsuario(userId)
+
+      // 🔹 Preenche campos musica e usuario completos
+      const completas = await Promise.all(
+        data.map(async (r) => {
+          let musica = r.musica
+          let usuario = r.usuario
+
+          // caso venha apenas o id, busca dados completos
+          if (typeof musica === 'number' || !musica?.titulo) {
+            try {
+              const { data: mData } = await resenhaService.getMusicaById(musica)
+              musica = mData
+            } catch {
+              musica = { titulo: 'Desconhecida', capa: '#' }
+            }
+          }
+
+          if (typeof usuario === 'number' || !usuario?.avatar) {
+            try {
+              const { data: uData } = await resenhaService.getUsuarioById(usuario)
+              usuario = uData
+            } catch {
+              usuario = { username: 'Usuário desconhecido', avatar: '#' }
+            }
+          }
+
+          return { ...r, musica, usuario }
+        })
+      )
+
+      resenhas.value = completas
+      console.log('✅ Resenhas do usuário logado:', completas)
+    } catch (err) {
+      error.value = err
+      console.error('Erro ao buscar resenhas do usuário:', err)
+    } finally {
+      loading.value = false
     }
+  }
 
-    async function addResenha(payload) {
-        try {
-            const nova = await resenhaService.create(payload);
-            await fetchResenhas(page.value);
-            return nova;
-        } catch (err) {
-            error.value = err;
-            throw err;
-        }
-    }
-
-    async function updateResenha(id, payload) {
-        try {
-            const atualizada = await resenhaService.update(id, payload);
-            const index = resenhas.value.findIndex(r => r.id === id);
-            if (index !== -1) resenhas.value[index] = atualizada;
-            return atualizada;
-        } catch (err) {
-            error.value = err;
-        }
-    }
-
-    async function deleteResenha(id) {
-        try {
-            await resenhaService.remove(id);
-        } catch (err) {
-            error.value = err;
-        }
-    }
-
-    async function getResenhaPorMusica(musicaId) {
-        try {
-            return await resenhaService.getResenhaPorMusica(musicaId);
-        } catch (err) {
-            error.value = err;
-            return { media_nota: 0, total_resenhas: 0 };
-        }
-    }
-
-    function fetchResenhasPorMusica(musicaId) {
-        return resenhas.value.filter(r => r.musica_id == musicaId);
-    }
-
-    return {
-        resenhas,
-        page,
-        pageSize,
-        totalPages,
-        loading,
-        error,
-        fetchResenhas,
-        addResenha,
-        updateResenha,
-        deleteResenha,
-        fetchResenhasPorMusica,
-        getResenhaPorMusica
-    };
-});
+  return {
+    resenhas,
+    loading,
+    error,
+    fetchResenhasDoUsuario,
+  }
+})

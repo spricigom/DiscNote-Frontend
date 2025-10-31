@@ -1,15 +1,24 @@
 <script setup>
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeaderComp from '@/components/HeaderComp.vue'
 import ResenhaPerfil from '@/components/ResenhaPerfil.vue'
 import PlaylistsPerfil from '@/components/PlaylistsPerfil.vue'
 import FavoritosPerfil from '@/components/FavoritosPerfil.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useResenhaStore } from '@/stores/resenhas'
 
 const route = useRoute()
 const router = useRouter()
-const authStore = useAuthStore()
+const authStore = useAuthStore() // <-- moveu pra cima
+const resenhaStore = useResenhaStore()
+
+onMounted(async () => {
+  if (authStore.user?.id) {
+    await resenhaStore.fetchResenhasDoUsuario(authStore.user.id)
+    console.log('Resenhas carregadas:', resenhaStore.resenhas)
+  }
+})
 
 const selectedTab = ref('resenhas')
 const perfilMain = ref(null)
@@ -17,7 +26,7 @@ const perfilMain = ref(null)
 const tabs = [
   { key: 'resenhas', label: 'Resenhas' },
   { key: 'playlists', label: 'Playlists' },
-  { key: 'favoritos', label: 'Favoritos' },
+  { key: 'favoritos', label: 'Favoritos' }
 ]
 
 watch(
@@ -50,11 +59,11 @@ function changeTab(tabKey) {
 
         <div class="stats">
           <div class="stat">
-            <span class="number">235</span>
+            <span class="number">0</span>
             <span class="label">Seguidores</span>
           </div>
           <div class="stat">
-            <span class="number">400</span>
+            <span class="number">0</span>
             <span class="label">Seguindo</span>
           </div>
           <div class="stat">
@@ -62,7 +71,7 @@ function changeTab(tabKey) {
             <span class="label">Resenhas</span>
           </div>
           <div class="stat">
-            <span class="number">8</span>
+            <span class="number">0</span>
             <span class="label">Playlists</span>
           </div>
         </div>
@@ -84,11 +93,13 @@ function changeTab(tabKey) {
         </button>
       </div>
 
-      <div class="tab-content">
-        <div v-if="selectedTab === 'resenhas'">
-          <ResenhaPerfil /><ResenhaPerfil />
-        </div>
-
+      <div v-if="selectedTab === 'resenhas'">
+        <ResenhaPerfil
+           v-for="resenha in resenhaStore.resenhas"
+          :key="resenha.id"
+          :resenha="resenha"
+        />
+      </div>
         <div v-else-if="selectedTab === 'playlists'" class="playlists">
           <PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil />
         </div>
@@ -98,7 +109,6 @@ function changeTab(tabKey) {
         </div>
       </div>
 
-    </div>
   </main>
 </template>
 

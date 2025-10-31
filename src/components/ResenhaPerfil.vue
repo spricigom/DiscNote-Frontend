@@ -1,33 +1,36 @@
+<script setup>
+defineProps({
+  resenha: {
+    type: Object,
+    required: true
+  }
+})
+</script>
+
 <template>
   <div class="resenha-wrapper">
-
-
     <div class="resenha">
       <div class="foto-resenha">
-        <img src="#" alt="" />
+        <img :src="resenha?.musica?.capa || '#'" alt="Capa da música" />
       </div>
 
       <div class="corpo">
         <div class="titulo">
-          <h1>Nome da Música</h1>
-          <h4>nome do artista</h4>
+          <h1>{{ resenha?.musica?.titulo }}</h1>
+          <h4>{{ resenha?.musica?.artista }}</h4>
         </div>
 
         <div class="user-av-e-fav">
-          <div class="username">
-            <div class="foto-username">
-              <img src="#" alt="" />
-            </div>
-            <p>@username</p>
-          </div>
+          
+
           <div class="avaliacao-e-favorito">
-            <div class="avaliacao">
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-              <i class="pi pi-star-fill"></i>
-            </div>
+           <div class="avaliacao">
+     <i
+    v-for="i in 5"
+    :key="i"
+    :class="['pi', i <= (resenha?.nota || 0) ? 'pi-star-fill' : 'pi-star']"
+  ></i>
+</div>
             <div class="favorito">
               <i class="pi pi-heart-fill"></i>
             </div>
@@ -35,28 +38,27 @@
         </div>
 
         <div class="texto-resenha">
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sed voluptate excepturi vero tempore similique... Lorem ipsum dolor sit, amet consectetur adipisicing elit. Hic maiores, vitae illo repellat voluptatum nostrum eius, dolorem error corporis recusandae, voluptas veritatis sequi excepturi. Molestias et soluta qui vitae deleniti? Lorem ipsum dolor sit amet consectetur adipisicing elit. Non mollitia delectus aspernatur deserunt ullam, quia cupiditate, odit blanditiis aliquid debitis maiores beatae quo ad illum ipsum voluptatem, quis ipsam fuga! Lorem ipsum dolor sit amet consectetur adipisicing elit. Non magnam amet repellendus dolores iure, asperiores quibusdam aliquam ut quo explicabo at tempora dolor? Doloremque optio, veritatis excepturi eligendi numquam suscipit! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis temporibus iste soluta sit dolorem asperiores aliquid aliquam. Fugiat ab fugit voluptatem atque quisquam, suscipit veniam soluta odit hic laboriosam molestiae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem, aliquam dolorum blanditiis perspiciatis facere quibusdam corrupti quas obcaecati possimus tempore consequuntur tempora optio, iste fuga eos repudiandae libero quasi nobis!
-          </p>
+          <p>{{ resenha?.texto }}</p>
         </div>
 
         <div class="curtida-e-comentario">
           <div class="curtida">
             <i class="pi pi-thumbs-up"></i>
-            <p>2.500 curtidas</p>
+            <p>{{ resenha?.curtidas || 0 }} curtidas</p>
           </div>
           <div class="comentarios">
             <i class="pi pi-comment"></i>
-            <p>230 comentarios</p>
+            <p>{{ resenha?.comentarios?.length || 0 }} comentários</p>
           </div>
         </div>
       </div>
     </div>
-     <div class="divisao">
+    <div class="divisao">
       <hr />
     </div>
   </div>
 </template>
+
 
 <style scoped>
 /* wrapper que garante centralização independente do pai */

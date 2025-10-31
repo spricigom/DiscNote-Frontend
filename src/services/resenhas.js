@@ -7,7 +7,13 @@ export default new class ResenhaService {
         } : {});
         return data;
     }
+    async getMusicaById(id) {
+  return api.get(`/musicas/${id}/`)
+}
 
+async getUsuarioById(id) {
+  return api.get(`/usuarios/${id}/`)
+}
     async getById(id) {
         const { data } = await api.get(`/resenhas/${id}`);
         return data;
@@ -39,4 +45,16 @@ export default new class ResenhaService {
     async getResenhaPorMusica(musicaId) {
         return api.get(`/resenhas/musica/${musicaId}/`).then(r => r.data);
     }
+
+    // 👇 Adicione esta função aqui
+    async fetchResenhasPorUsuario(userId) {
+        try {
+            const { data } = await api.get(`/resenhas/?usuario=${userId}`);
+            return { data };
+        } catch (error) {
+            console.error('Erro ao buscar resenhas do usuário:', error);
+            throw error;
+        }
+    }
+    
 };
