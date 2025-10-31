@@ -249,7 +249,7 @@ function irParaMusica(musica) {
 
 .loading-container {
   height: 100vh;
-  background-color: #0b1a1a;
+  background-color: #162326;
   display: flex;
   flex-direction: column;
   justify-content: center;

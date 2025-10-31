@@ -100,7 +100,7 @@ const truncatedresenha = computed(() => {
             </div>
             <p class="resenha-body">
               {{ truncatedresenha }}
-              <a class="ver-maisResenha" href="/VerMais">ver mais &gt;</a>
+              <RouterLink class="ver-maisResenha" to="/VerMais">ver mais &gt;</RouterLink>
             </p>
             <div class="resenha-footer">
               <span class="likes"
