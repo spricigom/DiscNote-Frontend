@@ -40,7 +40,7 @@ async function searchItunes() {
     results.value.albums = albumsRes.results || []
     results.value.songs = songsRes.results || []
     results.value.artists = artistsRes.results || []
-    activeTab.value = 'albums'
+    activeTab.value = 'songs'
   } catch (err) {
     console.error('Erro ao buscar na API do iTunes:', err)
   } finally {
@@ -59,12 +59,9 @@ watch(
       searchQuery.value = newQuery
       searchItunes()
     }
-  }
+  },
 )
-
-
 </script>
-
 
 <template>
   <HeaderComp />
@@ -86,10 +83,14 @@ watch(
       <div v-if="isLoading">Carregando...</div>
 
       <div v-else>
-        <!-- ÁLBUNS -->
         <div v-show="activeTab === 'albums'">
           <div v-if="results.albums.length" class="results-list">
-            <div v-for="album in results.albums" :key="album.collectionId" class="result-item">
+            <RouterLink
+              v-for="album in results.albums"
+              :key="album.collectionId"
+              class="result-item"
+              :to="`/album/${album.collectionId}`"
+            >
               <div class="result-image">
                 <img
                   :src="album.artworkUrl100?.replace('100x100bb', '1200x1200bb')"
@@ -104,20 +105,20 @@ watch(
                   <p>{{ album.releaseDate.slice(0, 4) }} • {{ album.artistName }}</p>
                 </div>
               </div>
-            </div>
+            </RouterLink>
           </div>
 
           <div v-else>Nenhum álbum encontrado.</div>
         </div>
 
-
-
-
-
-        <!-- MÚSICAS -->
         <div v-show="activeTab === 'songs'">
           <div v-if="results.songs.length" class="results-list">
-            <div v-for="song in results.songs" :key="song.trackId" class="result-item"  @click="irParaMusica(musica)" >
+            <RouterLink
+              v-for="song in results.songs"
+              :key="song.trackId"
+              class="result-item"
+              :to="`/musica/${song.trackId}`"
+            >
               <div class="result-image">
                 <img
                   :src="song.artworkUrl100?.replace('100x100bb', '1200x1200bb')"
@@ -130,12 +131,11 @@ watch(
                 <p class="artist">{{ song.artistName }}</p>
                 <audio :src="song.previewUrl" controls class="audio-preview"></audio>
               </div>
-            </div>
+            </RouterLink>
           </div>
           <div v-else>Nenhuma música encontrada.</div>
         </div>
 
-        <!-- ARTISTAS -->
         <div v-show="activeTab === 'artists'">
           <div v-if="results.artists.length" class="results-list">
             <div v-for="artist in results.artists" :key="artist.artistId" class="result-item">
@@ -225,6 +225,7 @@ main {
   transition: background 0.3s;
   width: 40vw;
   gap: 20px;
+  text-decoration: none;
   padding: 0.5rem;
 }
 

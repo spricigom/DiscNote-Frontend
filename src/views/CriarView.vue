@@ -4,6 +4,8 @@ import { useMusicasStore } from '@/stores/musicas'
 import { useResenhaStore } from '@/stores/resenhas'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import Footer from '@/components/Footer.vue'
+import HeaderComp from '@/components/HeaderComp.vue'
 
 const router = useRouter()
 const musicasStore = useMusicasStore()
@@ -13,12 +15,15 @@ const rating = ref(0)
 const favorito = ref(false)
 const musica = computed(() => musicasStore.musicaAtual || {})
 const authStore = useAuthStore()
-
+const capaAlta = computed(() => {
+  if (!musica.value.capa) return ''
+  return musica.value.capa.replace(/([0-9]+x[0-9]+)bb/, '600x600bb')
+})
 const props = defineProps({
   musicaId: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 })
 
 function setRating(n) {
@@ -37,13 +42,13 @@ async function salvarResenha() {
       nota: rating.value,
       favorito: favorito.value,
       data: new Date().toLocaleDateString(),
-      usuario: authStore.user.id
+      usuario: authStore.user.id,
     })
     alert(`Resenha salva! Nota: ${rating.value} | Favorito: ${favorito.value}`)
   } catch (error) {
     alert(error)
   }
-  router.push({ path: `/musica/${props.musicaId}` });
+  router.push({ path: `/musica/${props.musicaId}` })
 }
 
 onMounted(() => {
@@ -51,71 +56,86 @@ onMounted(() => {
 })
 
 if (!authStore.isLogged) {
-  alert('Você precisa estar logado para resenhar uma música.');
-  router.push({ path: '/login'});
-} 
+  alert('Você precisa estar logado para resenhar uma música.')
+  router.push({ path: '/login' })
+}
 </script>
 
 <template>
-  <header>
-    <p class="titulo">Resenhar...</p>
-  </header>
-  <div class="geral">
-    <div class="left">
-      <div class="informacoes">
-        <div class="imagem">
-          <img :src="musica.capa" alt="Capa da música" class="imagem" />
+  <HeaderComp />
+  <main>
+      <p class="titulo">Resenhar...</p>
+      <hr >
+    <div class="geral">
+      <div class="left">
+        <div class="informacoes">
+          <div class="imagem">
+            <img :src="capaAlta" alt="Capa da música" class="imagem" />
+          </div>
+          <div class="avaliacao">
+            <span
+              v-for="n in 5"
+              :key="n"
+              class="estrela"
+              :class="{ ativo: n <= rating }"
+              @click="setRating(n)"
+            >
+              ★
+            </span>
+          </div>
+          <p>Avaliar</p>
+          <div class="favorito" @click="toggleFavorito">
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=favorite"
+            />
+            <span class="material-symbols-outlined" :class="{ ativo: favorito }">favorite</span>
+            <p>Favoritar</p>
+          </div>
+          <button class="salvar" @click="salvarResenha">Salvar Resenha</button>
         </div>
-        <div class="avaliacao">
-          <span v-for="n in 5" :key="n" class="estrela" :class="{ ativo: n <= rating }" @click="setRating(n)">
-            ★
-          </span>
+      </div>
+
+      <div class="center">
+        <div class="card">
+          <h2 class="musica">{{ musica.titulo }}</h2>
+          <p class="artista">{{ musica.artista }}</p>
+
+          <textarea
+            v-model="resenha"
+            placeholder="Escreva sua resenha..."
+            class="textarea"
+          ></textarea>
         </div>
-        <p>Avaliar</p>
-        <div class="favorito" @click="toggleFavorito">
-          <link rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=favorite" />
-          <span class="material-symbols-outlined" :class="{ ativo: favorito }">favorite</span>
-          <p>Favoritar</p>
-        </div>
-        <button class="salvar" @click="salvarResenha">Salvar Resenha</button>
       </div>
     </div>
+  </main>
 
-    <div class="center">
-      <div class="card">
-        <h2 class="musica">{{ musica.titulo }}</h2>
-        <p class="artista">{{ musica.artista }}</p>
-
-        <textarea v-model="resenha" placeholder="Escreva sua resenha..." class="textarea"></textarea>
-      </div>
-    </div>
-  </div>
+  <Footer />
 </template>
 
 <style scoped>
 * {
   background-color: #162326;
 }
-
+main hr{
+  border: 1px solid #145d91;
+}
+main {
+  background-color: #162326;
+}
 .geral {
   display: grid;
   grid-template-columns: 1fr 3fr;
   padding: 32px;
-  height: 100%;
   font-family: 'Montserrat', sans-serif;
 }
 
-header {
-  border-bottom: 2px solid #145d91;
-}
-
 .titulo {
-  margin-left: 50px;
-  margin-top: 25px;
-  margin-bottom: 15px;
   color: white;
   font-size: 4vh;
+  margin-top: 5vh;
+  margin-left: 2vw;
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -192,7 +212,6 @@ p {
 .salvar:hover {
   background: #15803d;
 }
-
 
 .center {
   padding-top: 6px;

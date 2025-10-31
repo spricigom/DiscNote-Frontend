@@ -68,6 +68,29 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
+    async function updateUser(updatedData) {
+  try {
+    if (!user.value) user.value = {}
+
+    // Atualiza as chaves individualmente (mantém reatividade)
+    Object.assign(user.value, updatedData)
+
+    // Atualiza avatar se o e-mail mudar
+    if (user.value?.email) {
+      user.value.avatar = useGravatar(user.value.email)
+    }
+
+    // Persiste no localStorage
+    localStorage.setItem('user', JSON.stringify(user.value))
+
+    console.log('✅ Usuário atualizado no store:', user.value)
+  } catch (err) {
+    console.error('❌ Erro ao atualizar usuário:', err)
+  }
+}
+
+
+
     return {
         isLogged,
         user,
@@ -76,6 +99,7 @@ export const useAuthStore = defineStore('auth', () => {
         login,
         logout,
         refreshToken,
-        loginWithGoogle
+        loginWithGoogle,
+        updateUser
     };
 });

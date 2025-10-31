@@ -39,16 +39,16 @@ function goToSearch() {
           >Explorar <span><i class="pi pi-angle-down"></i></span
         ></RouterLink>
         <div class="submenu" v-if="showSubmenu">
-          <RouterLink to="#">Álbuns</RouterLink>
+          <RouterLink to="/Albuns">Álbuns</RouterLink>
           <hr />
           <RouterLink to="/musicas">Músicas</RouterLink>
           <hr />
           <RouterLink to="#">Artistas</RouterLink>
         </div>
       </div>
-      <RouterLink to="#">Playlists</RouterLink>
-      <RouterLink to="#">Resenhas</RouterLink>
-      <RouterLink to="/cadastro" v-if="!authStore.isLogged" >Cadastro</RouterLink>
+      <RouterLink to="/Playlists">Playlists</RouterLink>
+      <RouterLink to="/Resenhas">Resenhas</RouterLink>
+      <RouterLink to="/cadastro" v-if="!authStore.isLogged">Cadastro</RouterLink>
     </nav>
 
     <div class="right">
@@ -87,36 +87,32 @@ function goToSearch() {
         <hr style="margin-top: 4vh; width: 100%" />
         <div class="itens-sidebar">
           <p>
-            <RouterLink to="/perfil"
+            <RouterLink to="/perfilUsuario"
               ><i class="pi pi-user" style="color: #145d91; font-size: 1.2vw"></i> Seu
               Perfil</RouterLink
             >
           </p>
           <p>
-            <RouterLink to="#"
-              ><i class="pi pi-clipboard" style="color: #145d91; font-size: 1.2vw"></i> Suas
-              Resenhas</RouterLink
-            >
+            <RouterLink to="/perfilUsuario?tab=resenhas" @click="toggleSidebar">
+              <i class="pi pi-clipboard" style="color: #145d91; font-size: 1.2vw"></i>
+              Suas Resenhas
+            </RouterLink>
           </p>
           <p>
-            <RouterLink to="#"
-              ><i class="pi pi-headphones" style="color: #145d91; font-size: 1.2vw"></i> Suas
-              Playlisys</RouterLink
-            >
+            <RouterLink to="/perfilUsuario?tab=playlists" @click="toggleSidebar">
+              <i class="pi pi-headphones" style="color: #145d91; font-size: 1.2vw"></i>
+              Suas Playlists
+            </RouterLink>
           </p>
           <p>
-            <RouterLink to="#"
-              ><i class="pi pi-star" style="color: #145d91; font-size: 1.2vw"></i>
-              Favoritos</RouterLink
-            >
+            <RouterLink to="/perfilUsuario?tab=favoritos" @click="toggleSidebar">
+              <i class="pi pi-star" style="color: #145d91; font-size: 1.2vw"></i>
+              Favoritos
+            </RouterLink>
           </p>
+
           <p>
-            <RouterLink
-              to="#"
-              @click="
-                authStore.logout(),
-                toggleSidebar()
-              "
+            <RouterLink to="#" @click="(authStore.logout(), toggleSidebar())"
               ><i class="pi pi-sign-out" style="color: #145d91; font-size: 1.2vw"></i>
               Sair</RouterLink
             >
@@ -139,12 +135,12 @@ function goToSearch() {
   padding-right: 12px;
   border-radius: 15px;
 }
-.search-input input{
+.search-input input {
   background: none;
   border: none;
-    outline: none;
-color: white;
-caret-color: white;
+  outline: none;
+  color: white;
+  caret-color: white;
 }
 
 .botao-pesquisa {
@@ -170,7 +166,7 @@ header {
   height: 30px;
   object-fit: contain;
 }
-.logo{
+.logo {
   width: 25%;
 }
 
@@ -261,7 +257,6 @@ nav > a:hover::after {
   align-items: center;
   gap: 1.2rem;
 }
-
 
 .right span {
   color: whitesmoke;

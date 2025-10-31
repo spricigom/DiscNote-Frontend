@@ -5,10 +5,10 @@ import HeaderComp from '@/components/HeaderComp.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { useResenhaStore } from '@/stores/resenhas'; // ✅ importa o store
+import { useResenhaStore } from '@/stores/resenhas';
 
 const router = useRouter();
-const resenhaStore = useResenhaStore(); // ✅ instancia o store
+const resenhaStore = useResenhaStore();
 
 const generos = ref([
   { nome: "Rock", term: "rock" },
@@ -17,14 +17,14 @@ const generos = ref([
   { nome: "Jazz", term: "jazz" }
 ]);
 
-const musicasPorGenero = ref({});
-const notas = ref({}); // ✅ notas calculadas
-const ouvintes = ref({}); // ✅ número de resenhas
+const albunsPorGenero = ref({});
+const notas = ref({});
+const ouvintes = ref({});
 const loading = ref(true);
 
-// calcula as notas e ouvintes
-function fetchResenhasParaItem(item) {
-  const id = item.trackId || item.collectionId;
+// calcula notas e ouvintes
+function fetchResenhasParaAlbum(album) {
+  const id = album.collectionId;
   const lista = resenhaStore.fetchResenhasPorMusica(id);
 
   if (lista && lista.length > 0) {
@@ -37,38 +37,36 @@ function fetchResenhasParaItem(item) {
   }
 }
 
-// busca músicas por gênero
-async function fetchMusicas() {
+// busca álbuns por gênero
+async function fetchAlbuns() {
   loading.value = true;
   for (const g of generos.value) {
     try {
       const res = await axios.get("https://itunes.apple.com/search", {
-        params: { term: g.term, entity: "musicTrack", limit: 10 }
+        params: { term: g.term, entity: "album", limit: 10 }
       });
 
-      musicasPorGenero.value[g.nome] = res.data.results.map(track => ({
-        trackId: track.trackId,
-        titulo: track.trackName,
-        artista: track.artistName,
-        capa: track.artworkUrl100,
-        previewUrl: track.previewUrl
+      albunsPorGenero.value[g.nome] = res.data.results.map(album => ({
+        collectionId: album.collectionId,
+        titulo: album.collectionName,
+        artista: album.artistName,
+        capa: album.artworkUrl100
       }));
 
-      // busca as notas pra cada música
-      musicasPorGenero.value[g.nome].forEach(fetchResenhasParaItem);
+      albunsPorGenero.value[g.nome].forEach(fetchResenhasParaAlbum);
     } catch (err) {
-      console.error(`Erro ao buscar ${g.nome}:`, err);
-      musicasPorGenero.value[g.nome] = [];
+      console.error(`Erro ao buscar álbuns de ${g.nome}:`, err);
+      albunsPorGenero.value[g.nome] = [];
     }
   }
   loading.value = false;
 }
 
-onMounted(fetchMusicas);
+onMounted(fetchAlbuns);
 
-function irParaMusica(musica) {
-  if (!musica?.trackId) return;
-  router.push({ name: 'Musica', params: { id: musica.trackId } });
+function irParaAlbum(album) {
+  if (!album?.collectionId) return;
+  router.push({ name: 'Album', params: { id: album.collectionId } });
 }
 </script>
 
@@ -77,37 +75,33 @@ function irParaMusica(musica) {
 
   <div class="page">
     <div class="container">
-      <p class="titulo">Músicas</p>
+      <p class="titulo">Álbuns</p>
 
-      <div v-if="loading" class = "loading-container">
-       <div class="loader"></div>
-        <p>Carregando músicas...</p>
-      </div>
+      <div v-if="loading">Carregando álbuns...</div>
 
       <template v-else>
         <section v-for="g in generos" :key="g.nome" class="bloco">
           <div class="bloco-header">
             <p>{{ g.nome }}</p>
-            <RouterLink :to="`/genero/${g.term}`" class="vermais">ver mais &gt;</RouterLink>
+            <RouterLink :to="`/genero/${g.term}/albuns`" class="vermais">ver mais &gt;</RouterLink>
           </div>
 
           <Carousel :items-to-show="4" :wrap-around="true" :snap-align="'start'" class="carousel-custom">
-            <Slide v-for="musica in musicasPorGenero[g.nome]" :key="musica.trackId">
-              <div class="carousel-slide" @click="irParaMusica(musica)">
-                <img :src="musica.capa?.replace('100x100bb', '1200x1200bb')" :alt="musica.titulo" class="sliderImage" />
+            <Slide v-for="album in albunsPorGenero[g.nome]" :key="album.collectionId">
+              <div class="carousel-slide" @click="irParaAlbum(album)">
+                <img :src="album.capa?.replace('100x100bb', '1200x1200bb')" :alt="album.titulo" class="sliderImage" />
 
-                <!-- Overlay -->
                 <div class="overlay">
-                  <h3>{{ musica.titulo }}</h3>
-                  <p>{{ musica.artista }}</p>
+                  <h3>{{ album.titulo }}</h3>
+                  <p>{{ album.artista }}</p>
                 </div>
 
                 <div class="avaliacao">
                   <div class="av1">
-                    <p><i class="pi pi-clipboard"></i>{{ ouvintes[musica.trackId] || 0 }}</p>
+                    <p><i class="pi pi-clipboard"></i>{{ ouvintes[album.collectionId] || 0 }}</p>
                   </div>
                   <div class="av2">
-                    <p><i class="pi pi-star"></i>{{ notas[musica.trackId] || 0 }}/5</p>
+                    <p><i class="pi pi-star"></i>{{ notas[album.collectionId] || 0 }}/5</p>
                   </div>
                 </div>
               </div>
@@ -141,15 +135,15 @@ function irParaMusica(musica) {
 }
 .titulo {
   font-size: 5vh;
-  font-weight:600;
+  font-weight: 600;
   margin-bottom: 2.5vh;
-  margin-top:2.5vh;
+  margin-top: 2.5vh;
 }
 .bloco-header {
   display: flex;
   align-items: center;
   gap: 1vh;
-  margin-top:5vh;
+  margin-top: 5vh;
   margin-bottom: 2.5vh;
   color: #145D91;
   border-bottom: 2px solid #145D91;
@@ -157,13 +151,13 @@ function irParaMusica(musica) {
 .bloco-header p {
   margin: 0;
   font-size: 3vh;
-  font-weight:600;
+  font-weight: 600;
 }
 .vermais {
   color: #bdbdbd;
   text-decoration: none;
   font-weight: bold;
-  font-size:1.5vh;
+  font-size: 1.5vh;
 }
 .carousel-custom {
   width: 100%;
@@ -246,37 +240,4 @@ function irParaMusica(musica) {
 }
 .carousel-custom :deep(.carousel__prev) { left: -5%; }
 .carousel-custom :deep(.carousel__next) { right: -5%; }
-
-.loading-container {
-  height: 100vh;
-  background-color: #162326;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #ecc815;
-  font-family: 'Archivo', sans-serif;
-  font-size: 2.3vh;
-  letter-spacing: 0.5px;
-}
-
-.loader {
-  width: 48px;
-  height: 48px;
-  border: 4px solid #ecc815;
-  border-bottom-color: transparent;
-  border-radius: 50%;
-  margin-bottom: 18px;
-  animation: rotation 1s linear infinite;
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 </style>

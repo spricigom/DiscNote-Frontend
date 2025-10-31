@@ -32,11 +32,6 @@ const router = createRouter({
       name: 'Perfil',
       component: () => import('../views/PerfilView.vue'),
     },
-    {
-      path: '/resenhas',
-      name: 'Resenha',
-      component: () => import('../views/ResenhaView.vue'),
-    },
     { path: '/search',
       name: 'search',
       component: () => import('../views/SearchResultsView.vue')},
@@ -59,6 +54,34 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/Albuns',
+      name: 'Albuns',
+      component: () => import('../views/AlbunsView.vue'),
+      props: true
+    },
+    {
+      path: '/genero/:nome/albuns',
+      name: 'GeneroAlbuns',
+      component: () => import('../views/GeneroAlbunsView.vue')
+    },
+    {
+      path: '/album/:id',
+      name: 'Album',
+      component: () => import('../views/AlbumView.vue') 
+    },
+    {
+      path: '/perfilUsuario',
+      name: 'perfilUsuario',
+      component: () => import('../views/perfilUsuarioView.vue'),
+      props: true
+    },
+    {
+      path: '/MusicaEstatica',
+      name: 'MusicaEstatica',
+      component: () => import('../views/MusicaEstaticaView.vue'),
+      props: true
+    },
+    {
       path: '/musicas',
       name: 'musicas',
       component: Musicas
@@ -73,6 +96,31 @@ const router = createRouter({
       path: '/',
       name: 'LandingPage',
       component: () => import('../views/LandingPageView.vue')
+    },
+    {
+      path: '/VerMais',
+      name: 'VerMais',
+      component: () => import('../views/VerMaisView.vue')
+    },
+    {
+      path: '/VerMaisResenhas',
+      name: 'VerMaisResenhas',
+      component: () => import('../views/VerMaisResenhasView.vue')
+    },
+    {
+      path: '/EditarPerfil',
+      name: 'EditarPerfil',
+      component: () => import('../views/EditarPerfilView.vue')
+    },
+    {
+      path: '/Resenhas',
+      name: 'Resenhas',
+      component: () => import('../views/ResenhasView.vue')
+    },
+    {
+      path: '/Playlists',
+      name: 'Playlists',
+      component: () => import('../views/PlaylistsView.vue')
     },
   ],
 })

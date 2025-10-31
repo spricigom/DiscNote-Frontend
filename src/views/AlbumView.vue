@@ -1,205 +1,177 @@
 <script setup>
 import HeaderComp from '@/components/HeaderComp.vue'
-import Footer from '@/components/Footer.vue'
 import { onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useMusicasStore } from '@/stores/musicas'
+import { useAlbunsStore } from '@/stores/albuns'
 import { useAuthStore } from '@/stores/auth'
 import { useResenhaStore } from '@/stores/resenhas'
 import md5 from 'crypto-js/md5'
 
 const route = useRoute()
 const router = useRouter()
-const musicasStore = useMusicasStore()
+const albunsStore = useAlbunsStore()
 const authStore = useAuthStore()
 const resenhaStore = useResenhaStore()
 
-const musica = computed(() => musicasStore.musicaAtual || {})
-const stats = computed(() => musicasStore.stats || {})
-const loading = computed(() => musicasStore.loading)
+const album = computed(() => albunsStore.albumAtual || {})
+const stats = computed(() => albunsStore.stats || {})
+const resenhas = computed(() => albunsStore.resenhasAlbum || [])
+const loading = computed(() => albunsStore.loading)
 
-// **Atualiza automaticamente avatar e username do usuário logado nas resenhas**
-const resenhas = computed(() => {
-  return (musicasStore.resenhasMusica || []).map((res) => {
-    if (res.usuario.id === authStore.user?.id) {
-      return {
-        ...res,
-        usuario: {
-          ...res.usuario,
-          username: authStore.user.username,
-          avatar: authStore.user.avatar, // <--- avatar do perfil
-          name: authStore.user.name,
-        },
-      }
-    }
-    return res
-  })
-})
-
-const truncatedResenha = (texto) => {
+const truncatedResenha = (resenha) => {
+  if (!resenha) return ''
   const max = 420
-  return texto && texto.length > max ? texto.slice(0, max) + '...' : texto
+  return resenha.length > max ? resenha.slice(0, max) + '...' : resenha
 }
 
 const minhaResenha = computed(() => {
   if (!authStore.isLogged) return null
-  return resenhas.value.find((r) => r.usuario?.id === authStore.user.id) || null
+  return resenhas.value.find(r => r.usuario?.id === authStore.user.id) || null
 })
 
 onMounted(() => {
   if (route.params.id) {
-    musicasStore.fetchMusica(route.params.id)
+    albunsStore.fetchAlbuns(route.params.id)
   }
 })
-
 function goToResenha() {
   if (!authStore.isLogged) {
     alert('Você precisa estar logado para escrever uma resenha.')
     router.push({ path: '/login' })
     return
   }
-  router.push({ path: `/musica/${route.params.id}/criarResenha` })
+  router.push({ path: `/album/${route.params.id}/criarResenha` })
 }
 
 function deleteResenha() {
   if (!minhaResenha.value) return
   if (confirm('Tem certeza que deseja excluir sua resenha?')) {
     resenhaStore.deleteResenha(minhaResenha.value.id).then(() => {
-      musicasStore.fetchMusica(route.params.id)
+      albunsStore.fetchAlbum(route.params.id)
     })
   }
 }
+
+
 </script>
 
 <template>
   <HeaderComp />
-  <main v-if="!loading">
-    <div class="musica">
-      <div class="left">
-        <div class="imgMusica">
-          <img
-            v-if="musica.capa"
-            :src="musica.capa.replace('100x100bb', '1200x1200bb')"
-            alt="Capa da música"
-          />
-        </div>
 
-        <div class="acoes">
-          <button @click="goToResenha()" :disabled="minhaResenha">
-            {{ minhaResenha ? 'Resenha publicada' : 'Escrever Resenha' }}
-          </button>
-          <button v-if="minhaResenha" @click="deleteResenha()">Excluir minha resenha</button>
-        </div>
-
-        <audio v-if="musica.previewUrl" :src="musica.previewUrl" controls />
+ <main v-if="!loading">
+  <div class="album">
+    <div class="left">
+      <div class="imgAlbum">
+        <img
+          v-if="album.capa"
+          :src="album.capa.replace('100x100bb', '1200x1200bb')"
+          alt="Capa do álbum"
+        />
       </div>
 
-      <div class="direita">
-        <div class="cima">
-          <div class="center">
-            <div class="area-titulos">
-              <h1 class="titulo">{{ musica.titulo }}</h1>
-              <h2 class="artista">{{ musica.artista }}</h2>
-            </div>
-            <div id="generos">
-              <p>Gêneros:</p>
-              <div class="tags">
-                <button v-if="musica.genero" class="tag">{{ musica.genero }}</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="right">
-            <div class="stat">
-              <div class="big">{{ stats.totalresenhas?.toLocaleString() || 0 }}</div>
-              <div class="label">Total de avaliações</div>
-            </div>
-
-            <div class="stat rating">
-              <div class="stars">
-                <span
-                  v-for="n in 5"
-                  :key="n"
-                  class="estrelas"
-                  :class="{ ativo: n <= stats.average }"
-                >
-                  ★
-                </span>
-                <span class="avg">{{ stats.average?.toFixed(1) || '0.0' }}</span>
-              </div>
-              <div class="label">Média das avaliações</div>
-            </div>
-          </div>
-        </div>
-
-        <section class="resenhas">
-          <div id="cabecalho-resenha">
-            <h3>Resenhas</h3>
-            <RouterLink class="ver-todas" to="/VerMaisResenhas">ver todas</RouterLink>
-          </div>
-
-          <article class="card-resenha" v-for="(res, i) in resenhas" :key="i">
-            <div class="meta">
-              <div class="foto-username">
-                <img
-                  :src="
-                    res.usuario.avatar ||
-                    `https://www.gravatar.com/avatar/${md5(res.usuario.email.trim().toLowerCase())}?s=200&d=identicon`
-                  "
-                  alt="Avatar"
-                />
-              </div>
-              <div class="meta-text">
-                <div class="user-row">
-                  <strong>@{{ res.usuario.username }}</strong>
-                  <div class="estrelas">
-                    <span v-for="n in 5" :key="n" :class="{ ativo: n <= res.nota }">★</span>
-                    <span>({{ res.nota }})</span>
-                  </div>
-                  <div class="favorito">
-                    <i class="pi pi-heart-fill"></i>
-                  </div>
-                  <span class="data">{{ res.data }}</span>
-                </div>
-              </div>
-            </div>
-
-            <p class="resenha-body">
-              {{ truncatedResenha(res.texto) }}
-              <!--  <a class="ver-maisResenha" href="#">ver mais &gt;</a>-->
-            </p>
-
-            <div class="resenha-footer">
-              <span class="likes"
-                ><i class="pi pi-thumbs-up"></i>
-                {{ res.curtidas_count?.toLocaleString() }} curtidas</span
-              >
-            </div>
-          </article>
-        </section>
+      <div class="acoes">
+        <button @click="goToResenha()" :disabled="minhaResenha">
+          {{ minhaResenha ? 'Resenha publicada' : 'Escrever Resenha' }}
+        </button>
+        <button v-if="minhaResenha" @click="deleteResenha()">Excluir minha resenha</button>
       </div>
     </div>
-  </main>
 
-  <!-- LOADING -->
-  <div v-else class="loading-container">
-    <div class="loader"></div>
-    <p>Carregando música...</p>
+    <div class="direita">
+      <div class="cima">
+        <div class="center">
+          <div class="area-titulos">
+            <h1 class="titulo">{{ album.titulo }}</h1>
+            <h2 class="artista">{{ album.artista }}</h2>
+          </div>
+
+          <div id="generos">
+            <p>Gêneros:</p>
+            <div class="tags">
+              <button v-if="album.genero" class="tag">{{ album.genero }}</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="stat">
+            <div class="big">{{ stats.totalresenhas?.toLocaleString() || 0 }}</div>
+            <div class="label">Total de avaliações</div>
+          </div>
+
+          <div class="stat rating">
+            <div class="stars">
+              <span v-for="n in 5" :key="n" class="estrelas" :class="{ ativo: n <= stats.average }">★</span>
+              <span class="avg">{{ stats.average?.toFixed(1) || '0.0' }}</span>
+            </div>
+            <div class="label">Média das avaliações</div>
+          </div>
+        </div>
+      </div>
+
+      <section class="resenhas">
+        <div id="cabecalho-resenha">
+          <h3>Resenhas</h3>
+          <RouterLink class="ver-todas" to="/VerMaisResenhas">ver todas</RouterLink>
+        </div>
+
+        <article class="card-resenha" v-for="(res, i) in resenhas" :key="i">
+          <div class="meta">
+            <div class="foto-username">
+              <img
+                :src="`https://www.gravatar.com/avatar/${md5(res.usuario.email.trim().toLowerCase())}?s=200&d=identicon`"
+                alt="Avatar"
+              />
+            </div>
+
+            <div class="meta-text">
+              <div class="user-row">
+                <strong>@{{ res.usuario.username }}</strong>
+                <div class="estrelas">
+                  <span v-for="n in 5" :key="n" :class="{ ativo: n <= res.nota }">★</span>
+                  <span>({{ res.nota }})</span>
+                </div>
+                <div class="favorito">
+                  <i class="pi pi-heart-fill"></i>
+                </div>
+                <span class="data">{{ res.data }}</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="resenha-body">
+            {{ truncatedResenha(res.texto) }}
+            <a class="ver-maisResenha" href="#">ver mais &gt;</a>
+          </p>
+
+          <div class="resenha-footer">
+            <span class="likes">
+              <i class="pi pi-thumbs-up"></i>
+              {{ res.curtidas_count?.toLocaleString() }} curtidas
+            </span>
+          </div>
+        </article>
+      </section>
+    </div>
   </div>
+</main>
 
-  <Footer />
+
+   <div v-else class="loading-container">
+  <div class="loader"></div>
+  <p>Carregando álbum...</p>
+</div>
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=DM+Mono:wght@300;400;500&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Montserrat:wght@100..900&display=swap');
 main {
   min-height: 100vh;
   background-color: #162326;
   color: white;
 }
 
-.musica {
+.album {
   display: grid;
   grid-template-columns: 1.5fr 5fr 1fr;
   height: 100%;
@@ -215,14 +187,14 @@ main {
   margin-top: 7vh;
 }
 
-.imgMusica {
+.imgAlbum {
   width: 270px;
   height: 270px;
   background: #00000050;
   border-radius: 25px;
   overflow: hidden;
 }
-.imgMusica img {
+.imgAlbum img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -337,9 +309,7 @@ main {
   font-size: 2vw;
   font-family: 'DM Mono', sans-serif;
 }
-.resenhas{
-  margin-bottom: 10vh;
-}
+
 #cabecalho-resenha {
   display: flex;
   justify-content: space-between;
@@ -355,7 +325,7 @@ main {
   font-size: 3vh;
 }
 
-.ver-todas {
+.ver-todas{
   text-decoration: none;
   color: #145d91;
 }
