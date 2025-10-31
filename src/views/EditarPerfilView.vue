@@ -82,7 +82,7 @@ async function salvarAlteracoes() {
       </div>
       <div class="salvar">
 
-        <button class="btn-salvar" @click="salvarAlteracoes">Salvar Alterações</button>
+        <RouterLink to="/perfilUsuario"> <button class="btn-salvar" @click="salvarAlteracoes">Salvar Alterações</button></RouterLink>
       </div>
     </div>
   </main>
