@@ -23,7 +23,8 @@ export const useAlbunsStore = defineStore('albuns', () => {
 
     for (const g of generos) {
       try {
-        const res = await itunesService.buscarAlbunsPorGenero(g.term)
+        // usa o método do serviço com entity = 'album'
+        const res = await itunesService.buscarPorGenero(g.term, 8, 'album')
         albunsPorGenero.value[g.nome] = res
       } catch (err) {
         console.error(`Erro ao buscar álbuns de ${g.nome}:`, err)
@@ -44,17 +45,26 @@ export const useAlbunsStore = defineStore('albuns', () => {
     resenhasAlbum.value = []
 
     try {
-      const album = await itunesService.lookupAlbum(collectionId)
+      // usa o método lookup (não lookupAlbum)
+      const album = await itunesService.lookup(collectionId)
       if (!album) throw new Error('Álbum não encontrado')
 
-      albumAtual.value = album
+      // normaliza os campos para o template
+      albumAtual.value = {
+        id: album.collectionId || album.trackId,
+        titulo: album.titulo || album.collectionName || album.trackName,
+        artista: album.artista || album.artistName,
+        capa: album.capa?.replace('100x100bb.jpg', '600x600bb.jpg') || album.artworkUrl100,
+        genero: album.genero || album.primaryGenreName || 'Desconhecido'
+      }
 
-      // Busca estatísticas (nota média e total de resenhas)
-      const { media_nota, total_resenhas } = await resenhaStore.getResenhaPorAlbum(collectionId)
-      stats.value = { totalresenhas: total_resenhas, average: media_nota }
+     // Busca estatísticas (nota média e total de resenhas)
+const { media_nota, total_resenhas } = await resenhaStore.getResenhaPorMusica(collectionId)
+stats.value = { totalresenhas: total_resenhas, average: media_nota }
 
-      // Busca apenas as resenhas deste álbum
-      resenhasAlbum.value = await resenhaStore.fetchResenhasPorAlbum(collectionId)
+// Busca apenas as resenhas desta música/álbum
+resenhasAlbum.value = resenhaStore.fetchResenhasPorMusica(collectionId)
+
     } catch (err) {
       console.error('Erro ao buscar álbum:', err)
       error.value = err

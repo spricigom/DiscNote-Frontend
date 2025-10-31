@@ -2,7 +2,7 @@
 import HeaderComp from '@/components/HeaderComp.vue'
 import { onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useAlbunsStore } from '@/stores/albuns' 
+import { useAlbunsStore } from '@/stores/albuns'
 import { useAuthStore } from '@/stores/auth'
 import { useResenhaStore } from '@/stores/resenhas'
 import md5 from 'crypto-js/md5'
@@ -136,11 +136,28 @@ function deleteResenha() {
     </div>
   </main>
 
-  <div v-else>Carregando álbum...</div>
+   <div v-else class="loading-container">
+  <div class="loader"></div>
+  <p>Carregando álbum...</p>
+</div>
 </template>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Montserrat:wght@100..900&display=swap');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #0b1a1a; /* mesmo fundo do site */
+  overflow-x: hidden;
+}
+
+main {
+  min-height: 100vh;
+  background-color: #0b1a1a;
+}
+
 
 .album {
   display: grid;
@@ -334,5 +351,36 @@ strong {
 .rating .avg {
   margin-left: 8px;
   color: #fff;
+}
+.loading-container {
+  height: 100vh;
+  background-color: #0b1a1a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #ecc815;
+  font-family: 'Archivo', sans-serif;
+  font-size: 2.3vh;
+  letter-spacing: 0.5px;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #ecc815;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  margin-bottom: 18px;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
