@@ -17,7 +17,7 @@ export default defineConfig({
         name: 'DiscNote',
         short_name: 'DiscNote',
         description: 'DiscNote: resenhe suas musicas',
-        theme_color: '#ffffff',
+        theme_color: '#000000',
         icons: [
           {
             src: 'pwa-192x192.png',
