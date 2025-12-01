@@ -419,4 +419,214 @@ main {
     transform: rotate(360deg);
   }
 }
+
+@media (max-width: 768px) {
+  .musica {
+    grid-template-columns: 1fr;
+    gap: 2vh;
+  }
+
+  .left {
+    margin-left: 2vw;
+    margin-top: 4vh;
+    align-items: center;
+  }
+
+  .imgMusica {
+    width: 200px;
+    height: 200px;
+  }
+
+  .acoes button {
+    font-size: 3vw;
+    padding: 2vh 3vw;
+    margin-top: 2vh;
+  }
+
+  .direita {
+    margin-left: 2vw;
+    margin-top: 2vh;
+  }
+
+  .cima {
+    flex-direction: column;
+    gap: 2vh;
+    margin-top: 4vh;
+  }
+
+  .center {
+    width: 100%;
+  }
+
+  .area-titulos .titulo {
+    font-size: 4vh;
+  }
+
+  .area-titulos .artista {
+    font-size: 2.5vh;
+  }
+
+  #generos p {
+    font-size: 3vw;
+  }
+
+  .tag {
+    font-size: 2.5vw;
+    padding: 6px 10px;
+  }
+
+  .right {
+    margin-left: 0;
+    align-items: center;
+    text-align: center;
+  }
+
+  .stat {
+    align-items: center;
+  }
+
+  .stat .big {
+    font-size: 4vw;
+  }
+
+  .stat .label {
+    font-size: 3vw;
+  }
+
+  .rating .stars {
+    font-size: 3.5vw;
+  }
+
+  .rating .avg {
+    font-size: 4vw;
+  }
+
+  #cabecalho-resenha h3 {
+    font-size: 4vh;
+  }
+
+  .card-resenha {
+    padding: 1vh 0;
+  }
+
+  .meta {
+    gap: 8px;
+  }
+
+  .user-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1vh;
+  }
+
+  .estrelas {
+    font-size: 3vh;
+  }
+
+  .resenha-body {
+    font-size: 2.5vh;
+  }
+
+  .foto-username {
+    width: 35px;
+    height: 35px;
+  }
+
+  .loading-container {
+    font-size: 3vh;
+  }
+
+  .loader {
+    width: 40px;
+    height: 40px;
+    border-width: 3px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .musica {
+    grid-template-columns: 1fr 3fr;
+  }
+
+  .left {
+    margin-left: 4vw;
+    margin-top: 5vh;
+  }
+
+  .imgMusica {
+    width: 220px;
+    height: 220px;
+  }
+
+  .acoes button {
+    font-size: 1.5vw;
+    padding: 1vh 1.5vw;
+  }
+
+  .direita {
+    margin-left: 2vw;
+  }
+
+  .cima {
+    margin-top: 5vh;
+  }
+
+  .center {
+    width: 50vw;
+  }
+
+  .area-titulos .titulo {
+    font-size: 5vh;
+  }
+
+  .area-titulos .artista {
+    font-size: 3vh;
+  }
+
+  #generos p {
+    font-size: 1.6vw;
+  }
+
+  .tag {
+    font-size: 1.3vw;
+  }
+
+  .right {
+    margin-left: 4vh;
+  }
+
+  .stat .big {
+    font-size: 2.2vw;
+  }
+
+  .stat .label {
+    font-size: 1.8vw;
+  }
+
+  .rating .stars {
+    font-size: 2vw;
+  }
+
+  .rating .avg {
+    font-size: 2.2vw;
+  }
+
+  #cabecalho-resenha h3 {
+    font-size: 3.5vh;
+  }
+
+  .estrelas {
+    font-size: 2.8vh;
+  }
+
+  .resenha-body {
+    font-size: 2vh;
+  }
+
+  .foto-username {
+    width: 38px;
+    height: 38px;
+  }
+}
+
 </style>

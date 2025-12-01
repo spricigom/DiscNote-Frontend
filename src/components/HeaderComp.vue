@@ -360,4 +360,167 @@ nav > a:hover::after {
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 999;
 }
+
+/* Responsividade adicionada sem alterar o CSS original */
+
+/* Mobile (até 768px) */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    height: auto;
+    padding: 2vh 2vw;
+    gap: 2vh;
+  }
+
+  .logo {
+    width: 100%;
+    text-align: center;
+  }
+
+  .logo img {
+    width: 150px;
+    height: 25px;
+  }
+
+  nav {
+    width: 100%;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .nav-item > a,
+  nav > a {
+    font-size: 0.9rem;
+  }
+
+  .submenu {
+    width: 60vw;
+    height: auto;
+    padding: 1vh;
+    top: 5vw;
+  }
+
+  .submenu a {
+    font-size: 0.9rem;
+  }
+
+  .right {
+    width: 100%;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    width: 80%;
+    max-width: 300px;
+  }
+
+  .search-input input {
+    width: 100%;
+  }
+
+  .foto-user {
+    width: 40px;
+    height: 40px;
+  }
+
+  .foto-user img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .sidebar {
+    width: 80vw;
+    padding-top: 2vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+  }
+
+  .itens-sidebar {
+    gap: 2vh;
+    margin-top: 3vh;
+  }
+
+  .itens-sidebar a {
+    font-size: 0.9rem;
+  }
+
+  .itens-sidebar i {
+    font-size: 1vw;
+  }
+
+  .user h3 {
+    font-size: 0.9vw;
+  }
+
+  .close-btn {
+    font-size: 1.2rem;
+  }
+}
+
+/* Tablet (768px a 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  header {
+    height: 12vh;
+    padding: 0 1.5vw;
+  }
+
+  .logo img {
+    width: 180px;
+    height: 28px;
+  }
+
+  nav {
+    gap: 1.5rem;
+  }
+
+  .nav-item > a,
+  nav > a {
+    font-size: 0.95rem;
+  }
+
+  .submenu {
+    width: 12vw;
+    height: 16vh;
+    top: 3.5vw;
+  }
+
+  .right {
+    gap: 1rem;
+  }
+
+  .search-input {
+    padding-left: 8px;
+    padding-right: 10px;
+  }
+
+  .foto-user {
+    width: 45px;
+    height: 45px;
+  }
+
+  .foto-user img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .sidebar {
+    width: 18vw;
+  }
+
+  .itens-sidebar i {
+    font-size: 1.1vw;
+  }
+
+  .user h3 {
+    font-size: 0.95vw;
+  }
+}
+
+/* Desktop (acima de 1024px) - mantém o original, mas ajusta se necessário */
+@media (min-width: 1025px) {
+  /* Nenhuma alteração necessária, pois o CSS original já é adequado */
+}
 </style>
