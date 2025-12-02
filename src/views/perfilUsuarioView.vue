@@ -3,7 +3,6 @@ import { ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeaderComp from '@/components/HeaderComp.vue'
 import ResenhaPerfil from '@/components/ResenhaPerfil.vue'
-import PlaylistsPerfil from '@/components/PlaylistsPerfil.vue'
 import FavoritosPerfil from '@/components/FavoritosPerfil.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -16,14 +15,13 @@ const perfilMain = ref(null)
 
 const tabs = [
   { key: 'resenhas', label: 'Resenhas' },
-  { key: 'playlists', label: 'Playlists' },
   { key: 'favoritos', label: 'Favoritos' },
 ]
 
 watch(
   () => route.query.tab,
   async (newTab) => {
-    if (['resenhas', 'playlists', 'favoritos'].includes(newTab)) {
+    if (['resenhas', 'favoritos'].includes(newTab)) {
       selectedTab.value = newTab
       await nextTick()
       perfilMain.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -61,10 +59,7 @@ function changeTab(tabKey) {
             <span class="number">19</span>
             <span class="label">Resenhas</span>
           </div>
-          <div class="stat">
-            <span class="number">8</span>
-            <span class="label">Playlists</span>
-          </div>
+
         </div>
 
         <RouterLink to="/EditarPerfil">
@@ -89,9 +84,7 @@ function changeTab(tabKey) {
           <ResenhaPerfil /><ResenhaPerfil />
         </div>
 
-        <div v-else-if="selectedTab === 'playlists'" class="playlists">
-          <PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil />
-        </div>
+
 
         <div v-else-if="selectedTab === 'favoritos'">
           <FavoritosPerfil />

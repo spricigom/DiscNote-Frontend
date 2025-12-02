@@ -43,10 +43,8 @@ function goToSearch() {
           <hr />
           <RouterLink to="/musicas">Músicas</RouterLink>
           <hr />
-          <RouterLink to="#">Artistas</RouterLink>
         </div>
       </div>
-      <RouterLink to="/Playlists">Playlists</RouterLink>
       <RouterLink to="/Resenhas">Resenhas</RouterLink>
       <RouterLink to="/cadastro" v-if="!authStore.isLogged">Cadastro</RouterLink>
     </nav>
@@ -98,12 +96,7 @@ function goToSearch() {
               Suas Resenhas
             </RouterLink>
           </p>
-          <p>
-            <RouterLink to="/perfilUsuario?tab=playlists" @click="toggleSidebar">
-              <i class="pi pi-headphones" style="color: #145d91; font-size: 1.2vw"></i>
-              Suas Playlists
-            </RouterLink>
-          </p>
+         
           <p>
             <RouterLink to="/perfilUsuario?tab=favoritos" @click="toggleSidebar">
               <i class="pi pi-star" style="color: #145d91; font-size: 1.2vw"></i>
