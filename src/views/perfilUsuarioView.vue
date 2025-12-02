@@ -2,7 +2,6 @@
 import { ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeaderComp from '@/components/HeaderComp.vue'
-import FavoritosPerfil from '@/components/FavoritosPerfil.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useResenhaStore } from "@/stores/resenhas.js";
 import Resenha from "@/components/Resenha.vue";
@@ -18,7 +17,8 @@ const perfilMain = ref(null)
 
 const tabs = [
   { key: 'resenhas', label: 'Resenhas' },
-  { key: 'favoritos', label: 'Favoritos' },
+  { key: 'favoritos', label: 'Resenhas Favoritas' },
+  { key: 'favoritadas', label: 'Musicas Favoritadas'}
 ]
 
 watch(
@@ -64,7 +64,7 @@ onMounted(async () => {
             <span class="label">Seguindo</span>
           </div>
           <div class="stat">
-            <span class="number">16</span>
+            <span class="number">17</span>
             <span class="label">Resenhas</span>
           </div>
 
@@ -94,13 +94,21 @@ onMounted(async () => {
   :key="r.id"
   :resenha="r"
 />
-
         </div>
-
-
-
         <div v-else-if="selectedTab === 'favoritos'">
-          <FavoritosPerfil />
+  <Resenha
+    v-for="r in resenhaStore.resenhas.slice(0, 5)"
+    :key="r.id"
+    :resenha="r"
+  />
+</div>
+ <div v-if="selectedTab === 'favoritadas'">
+<Resenha
+  v-for="r in resenhaStore.getResenhasDoUsuario('manuhostin').slice(0, 10)"
+  :key="r.id"
+  :resenha="r"
+/>
+
         </div>
       </div>
 

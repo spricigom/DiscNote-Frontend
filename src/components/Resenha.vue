@@ -72,10 +72,6 @@ onMounted(async () => {
             <i class="pi pi-thumbs-up"></i>
             <p>{{ resenha.curtidas_count.toLocaleString() }} curtidas</p>
           </div>
-          <div class="comentarios">
-            <i class="pi pi-comment"></i>
-            <!-- <p>{{ resenha.comentarios.toLocaleString() }} comentários</p> -->
-          </div>
         </div>
       </div>
     </div>
