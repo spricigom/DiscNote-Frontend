@@ -2,28 +2,29 @@
 import { ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeaderComp from '@/components/HeaderComp.vue'
-import ResenhaPerfil from '@/components/ResenhaPerfil.vue'
-import PlaylistsPerfil from '@/components/PlaylistsPerfil.vue'
-import FavoritosPerfil from '@/components/FavoritosPerfil.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useResenhaStore } from "@/stores/resenhas.js";
+import Resenha from "@/components/Resenha.vue";
+import { onMounted } from "vue";
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const resenhaStore = useResenhaStore();
 
 const selectedTab = ref('resenhas')
 const perfilMain = ref(null)
 
 const tabs = [
   { key: 'resenhas', label: 'Resenhas' },
-  { key: 'playlists', label: 'Playlists' },
-  { key: 'favoritos', label: 'Favoritos' },
+  { key: 'favoritos', label: 'Resenhas Favoritas' },
+  { key: 'favoritadas', label: 'Musicas Favoritadas'}
 ]
 
 watch(
   () => route.query.tab,
   async (newTab) => {
-    if (['resenhas', 'playlists', 'favoritos'].includes(newTab)) {
+    if (['resenhas', 'favoritos'].includes(newTab)) {
       selectedTab.value = newTab
       await nextTick()
       perfilMain.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -37,6 +38,11 @@ function changeTab(tabKey) {
   router.push({ query: { tab: tabKey } })
   perfilMain.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
+
+onMounted(async () => {
+  await resenhaStore.fetchResenhas(); // pega todas
+});
+
 </script>
 
 <template>
@@ -50,21 +56,18 @@ function changeTab(tabKey) {
 
         <div class="stats">
           <div class="stat">
-            <span class="number">235</span>
+            <span class="number">0</span>
             <span class="label">Seguidores</span>
           </div>
           <div class="stat">
-            <span class="number">400</span>
+            <span class="number">0</span>
             <span class="label">Seguindo</span>
           </div>
           <div class="stat">
-            <span class="number">19</span>
+            <span class="number">17</span>
             <span class="label">Resenhas</span>
           </div>
-          <div class="stat">
-            <span class="number">8</span>
-            <span class="label">Playlists</span>
-          </div>
+
         </div>
 
         <RouterLink to="/EditarPerfil">
@@ -86,15 +89,26 @@ function changeTab(tabKey) {
 
       <div class="tab-content">
         <div v-if="selectedTab === 'resenhas'">
-          <ResenhaPerfil /><ResenhaPerfil />
+<Resenha
+  v-for="r in resenhaStore.getResenhasDoUsuario('manuhostin')"
+  :key="r.id"
+  :resenha="r"
+/>
         </div>
-
-        <div v-else-if="selectedTab === 'playlists'" class="playlists">
-          <PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil /><PlaylistsPerfil />
-        </div>
-
         <div v-else-if="selectedTab === 'favoritos'">
-          <FavoritosPerfil />
+  <Resenha
+    v-for="r in resenhaStore.resenhas.slice(0, 5)"
+    :key="r.id"
+    :resenha="r"
+  />
+</div>
+ <div v-if="selectedTab === 'favoritadas'">
+<Resenha
+  v-for="r in resenhaStore.getResenhasDoUsuario('manuhostin').slice(0, 10)"
+  :key="r.id"
+  :resenha="r"
+/>
+
         </div>
       </div>
 
@@ -223,5 +237,101 @@ function changeTab(tabKey) {
 .divisao hr {
   width: 100%;
   border: #145d91 1px solid;
+}
+@media (max-width: 1024px) {
+
+  .foto-perfil {
+    width: 140px;
+    height: 140px;
+  }
+
+  .username {
+    font-size: 2.6vw;
+  }
+
+  .arroba {
+    font-size: 1.8vw;
+  }
+
+  .stat .number {
+    font-size: 2vw;
+  }
+
+  .stat .label {
+    font-size: 1.6vw;
+  }
+
+  .tabs {
+    font-size: 1.8vw;
+  }
+
+  .tab {
+    font-size: 1.8vw;
+    width: 25vw;
+  }
+
+  .btn-seguir {
+    font-size: 1.8vw;
+  }
+}
+
+
+/* CELULAR */
+@media (max-width: 600px) {
+
+  .perfil-info {
+    margin-top: 4vh;
+  }
+
+  .foto-perfil {
+    width: 110px;
+    height: 110px;
+  }
+
+  .username {
+    font-size: 6vw;
+  }
+
+  .arroba {
+    font-size: 4vw;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 2vh;
+    margin-top: 4vh;
+  }
+
+  .stat .number {
+    font-size: 5vw;
+  }
+
+  .stat .label {
+    font-size: 4vw;
+  }
+
+  .btn-seguir {
+    font-size: 4vw;
+    padding: 8px 20px;
+    border-width: 1px;
+  }
+
+  .tabs {
+    flex-direction: column;
+    align-items: center;
+    gap: 1vh;
+    margin-top: 5vh;
+  }
+
+  .tab {
+    width: 60vw;
+    padding: 10px 0;
+    font-size: 4vw;
+  }
+
+  .tab-content {
+    gap: 3vh;
+    margin-top: 3vh;
+  }
 }
 </style>

@@ -69,6 +69,9 @@ export const useResenhaStore = defineStore('resenha', () => {
     function fetchResenhasPorMusica(musicaId) {
         return resenhas.value.filter(r => r.musica_id == musicaId);
     }
+    function getResenhasDoUsuario(username) {
+  return resenhas.value.filter(r => r.usuario.username === username);
+}
 
     return {
         resenhas,
@@ -82,6 +85,8 @@ export const useResenhaStore = defineStore('resenha', () => {
         updateResenha,
         deleteResenha,
         fetchResenhasPorMusica,
-        getResenhaPorMusica
+        getResenhaPorMusica,
+        getResenhasDoUsuario,
+
     };
 });

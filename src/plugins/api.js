@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useAuthStore } from "@/stores/auth";
 
 const apiURL = import.meta.env.VITE_API_URL || "https://discnote-backend.onrender.com/api";
 
@@ -8,32 +7,57 @@ const api = axios.create({
     headers: {
         "Content-Type": "application/json"
     },
-    timeout: 50000,
-});
+    timeout: 200000,
 
+
+// ====== REQUEST INTERCEPTOR ======
 api.interceptors.request.use((config) => {
-    const auth = useAuthStore();
-    if (auth.token) {
-        config.headers.Authorization = `Bearer ${auth.token}`;
+
+    // Pegamos direto do localStorage para evitar problemas com o Pinia
+    const token = localStorage.getItem("access");
+
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
 });
 
+
+// ====== RESPONSE INTERCEPTOR (REFRESH TOKEN AUTOMÁTICO) ======
 api.interceptors.response.use(
     (response) => response,
+
     async (error) => {
-        const auth = useAuthStore();
+        const originalRequest = error.config;
 
-        if (error.response?.status === 401 && auth.refresh) {
+        // Se der 401 e ainda não tentamos refresh
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            const refresh = localStorage.getItem("refresh");
+            if (!refresh) return Promise.reject(error);
+
             try {
-                await auth.refreshToken();
+                // Tentamos pegar novo token
+                const { data } = await axios.post(`${apiURL}/token/refresh/`, {
+                    refresh,
+                });
 
-                error.config.headers.Authorization = `Bearer ${auth.token}`;
-                return api.request(error.config);
+                // Salvamos o token novo
+                localStorage.setItem("access", data.access);
+
+                // Reenvia a requisição original com token novo
+                originalRequest.headers.Authorization = `Bearer ${data.access}`;
+                return api(originalRequest);
+
             } catch (err) {
-                auth.logout();
+                // Refresh inválido → desloga
+                localStorage.removeItem("access");
+                localStorage.removeItem("refresh");
             }
         }
+
         return Promise.reject(error);
     }
 );
