@@ -238,4 +238,100 @@ onMounted(async () => {
   width: 100%;
   border: #145d91 1px solid;
 }
+@media (max-width: 1024px) {
+
+  .foto-perfil {
+    width: 140px;
+    height: 140px;
+  }
+
+  .username {
+    font-size: 2.6vw;
+  }
+
+  .arroba {
+    font-size: 1.8vw;
+  }
+
+  .stat .number {
+    font-size: 2vw;
+  }
+
+  .stat .label {
+    font-size: 1.6vw;
+  }
+
+  .tabs {
+    font-size: 1.8vw;
+  }
+
+  .tab {
+    font-size: 1.8vw;
+    width: 25vw;
+  }
+
+  .btn-seguir {
+    font-size: 1.8vw;
+  }
+}
+
+
+/* CELULAR */
+@media (max-width: 600px) {
+
+  .perfil-info {
+    margin-top: 4vh;
+  }
+
+  .foto-perfil {
+    width: 110px;
+    height: 110px;
+  }
+
+  .username {
+    font-size: 6vw;
+  }
+
+  .arroba {
+    font-size: 4vw;
+  }
+
+  .stats {
+    flex-direction: column;
+    gap: 2vh;
+    margin-top: 4vh;
+  }
+
+  .stat .number {
+    font-size: 5vw;
+  }
+
+  .stat .label {
+    font-size: 4vw;
+  }
+
+  .btn-seguir {
+    font-size: 4vw;
+    padding: 8px 20px;
+    border-width: 1px;
+  }
+
+  .tabs {
+    flex-direction: column;
+    align-items: center;
+    gap: 1vh;
+    margin-top: 5vh;
+  }
+
+  .tab {
+    width: 60vw;
+    padding: 10px 0;
+    font-size: 4vw;
+  }
+
+  .tab-content {
+    gap: 3vh;
+    margin-top: 3vh;
+  }
+}
 </style>

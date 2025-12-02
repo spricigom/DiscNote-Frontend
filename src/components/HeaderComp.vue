@@ -353,4 +353,128 @@ nav > a:hover::after {
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 999;
 }
+@media (max-width: 1024px) {
+  header {
+    height: 12vh;
+    padding: 0 4vw;
+  }
+
+  .logo {
+    width: 35%;
+  }
+
+  nav {
+    gap: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .search-input {
+    padding: 8px;
+  }
+
+  .foto-user {
+    width: 45px;
+    height: 45px;
+  }
+
+  .foto-user img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .sidebar {
+    width: 40vw;
+  }
+
+  .user h3 {
+    font-size: 1.5vw;
+  }
+
+  .submenu {
+    width: 18vw;
+  }
+}
+
+@media (max-width: 600px) {
+  header {
+    height: auto;
+    flex-direction: column;
+    padding: 3vh 4vw;
+    gap: 2vh;
+  }
+
+  .logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .logo img {
+    width: 150px;
+    height: auto;
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  nav a,
+  .nav-item > a {
+    font-size: 0.9rem;
+  }
+
+  .submenu {
+    width: 40vw;
+    top: 8vh;
+  }
+
+  .right {
+    width: 100%;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .search-input {
+    width: 70%;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+
+  .botao-pesquisa {
+    font-size: 1rem;
+  }
+
+  .foto-user {
+    width: 40px;
+    height: 40px;
+  }
+
+  .foto-user img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .sidebar {
+    width: 70vw;
+  }
+
+  .user h3 {
+    font-size: 3vw;
+  }
+
+  .itens-sidebar a {
+    font-size: 4vw;
+  }
+
+  .itens-sidebar i {
+    font-size: 4vw !important;
+  }
+
+  .close-btn i {
+    font-size: 4vw !important;
+  }
+}
 </style>
