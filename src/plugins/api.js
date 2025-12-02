@@ -8,7 +8,6 @@ const api = axios.create({
         "Content-Type": "application/json"
     },
     timeout: 200000,
-});
 
 
 // ====== REQUEST INTERCEPTOR ======
