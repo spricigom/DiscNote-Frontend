@@ -15,7 +15,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
 
     // Pegamos direto do localStorage para evitar problemas com o Pinia
-    const token = localStorage.getItem("access");
+    const token = localStorage.getItem("token");
 
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
