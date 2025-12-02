@@ -72,10 +72,6 @@ onMounted(async () => {
             <i class="pi pi-thumbs-up"></i>
             <p>{{ resenha.curtidas_count.toLocaleString() }} curtidas</p>
           </div>
-          <div class="comentarios">
-            <i class="pi pi-comment"></i>
-            <!-- <p>{{ resenha.comentarios.toLocaleString() }} comentários</p> -->
-          </div>
         </div>
       </div>
     </div>
@@ -240,5 +236,105 @@ onMounted(async () => {
 }
 a{
   text-decoration: none;
+}
+@media (max-width: 600px) {
+  .resenha {
+    flex-direction: column;
+    align-items: center;
+    gap: 4vh;
+    margin-bottom: 8vh;
+  }
+
+  .foto-resenha {
+    width: 70vw;
+    height: 70vw;
+  }
+
+  .corpo {
+    width: 90%;
+  }
+
+  .titulo h1 {
+    font-size: 6vw;
+    text-align: center;
+  }
+
+  .titulo h4 {
+    font-size: 4vw;
+    text-align: center;
+  }
+
+  .user-av-e-fav {
+    flex-direction: column;
+    gap: 2vh;
+  }
+
+  .avaliacao {
+    font-size: 6vw;
+  }
+
+  .favorito {
+    font-size: 6vw;
+  }
+
+  .texto-resenha p {
+    font-size: 4vw;
+  }
+
+  .curtida i {
+    font-size: 6vw;
+  }
+
+  .curtida p {
+    font-size: 3.8vw;
+  }
+}
+
+
+/* ============================
+   📱 TABLET (600px → 900px)
+   ============================ */
+@media (max-width: 900px) and (min-width: 601px) {
+  .resenha {
+    gap: 3vw;
+    margin-bottom: 12vh;
+  }
+
+  .foto-resenha {
+    width: 32vw;
+    height: 32vw;
+  }
+
+  .corpo {
+    width: 60%;
+  }
+
+  .titulo h1 {
+    font-size: 3.8vw;
+  }
+
+  .titulo h4 {
+    font-size: 2.6vw;
+  }
+
+  .avaliacao {
+    font-size: 2.8vw;
+  }
+
+  .favorito {
+    font-size: 2.8vw;
+  }
+
+  .texto-resenha p {
+    font-size: 2.4vw;
+  }
+
+  .curtida i {
+    font-size: 3vw;
+  }
+
+  .curtida p {
+    font-size: 2.3vw;
+  }
 }
 </style>
