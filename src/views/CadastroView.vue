@@ -76,9 +76,6 @@ function handleCredentialResponse(response) {
         <span>G</span> Continue com Google
       </button>
 
-      <button class="social-btn facebook">
-        <span>f</span> Continue com Facebook
-      </button>
 
       <div class="divider">ou</div>
 

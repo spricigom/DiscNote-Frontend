@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import Footer from '@/components/Footer.vue'
 import HeaderComp from '@/components/HeaderComp.vue'
+import Toast from '@/components/Toast.vue' 
 
 const router = useRouter()
 const musicasStore = useMusicasStore()
@@ -26,6 +27,10 @@ const props = defineProps({
   },
 })
 
+const showToast = ref(false)
+const toastMessage = ref('')
+const toastType = ref('success') // 'success' ou 'error'
+
 function setRating(n) {
   rating.value = n
 }
@@ -44,11 +49,17 @@ async function salvarResenha() {
       data: new Date().toLocaleDateString(),
       usuario: authStore.user.id,
     })
-    alert(`Resenha salva! Nota: ${rating.value} | Favorito: ${favorito.value}`)
+    toastMessage.value = `Resenha salva! Nota: ${rating.value} | Favorito: ${favorito.value ? 'Sim' : 'Não'}`
+    toastType.value = 'success'
+    showToast.value = true
+    setTimeout(() => {
+      router.push({ path: `/musica/${props.musicaId}` })
+    }, 2000) 
   } catch (error) {
-    alert(error)
+    toastMessage.value = 'Erro ao salvar resenha: ' + error.message
+    toastType.value = 'error'
+    showToast.value = true
   }
-  router.push({ path: `/musica/${props.musicaId}` })
 }
 
 onMounted(() => {
@@ -64,8 +75,8 @@ if (!authStore.isLogged) {
 <template>
   <HeaderComp />
   <main>
-      <p class="titulo">Resenhar...</p>
-      <hr >
+    <p class="titulo">Resenhar...</p>
+    <hr>
     <div class="geral">
       <div class="left">
         <div class="informacoes">
@@ -110,6 +121,14 @@ if (!authStore.isLogged) {
       </div>
     </div>
   </main>
+
+  <!-- Adicione o componente Toast aqui -->
+  <Toast
+    v-if="showToast"
+    :message="toastMessage"
+    :type="toastType"
+    @close="showToast = false"
+  />
 
   <Footer />
 </template>

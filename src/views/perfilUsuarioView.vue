@@ -48,15 +48,15 @@ function changeTab(tabKey) {
 
         <div class="stats">
           <div class="stat">
-            <span class="number">235</span>
+            <span class="number">0</span>
             <span class="label">Seguidores</span>
           </div>
           <div class="stat">
-            <span class="number">400</span>
+            <span class="number">0</span>
             <span class="label">Seguindo</span>
           </div>
           <div class="stat">
-            <span class="number">19</span>
+            <span class="number">0</span>
             <span class="label">Resenhas</span>
           </div>
 
