@@ -2,13 +2,16 @@
 import { ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeaderComp from '@/components/HeaderComp.vue'
-import ResenhaPerfil from '@/components/ResenhaPerfil.vue'
 import FavoritosPerfil from '@/components/FavoritosPerfil.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useResenhaStore } from "@/stores/resenhas.js";
+import Resenha from "@/components/Resenha.vue";
+import { onMounted } from "vue";
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const resenhaStore = useResenhaStore();
 
 const selectedTab = ref('resenhas')
 const perfilMain = ref(null)
@@ -35,6 +38,11 @@ function changeTab(tabKey) {
   router.push({ query: { tab: tabKey } })
   perfilMain.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
+
+onMounted(async () => {
+  await resenhaStore.fetchResenhas(); // pega todas
+});
+
 </script>
 
 <template>
@@ -56,7 +64,7 @@ function changeTab(tabKey) {
             <span class="label">Seguindo</span>
           </div>
           <div class="stat">
-            <span class="number">0</span>
+            <span class="number">16</span>
             <span class="label">Resenhas</span>
           </div>
 
@@ -81,7 +89,12 @@ function changeTab(tabKey) {
 
       <div class="tab-content">
         <div v-if="selectedTab === 'resenhas'">
-          <ResenhaPerfil /><ResenhaPerfil />
+<Resenha
+  v-for="r in resenhaStore.getResenhasDoUsuario('manuhostin')"
+  :key="r.id"
+  :resenha="r"
+/>
+
         </div>
 
 
