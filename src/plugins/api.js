@@ -9,6 +9,7 @@ const api = axios.create({
     },
     timeout: 200000,
 
+  })
 
 // ====== REQUEST INTERCEPTOR ======
 api.interceptors.request.use((config) => {
