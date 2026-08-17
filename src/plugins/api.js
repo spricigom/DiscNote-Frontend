@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiURL = import.meta.env.VITE_API_URL || "https://discnote-backend.onrender.com/api";
+const apiURL = import.meta.env.VITE_API_URL || "https://discnote-backend-7tck.onrender.com/api";
 
 const api = axios.create({
     baseURL: apiURL,
