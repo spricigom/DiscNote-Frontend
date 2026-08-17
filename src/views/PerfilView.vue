@@ -86,7 +86,7 @@ const tabs = [
         <div v-else-if="selectedTab === 'favoritos'"><FavoritosPerfil /></div>
     <!--<div v-else-if="selectedTab === 'mais-ouvidas'">Conteúdo de Mais Ouvidas</div>-->
       </div>
-      <div class="divisao">hr</div>
+      <div class="divisao"><hr /></div>
     </div>
   </main>
 
