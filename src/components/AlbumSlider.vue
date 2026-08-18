@@ -23,7 +23,7 @@ function goToAlbum(album) {
       <div class="carousel-slide" @click="goToAlbum(album)">
         <img :src="album.capa" :alt="album.titulo" class="sliderImage" />
 
-        <!-- Overlay -->
+        <!-- Overlay testandokl-->
         <div class="overlay">
           <h3>{{ album.titulo }}</h3>
           <p>{{ album.artista }}</p>
